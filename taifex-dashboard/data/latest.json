@@ -1,0 +1,54 @@
+{
+  "date": "2026-06-25",
+  "fetched_at": "2026-06-25T07:40:00+00:00",
+  "weighted_index": {
+    "date": "2026-06-25",
+    "close": 46255.26,
+    "change": 211.66,
+    "change_pct": 0.46,
+    "turnover_billion": 13556.87
+  },
+  "tx_futures": {
+    "date": "2026-06-25",
+    "price": 46544.0,
+    "change": 137.0,
+    "change_pct": 0.3
+  },
+  "basis": 288.74,
+  "institutional_spot": {
+    "date": "2026-06-25",
+    "foreign": -405.1,
+    "trust": 161.41,
+    "dealer": -70.01,
+    "total": -313.7
+  },
+  "institutional_futures_tx": {
+    "date": "2026-06-25",
+    "dealer_oi_net": 3003,
+    "dealer_oi_chg": -274,
+    "trust_oi_net": 60921,
+    "trust_oi_chg": 164,
+    "foreign_oi_net": -81051,
+    "foreign_oi_chg": 2554
+  },
+  "institutional_futures_mtx": {
+    "date": "2026-06-25",
+    "dealer_oi_net": null,
+    "dealer_oi_chg": null,
+    "trust_oi_net": null,
+    "trust_oi_chg": null,
+    "foreign_oi_net": 1615,
+    "foreign_oi_chg": 733
+  },
+  "large_trader_futures": {
+    "date": "2026-06-25",
+    "rows_found": 1,
+    "top10_net": -10890,
+    "top10_specific_net": -18878
+  },
+  "pc_ratio": {
+    "date": "2026-06-25",
+    "pc_ratio": 114.57,
+    "vix": 40.39
+  }
+}

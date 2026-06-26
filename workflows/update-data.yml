@@ -1,0 +1,43 @@
+name: 每日更新台股期貨籌碼資料
+
+on:
+  schedule:
+    # GitHub Actions 排程時間為 UTC，台北時間 = UTC+8
+    # 07:40 UTC = 台北 15:40（三大法人/大額交易人資料約 15:30 後公布）
+    # 09:00 UTC = 台北 17:00（備援，避免第一次抓的時候資料還沒更新完）
+    - cron: "40 7 * * 1-5"
+    - cron: "0 9 * * 1-5"
+  workflow_dispatch: {}   # 允許手動點擊「Run workflow」立即執行一次
+
+permissions:
+  contents: write
+
+jobs:
+  update-data:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 取出原始碼
+        uses: actions/checkout@v4
+
+      - name: 設定 Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: 安裝套件
+        run: pip install -r scripts/requirements.txt
+
+      - name: 抓取資料
+        run: python scripts/fetch_data.py
+
+      - name: 提交更新
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/
+          if git diff --staged --quiet; then
+            echo "資料沒有變化，不需要 commit"
+          else
+            git commit -m "自動更新籌碼資料 $(date -u +'%Y-%m-%d %H:%M UTC')"
+            git push
+          fi

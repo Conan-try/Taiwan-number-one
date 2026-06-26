@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>台股期貨籌碼快報</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<div class="scanline" aria-hidden="true"></div>
+
+<header class="top">
+  <div class="top-inner">
+    <div class="brand">
+      <span class="brand-dot" id="liveDot"></span>
+      <h1>台股期貨籌碼快報</h1>
+    </div>
+    <div class="top-meta">
+      <span class="eyebrow">資料日期</span>
+      <span id="dataDate" class="meta-value">－</span>
+      <span class="divider">/</span>
+      <span class="eyebrow">最後抓取</span>
+      <span id="fetchedAt" class="meta-value">－</span>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <section class="hero">
+    <div class="hero-card">
+      <span class="hero-label">加權指數</span>
+      <div class="hero-number" id="idxClose">－</div>
+      <div class="hero-sub" id="idxChange">－</div>
+      <div class="hero-foot">成交金額 <span id="idxTurnover">－</span> 億元</div>
+    </div>
+    <div class="hero-card">
+      <span class="hero-label">台指期（近月）</span>
+      <div class="hero-number" id="txPrice">－</div>
+      <div class="hero-sub" id="txChange">－</div>
+      <div class="hero-foot">價差（期－現）<span id="basis">－</span></div>
+    </div>
+    <div class="hero-card pc">
+      <span class="hero-label">賣買權未平倉比 P/C Ratio</span>
+      <div class="hero-number" id="pcRatio">－</div>
+      <div class="hero-foot" id="vixRow">VIX －</div>
+    </div>
+  </section>
+
+  <section class="grid">
+
+    <div class="card">
+      <h2>三大法人現貨買賣超 <span class="unit">億元</span></h2>
+      <div id="spotBars" class="bars"></div>
+    </div>
+
+    <div class="card">
+      <h2>三大法人－臺股期貨 留倉 <span class="unit">口</span></h2>
+      <div id="futTxBars" class="bars"></div>
+    </div>
+
+    <div class="card">
+      <h2>外資及大額交易人期貨 <span class="unit">口</span></h2>
+      <table class="data-table" id="largeTraderTable">
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>外資－小型臺指期貨 留倉 <span class="unit">口</span></h2>
+      <div id="futMtxBars" class="bars"></div>
+    </div>
+
+  </section>
+
+  <section class="charts">
+    <div class="card chart-card">
+      <h2>加權指數走勢</h2>
+      <canvas id="chartIndex" height="140"></canvas>
+    </div>
+    <div class="card chart-card">
+      <h2>外資台股期貨留倉走勢</h2>
+      <canvas id="chartForeign" height="140"></canvas>
+    </div>
+    <div class="card chart-card">
+      <h2>P/C Ratio 走勢</h2>
+      <canvas id="chartPC" height="140"></canvas>
+    </div>
+  </section>
+
+  <section class="sources card">
+    <h2>資料來源</h2>
+    <ul class="source-list">
+      <li>加權指數 / 成交金額 — 臺灣證券交易所 OpenAPI（exchangeReport/FMTQIK）</li>
+      <li>三大法人現貨買賣超 — 臺灣證券交易所 OpenAPI（exchangeReport/BFIAUU）</li>
+      <li>台指期（近月）行情 — 臺灣期貨交易所 政府開放資料（DailyMarketReportFut）</li>
+      <li>三大法人期貨留倉 — 臺灣期貨交易所 政府開放資料（三大法人區分各期貨契約）</li>
+      <li>大額交易人未沖銷部位 — 臺灣期貨交易所 政府開放資料（OpenInterestOfLargeTradersFutures）</li>
+      <li>賣買權未平倉比 / VIX — 臺灣期貨交易所 政府開放資料（PutCallRatio）</li>
+    </ul>
+    <p class="disclaimer">本網站資料僅供參考，不保證完整性與正確性，不作為投資建議，請自行審慎判斷並承擔交易風險。</p>
+  </section>
+
+</main>
+
+<footer>
+  <span>由 GitHub Actions 每個交易日自動更新</span>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
