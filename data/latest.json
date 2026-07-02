@@ -1,20 +1,14 @@
 {
   "date": "20260702",
-  "fetched_at": "2026-07-02T19:52:46.474324+00:00",
-  "weighted_index": {
-    "date": "2026-07-01",
-    "close": 47018.99,
-    "change": 893.08,
-    "change_pct": 1.94,
-    "turnover_billion": 13678.18
-  },
+  "fetched_at": "2026-07-02T19:56:13.744757+00:00",
+  "weighted_index": null,
   "tx_futures": {
     "date": "20260702",
     "price": 46599.0,
     "change": -622.0,
     "change_pct": -1.32
   },
-  "basis": -419.99,
+  "basis": null,
   "institutional_spot": null,
   "institutional_futures_tx": {
     "date": "20260702",
