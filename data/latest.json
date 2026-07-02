@@ -1,6 +1,6 @@
 {
   "date": "20260702",
-  "fetched_at": "2026-07-02T18:59:19.074551+00:00",
+  "fetched_at": "2026-07-02T19:23:26.378066+00:00",
   "weighted_index": null,
   "tx_futures": {
     "date": "20260702",
@@ -10,8 +10,24 @@
   },
   "basis": null,
   "institutional_spot": null,
-  "institutional_futures_tx": null,
-  "institutional_futures_mtx": null,
+  "institutional_futures_tx": {
+    "date": "20260702",
+    "dealer_oi_net": 3683.0,
+    "dealer_oi_chg": null,
+    "trust_oi_net": 66410.0,
+    "trust_oi_chg": null,
+    "foreign_oi_net": -84487.0,
+    "foreign_oi_chg": null
+  },
+  "institutional_futures_mtx": {
+    "date": "20260702",
+    "dealer_oi_net": -8028.0,
+    "dealer_oi_chg": null,
+    "trust_oi_net": 33.0,
+    "trust_oi_chg": null,
+    "foreign_oi_net": 418.0,
+    "foreign_oi_chg": null
+  },
   "large_trader_futures": {
     "date": "20260702",
     "rows_found": 6,
@@ -19,25 +35,17 @@
       "top5_buy": 66205.0,
       "top5_sell": 59607.0,
       "top5_net": 6598.0,
-      "top5_buy_chg": null,
-      "top5_sell_chg": null,
       "top10_buy": 76074.0,
       "top10_sell": 80046.0,
-      "top10_net": -3972.0,
-      "top10_buy_chg": null,
-      "top10_sell_chg": null
+      "top10_net": -3972.0
     },
     "all_months": {
-      "top5_buy": 11.0,
-      "top5_sell": 12.0,
-      "top5_net": -1.0,
-      "top5_buy_chg": null,
-      "top5_sell_chg": null,
-      "top10_buy": 12.0,
-      "top10_sell": 12.0,
-      "top10_net": 0.0,
-      "top10_buy_chg": null,
-      "top10_sell_chg": null
+      "top5_buy": 59011.0,
+      "top5_sell": 61288.0,
+      "top5_net": -2277.0,
+      "top10_buy": 69290.0,
+      "top10_sell": 82050.0,
+      "top10_net": -12760.0
     }
   },
   "pc_ratio": {
