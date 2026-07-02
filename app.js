@@ -1,13 +1,14 @@
 const fmt = (n, digits = 0) => {
-  if (n === null || n === undefined || Number.isNaN(n)) return "－";
+  if (n === null || n === undefined || Number.isNaN(Number(n))) return "－";
   return Number(n).toLocaleString("zh-TW", { maximumFractionDigits: digits, minimumFractionDigits: digits });
 };
-const signClass = (n) => { if (n === null || n === undefined || Number.isNaN(n)) return "flat"; if (n > 0) return "up"; if (n < 0) return "down"; return "flat"; };
-const arrow = (n) => (n > 0 ? "▲" : n < 0 ? "▼" : "－");
+const signClass = (n) => { if (n === null || n === undefined) return "flat"; if (Number(n) > 0) return "up"; if (Number(n) < 0) return "down"; return "flat"; };
+const arrow = (n) => (Number(n) > 0 ? "▲" : Number(n) < 0 ? "▼" : "－");
+const chgStr = (n) => n == null ? "" : ` <span class="${signClass(n)}" style="font-size:0.78em">(${arrow(n)}${fmt(Math.abs(n))})</span>`;
 
 async function loadJSON(path) {
   const res = await fetch(path, { cache: "no-store" });
-  if (!res.ok) throw new Error(`無法讀取 ${path}`);
+  if (!res.ok) throw new Error(`無法讀取 ${path}: ${res.status}`);
   return res.json();
 }
 
@@ -38,24 +39,69 @@ function renderHero(latest) {
 
 function renderBars(containerId, items) {
   const el = document.getElementById(containerId); el.innerHTML = "";
-  const valid = items.filter(i => i.value !== null && i.value !== undefined && !Number.isNaN(i.value));
+  const valid = items.filter(i => i.value !== null && i.value !== undefined && !Number.isNaN(Number(i.value)));
   if (!valid.length) { el.innerHTML = '<p class="empty">暫無資料</p>'; return; }
   const maxAbs = Math.max(...valid.map(i => Math.abs(i.value)), 1);
   items.forEach(item => {
     const row = document.createElement("div"); row.className = "bar-row";
     const pct = item.value == null ? 0 : (Math.abs(item.value)/maxAbs)*50;
-    row.innerHTML = `<div class="bar-name">${item.label}</div><div class="bar-track"><div class="bar-fill ${item.value>=0?"up":"down"}" style="width:${pct}%"></div></div><div class="bar-value ${signClass(item.value)}">${item.value==null?"－":fmt(item.value,item.digits??0)}</div>`;
+    row.innerHTML = `<div class="bar-name">${item.label}</div><div class="bar-track"><div class="bar-fill ${Number(item.value)>=0?"up":"down"}" style="width:${pct}%"></div></div><div class="bar-value ${signClass(item.value)}">${item.value==null?"－":fmt(item.value,item.digits??0)}</div>`;
     el.appendChild(row);
   });
 }
 
 function renderTable(tableId, rows) {
   const tbody = document.querySelector(`#${tableId} tbody`); tbody.innerHTML = "";
-  rows.forEach(([label, value, digits=0]) => {
+  rows.forEach(([label, value, digits=0, chg]) => {
     const tr = document.createElement("tr");
-    tr.innerHTML = `<td>${label}</td><td class="${signClass(value)}">${value==null?"－":fmt(value,digits)}</td>`;
+    const valStr = value == null ? "－" : fmt(value, digits);
+    const chgHtml = chg != null ? chgStr(chg) : "";
+    tr.innerHTML = `<td>${label}</td><td class="${signClass(value)}">${valStr}${chgHtml}</td>`;
     tbody.appendChild(tr);
   });
+}
+
+// 前五大/前十大交易人詳細表
+function renderLargeTrader(lt) {
+  const el = document.getElementById("largeTraderDetail");
+  if (!el) return;
+  if (!lt) { el.innerHTML = '<p class="empty">暫無資料</p>'; return; }
+
+  const near = lt.near_month || {};
+  const all  = lt.all_months  || {};
+
+  const makeSection = (title, data) => {
+    if (!data || Object.keys(data).length === 0) return "";
+    return `
+    <div class="lt-section">
+      <div class="lt-title">${title}</div>
+      <table class="data-table lt-table">
+        <thead><tr><th></th><th>買方</th><th>賣方</th><th>淨額</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>前五大交易人</td>
+            <td>${fmt(data.top5_buy)}${chgStr(data.top5_buy_chg)}</td>
+            <td>${fmt(data.top5_sell)}${chgStr(data.top5_sell_chg)}</td>
+            <td class="${signClass(data.top5_net)}">${fmt(data.top5_net)}</td>
+          </tr>
+          <tr>
+            <td>前十大交易人</td>
+            <td>${fmt(data.top10_buy)}${chgStr(data.top10_buy_chg)}</td>
+            <td>${fmt(data.top10_sell)}${chgStr(data.top10_sell_chg)}</td>
+            <td class="${signClass(data.top10_net)}">${fmt(data.top10_net)}</td>
+          </tr>
+          <tr>
+            <td>前十大特定法人</td>
+            <td>${fmt(data.top10_specific_buy)}${chgStr(data.top10_specific_buy_chg)}</td>
+            <td>${fmt(data.top10_specific_sell)}${chgStr(data.top10_specific_sell_chg)}</td>
+            <td class="${signClass(data.top10_specific_net)}">${fmt(data.top10_specific_net)}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>`;
+  };
+
+  el.innerHTML = makeSection("近月份", near) + makeSection("所有月份", all);
 }
 
 function renderCharts(history) {
@@ -66,9 +112,9 @@ function renderCharts(history) {
     if (!ctx) return;
     new Chart(ctx, { type:"line", data:{ labels, datasets:[{ data, borderColor:color, backgroundColor:color+"22", fill:true, tension:0.25, pointRadius:0, borderWidth:2 }]}, options:{ responsive:true, plugins:{legend:{display:false}}, scales:{ x:{ticks:{color:"#8b92a3",maxTicksLimit:6},grid:{color:"#1a1f28"}}, y:{ticks:{color:"#8b92a3"},grid:{color:"#1a1f28"}} }}});
   };
-  make("chartIndex", history.map(h=>h.weighted_index?.close??null), "#d9a441");
+  make("chartIndex",   history.map(h=>h.weighted_index?.close??null),                    "#d9a441");
   make("chartForeign", history.map(h=>h.institutional_futures_tx?.foreign_oi_net??null), "#e5484d");
-  make("chartPC", history.map(h=>h.pc_ratio?.pc_ratio??null), "#2fa37a");
+  make("chartPC",      history.map(h=>h.pc_ratio?.pc_ratio??null),                       "#2fa37a");
 }
 
 async function main() {
@@ -76,28 +122,29 @@ async function main() {
     const latest = await loadJSON("data/latest.json");
     renderHero(latest);
     renderBars("spotBars",[
-      {label:"外資",value:latest.institutional_spot?.foreign,digits:2},
-      {label:"投信",value:latest.institutional_spot?.trust,digits:2},
-      {label:"自營商",value:latest.institutional_spot?.dealer,digits:2}]);
+      {label:"外資",  value:latest.institutional_spot?.foreign, digits:2},
+      {label:"投信",  value:latest.institutional_spot?.trust,   digits:2},
+      {label:"自營商",value:latest.institutional_spot?.dealer,  digits:2}]);
     renderBars("futTxBars",[
-      {label:"外資",value:latest.institutional_futures_tx?.foreign_oi_net},
-      {label:"投信",value:latest.institutional_futures_tx?.trust_oi_net},
+      {label:"外資",  value:latest.institutional_futures_tx?.foreign_oi_net},
+      {label:"投信",  value:latest.institutional_futures_tx?.trust_oi_net},
       {label:"自營商",value:latest.institutional_futures_tx?.dealer_oi_net}]);
     renderBars("futMtxBars",[{label:"外資",value:latest.institutional_futures_mtx?.foreign_oi_net}]);
-    renderTable("largeTraderTable",[
-      ["外資台指期 未平倉",latest.institutional_futures_tx?.foreign_oi_net],
-      ["外資小台 未平倉",latest.institutional_futures_mtx?.foreign_oi_net],
-      ["十大交易人 淨未平倉",latest.large_trader_futures?.top10_net],
-      ["十大特定法人 淨未平倉",latest.large_trader_futures?.top10_specific_net]]);
+    renderLargeTrader(latest.large_trader_futures);
   } catch(err) {
-    console.error("Hero/bars 載入失敗:", err);
+    console.error("主資料載入失敗:", err);
+    document.querySelector("main").innerHTML = `<p class="empty" style="padding:40px;text-align:center;">資料載入失敗：${err.message}</p>`;
+    return;
   }
   try {
     const history = await loadJSON("data/history.json");
     renderCharts(history.history || []);
   } catch(err) {
     console.error("圖表載入失敗:", err);
-    document.querySelectorAll(".chart-card canvas").forEach(c => { c.style.display="none"; c.insertAdjacentHTML("afterend","<p class='empty'>圖表暫時無法顯示</p>"); });
+    document.querySelectorAll(".chart-card canvas").forEach(c => {
+      c.style.display="none";
+      c.insertAdjacentHTML("afterend","<p class='empty' style='padding:20px;text-align:center'>圖表資料累積中，明日起自動顯示</p>");
+    });
   }
 }
 
