@@ -251,3 +251,48 @@ footer {
   .hero, .grid, .charts { grid-template-columns: 1fr; }
   .hero-number { font-size: 1.7rem; }
 }
+
+/* 前五大/前十大大額交易人區塊 */
+.lt-card { margin-bottom: 16px; }
+.lt-card > h2 { margin-bottom: 16px; }
+.lt-section { margin-bottom: 20px; }
+.lt-section:last-child { margin-bottom: 0; }
+.lt-title {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--accent);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  border-left: 2px solid var(--accent);
+  padding-left: 8px;
+}
+.lt-table { width: 100%; }
+.lt-table thead th {
+  font-size: 0.72rem;
+  color: var(--muted);
+  text-align: right;
+  padding: 4px 6px;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+}
+.lt-table thead th:first-child { text-align: left; }
+.lt-table tbody td {
+  font-family: var(--font-mono);
+  font-size: 0.88rem;
+  padding: 8px 6px;
+  border-bottom: 1px solid var(--border);
+  text-align: right;
+}
+.lt-table tbody td:first-child {
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  color: var(--muted);
+  text-align: left;
+}
+.lt-table tbody tr:last-child td { border-bottom: none; }
+
+/* grid 改成1欄讓三法人卡片更大氣 */
+@media (min-width: 861px) {
+  .grid { grid-template-columns: repeat(3, 1fr); }
+}
