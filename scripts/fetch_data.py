@@ -365,12 +365,13 @@ def main():
     large_trader_futures     = safe(get_large_trader_futures,      "大額交易人期貨")
     pc_ratio                 = safe(get_pc_ratio,                  "P/C Ratio (TAIFEX)")
 
-    record_date = None
-    for d in [weighted_index, tx_futures, institutional_spot]:
-        if d and d.get("date"):
-            record_date = d["date"]; break
-    if not record_date:
-        record_date = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    # 取所有資料來源中最新的日期（避免 TWSE 比 TAIFEX 晚更新）
+    all_dates = [
+        d.get("date") for d in [weighted_index, tx_futures, institutional_spot,
+                                  institutional_futures_tx, pc_ratio]
+        if d and d.get("date")
+    ]
+    record_date = max(all_dates) if all_dates else datetime.now(timezone.utc).strftime("%Y-%m-%d")
 
     basis = None
     if weighted_index and tx_futures:
