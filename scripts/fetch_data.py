@@ -1,18 +1,13 @@
 """
 台股期貨籌碼儀表板 - 每日資料抓取腳本
-資料來源（皆為官方公開資料，免金鑰）：
-  - 臺灣證券交易所 OpenAPI: https://openapi.twse.com.tw/v1/
-  - 臺灣期貨交易所 政府開放資料: https://www.taifex.com.tw/data_gov/taifex_open_data.asp
 """
-
 import io, json, os, re, traceback
 from datetime import datetime, timezone
-
 import pandas as pd
 import requests
 
-OUT_DIR  = os.path.join(os.path.dirname(__file__), "..", "data")
-RAW_DIR  = os.path.join(OUT_DIR, "raw")
+OUT_DIR      = os.path.join(os.path.dirname(__file__), "..", "data")
+RAW_DIR      = os.path.join(OUT_DIR, "raw")
 HISTORY_PATH = os.path.join(OUT_DIR, "history.json")
 LATEST_PATH  = os.path.join(OUT_DIR, "latest.json")
 LOG_PATH     = os.path.join(OUT_DIR, "fetch_log.txt")
@@ -30,9 +25,6 @@ def safe(fn, name):
         log(traceback.format_exc())
         return None
 
-# ---------------------------------------------------------------------------
-# 共用工具
-# ---------------------------------------------------------------------------
 def to_float(x, default=0.0):
     try:
         return float(str(x).replace(",", "").replace("%", "").strip())
@@ -41,19 +33,10 @@ def to_float(x, default=0.0):
 
 def find_col(df, *keywords):
     for col in df.columns:
-        col_str = str(col)
         for kw in keywords:
-            if kw in col_str:
+            if kw in str(col):
                 return col
     return None
-
-def twse_date_to_iso(s):
-    s = re.sub(r"\D", "", str(s))
-    if len(s) == 8:
-        return f"{s[0:4]}-{s[4:6]}-{s[6:8]}"
-    if len(s) == 7:
-        return f"{int(s[0:3])+1911}-{s[3:5]}-{s[5:7]}"
-    return s
 
 def roc_date_to_iso(s):
     s = str(s).strip()
@@ -72,60 +55,115 @@ def roc_date_to_iso(s):
 # ---------------------------------------------------------------------------
 def fetch_twse_json(endpoint):
     url = f"https://openapi.twse.com.tw/v1/{endpoint}"
-    resp = requests.get(url, timeout=30, headers={"User-Agent": "Mozilla/5.0"})
-    resp.raise_for_status()
-    return resp.json()
+    r = requests.get(url, timeout=30, headers={"User-Agent":"Mozilla/5.0"})
+    r.raise_for_status()
+    return r.json()
 
 def get_weighted_index():
     data = fetch_twse_json("exchangeReport/FMTQIK")
     df = pd.DataFrame(data)
     log(f"FMTQIK 欄位: {list(df.columns)}")
     if df.empty:
-        raise ValueError("FMTQIK 回傳空資料")
-    date_col    = find_col(df, "日期")
-    close_col   = find_col(df, "發行量加權股價指數", "加權股價指數", "指數")
-    chg_col     = find_col(df, "漲跌點數", "漲跌")
-    turnover_col= find_col(df, "成交金額")
-    log(f"  date_col={date_col}, close_col={close_col}, chg_col={chg_col}, turnover_col={turnover_col}")
+        raise ValueError("空資料")
+    # 欄位為英文：Date, TAIEX, Change, TradeValue
+    date_col     = find_col(df, "Date", "日期")
+    close_col    = find_col(df, "TAIEX", "發行量加權股價指數", "加權股價指數")
+    chg_col      = find_col(df, "Change", "漲跌點數", "漲跌")
+    turnover_col = find_col(df, "TradeValue", "成交金額")
+    log(f"  date={date_col}, close={close_col}, chg={chg_col}, turnover={turnover_col}")
     if not (date_col and close_col):
-        raise ValueError(f"FMTQIK 找不到必要欄位，現有欄位: {list(df.columns)}")
-    last = df.iloc[-1]
+        raise ValueError(f"找不到必要欄位，現有: {list(df.columns)}")
+    last   = df.iloc[-1]
     close  = to_float(last[close_col])
     change = to_float(last[chg_col]) if chg_col else 0.0
     prev   = close - change
+    # 日期可能是西元 8 碼或民國 7 碼
+    raw_date = str(last[date_col])
+    digits = re.sub(r"\D","", raw_date)
+    if len(digits) == 8:
+        iso_date = f"{digits[0:4]}-{digits[4:6]}-{digits[6:8]}"
+    elif len(digits) == 7:
+        iso_date = f"{int(digits[0:3])+1911}-{digits[3:5]}-{digits[5:7]}"
+    else:
+        iso_date = raw_date
+    turnover = to_float(last[turnover_col])/1e8 if turnover_col else None
     return {
-        "date": twse_date_to_iso(last[date_col]),
+        "date": iso_date,
         "close": round(close, 2),
         "change": round(change, 2),
         "change_pct": round(change/prev*100, 2) if prev else None,
-        "turnover_billion": round(to_float(last[turnover_col])/1e8, 2) if turnover_col else None,
+        "turnover_billion": round(turnover, 2) if turnover else None,
     }
 
 def get_institutional_spot():
-    data = fetch_twse_json("exchangeReport/BFIAUU")
-    df = pd.DataFrame(data)
-    log(f"BFIAUU 欄位: {list(df.columns)}")
-    if df.empty:
-        raise ValueError("BFIAUU 回傳空資料")
-    date_col = find_col(df, "日期")
-    name_col = find_col(df, "單位名稱", "機構名稱", "名稱")
-    buy_col  = find_col(df, "買進金額", "買進")
-    sell_col = find_col(df, "賣出金額", "賣出")
-    log(f"  date_col={date_col}, name_col={name_col}, buy_col={buy_col}, sell_col={sell_col}")
-    if not (date_col and name_col and buy_col and sell_col):
-        raise ValueError(f"BFIAUU 找不到必要欄位，現有欄位: {list(df.columns)}")
-    last_date = df[date_col].iloc[-1]
-    today = df[df[date_col] == last_date]
+    """
+    TWSE 三大法人整體買賣超。
+    嘗試多個可能的 endpoint，逐一 fallback。
+    """
+    endpoints = [
+        "fund/TWT38U",          # 外資及陸資買賣超彙總
+        "exchangeReport/BFI82U",
+        "exchangeReport/BFIAUU",
+    ]
+    df = None
+    used_ep = None
+    for ep in endpoints:
+        try:
+            data = fetch_twse_json(ep)
+            tmp = pd.DataFrame(data)
+            log(f"嘗試 {ep}，欄位: {list(tmp.columns)}, 列數: {len(tmp)}")
+            if not tmp.empty:
+                df = tmp
+                used_ep = ep
+                break
+        except Exception as e:
+            log(f"  {ep} 失敗: {e}")
+
+    if df is None:
+        raise ValueError("所有 TWSE 三大法人 endpoint 均失敗")
+
+    log(f"使用 endpoint: {used_ep}, 欄位: {list(df.columns)}")
+    df.columns = [str(c).strip() for c in df.columns]
+
+    # 找日期欄
+    date_col = find_col(df, "Date", "日期")
+    name_col = find_col(df, "Name", "單位名稱", "機構名稱", "名稱")
+    buy_col  = find_col(df, "BuyValue", "Buy", "買進金額", "買進")
+    sell_col = find_col(df, "SellValue", "Sell", "賣出金額", "賣出")
+    diff_col = find_col(df, "Diff", "買賣差額", "差額", "買賣超")
+    log(f"  date={date_col}, name={name_col}, buy={buy_col}, sell={sell_col}, diff={diff_col}")
+
+    if not (name_col and (buy_col or diff_col)):
+        raise ValueError(f"找不到必要欄位，現有: {list(df.columns)}")
+
+    # 取最新日期
+    if date_col:
+        last_date = df[date_col].iloc[-1]
+        today = df[df[date_col]==last_date]
+    else:
+        today = df
+
     def net(keyword):
-        rows = today[today[name_col].astype(str).str.contains(keyword)]
-        return round((rows[buy_col].apply(to_float).sum() - rows[sell_col].apply(to_float).sum()) / 1e8, 2)
-    foreign = net("外資")
-    trust   = net("投信")
-    dealer  = net("自營")
+        rows = today[today[name_col].astype(str).str.contains(keyword, case=False)]
+        if rows.empty:
+            return None
+        if diff_col:
+            return round(rows[diff_col].apply(to_float).sum()/1e8, 2)
+        if buy_col and sell_col:
+            b = rows[buy_col].apply(to_float).sum()
+            s = rows[sell_col].apply(to_float).sum()
+            return round((b-s)/1e8, 2)
+        return None
+
+    foreign = net("外資|Foreign")
+    trust   = net("投信|Trust|Invest")
+    dealer  = net("自營|Dealer|Prop")
+    iso_date = roc_date_to_iso(last_date) if date_col else datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    total = sum(v for v in [foreign, trust, dealer] if v is not None)
     return {
-        "date": twse_date_to_iso(last_date),
+        "date": iso_date,
         "foreign": foreign, "trust": trust, "dealer": dealer,
-        "total": round(foreign+trust+dealer, 2),
+        "total": round(total, 2),
     }
 
 # ---------------------------------------------------------------------------
@@ -133,11 +171,11 @@ def get_institutional_spot():
 # ---------------------------------------------------------------------------
 def fetch_taifex_csv(data_name, save_raw=True):
     url = f"https://www.taifex.com.tw/data_gov/taifex_open_data.asp?data_name={data_name}"
-    resp = requests.get(url, timeout=30, headers={"User-Agent": "Mozilla/5.0"})
-    resp.raise_for_status()
-    raw = resp.content
+    r = requests.get(url, timeout=30, headers={"User-Agent":"Mozilla/5.0"})
+    r.raise_for_status()
+    raw = r.content
     text = None
-    for enc in ("utf-8-sig", "utf-8", "big5", "cp950"):
+    for enc in ("utf-8-sig","utf-8","big5","cp950"):
         try:
             text = raw.decode(enc); break
         except UnicodeDecodeError:
@@ -153,30 +191,28 @@ def fetch_taifex_csv(data_name, save_raw=True):
 
 def get_tx_futures():
     df = fetch_taifex_csv("DailyMarketReportFut")
-    log(f"DailyMarketReportFut 欄位: {list(df.columns)}")
-    prod_col  = find_col(df, "契約代號", "商品代號", "商品名稱", "契約")
-    month_col = find_col(df, "到期月份")
     date_col  = find_col(df, "日期")
+    prod_col  = find_col(df, "契約代號", "商品代號", "契約")
+    month_col = find_col(df, "到期月份")
     close_col = find_col(df, "最後成交價", "收盤價", "結算價")
     chg_col   = find_col(df, "漲跌價", "漲跌(")
-    chgpct_col= find_col(df, "漲跌%", "漲跌百分比")
+    chgpct_col= find_col(df, "漲跌%")
     if not (prod_col and month_col and date_col):
         raise ValueError(f"找不到必要欄位，現有: {list(df.columns)}")
     tx = df[df[prod_col].astype(str).str.strip().isin(["TX","臺股期貨"])].copy()
     if tx.empty:
-        tx = df[df[prod_col].astype(str).str.contains("臺股期貨|TX")].copy()
+        tx = df[df[prod_col].astype(str).str.contains("TX")].copy()
     tx = tx[~tx[month_col].astype(str).str.contains("/")]
     last_date = tx[date_col].iloc[-1]
-    tx_today = tx[tx[date_col]==last_date].sort_values(month_col)
-    near = tx_today.iloc[0]
+    near = tx[tx[date_col]==last_date].sort_values(month_col).iloc[0]
     return {
         "date": roc_date_to_iso(last_date),
-        "price": to_float(near[close_col]) if close_col else None,
-        "change": to_float(near[chg_col]) if chg_col else None,
-        "change_pct": to_float(near[chgpct_col]) if chgpct_col else None,
+        "price":      to_float(near[close_col]) if close_col else None,
+        "change":     to_float(near[chg_col])   if chg_col   else None,
+        "change_pct": to_float(near[chgpct_col])if chgpct_col else None,
     }
 
-def _load_institutional_futures_df():
+def _load_inst_fut_df():
     df = fetch_taifex_csv("MarketDataOfMajorInstitutionalTradersDetailsOfFuturesContractsBytheDate")
     log(f"三大法人期貨 欄位: {list(df.columns)}")
     return df
@@ -184,18 +220,16 @@ def _load_institutional_futures_df():
 def get_institutional_futures_for(df, product_keyword):
     date_col   = find_col(df, "日期")
     prod_col   = find_col(df, "商品名稱", "商品")
-    # 實際欄位是「身份別」
     role_col   = find_col(df, "身份別", "身份", "身分")
-    # 實際欄位是「多空未平倉口數淨額」
-    oi_net_col = find_col(df, "多空未平倉口數淨額", "未平倉契約淨額", "未平倉淨額", "未沖銷契約淨額")
-    oi_chg_col = find_col(df, "多空未平倉口數淨額增減", "未平倉契約淨額增減", "增減")
-    log(f"  [{product_keyword}] role={role_col}, oi_net={oi_net_col}, oi_chg={oi_chg_col}")
+    oi_net_col = find_col(df, "多空未平倉口數淨額", "未平倉契約淨額", "未平倉淨額")
+    oi_chg_col = find_col(df, "多空未平倉口數淨額增減", "增減")
+    log(f"  [{product_keyword}] role={role_col}, oi_net={oi_net_col}")
     if not (date_col and prod_col and role_col and oi_net_col):
         raise ValueError(f"找不到必要欄位，現有: {list(df.columns)}")
     last_date = df[date_col].iloc[-1]
     today = df[(df[date_col]==last_date) & (df[prod_col].astype(str).str.contains(product_keyword))]
-    def pick(keyword):
-        rows = today[today[role_col].astype(str).str.contains(keyword)]
+    def pick(kw):
+        rows = today[today[role_col].astype(str).str.contains(kw)]
         if rows.empty: return None, None
         return to_float(rows[oi_net_col].iloc[0]), (to_float(rows[oi_chg_col].iloc[0]) if oi_chg_col else None)
     dealer_net, dealer_chg = pick("自營")
@@ -209,76 +243,92 @@ def get_institutional_futures_for(df, product_keyword):
     }
 
 def get_institutional_futures_tx():
-    return get_institutional_futures_for(_load_institutional_futures_df(), "臺股期貨")
+    return get_institutional_futures_for(_load_inst_fut_df(), "臺股期貨")
 
 def get_institutional_futures_mtx():
-    return get_institutional_futures_for(_load_institutional_futures_df(), "小型臺指期貨")
+    return get_institutional_futures_for(_load_inst_fut_df(), "小型臺指期貨")
 
 def get_large_trader_futures():
-    """
-    實際欄位：日期、契約、商品名稱(契約名稱)、到期月份(週別)、交易人類別、
-              前五大交易人買方數量、前五大交易人賣方數量、
-              前十大交易人買方數量、前十大交易人賣方數量、全市場未沖銷部位數
-    到期月份(週別) 的值：近月合約如 "202607"，所有月份通常是最後一列且值最大或含特定字
-    """
     df = fetch_taifex_csv("OpenInterestOfLargeTradersFutures")
     log(f"大額交易人期貨 欄位: {list(df.columns)}")
     date_col  = find_col(df, "日期")
     prod_col  = find_col(df, "商品名稱", "契約名稱", "契約")
     month_col = find_col(df, "到期月份")
-    b5_col    = find_col(df, "前五大交易人買方數量", "前五大交易人買方", "前五大買方")
-    s5_col    = find_col(df, "前五大交易人賣方數量", "前五大交易人賣方", "前五大賣方")
-    b10_col   = find_col(df, "前十大交易人買方數量", "前十大交易人買方", "前十大買方")
-    s10_col   = find_col(df, "前十大交易人賣方數量", "前十大交易人賣方", "前十大賣方")
-    log(f"  b5={b5_col}, s5={s5_col}, b10={b10_col}, s10={s10_col}, month={month_col}")
+    cat_col   = find_col(df, "交易人類別", "類別")
+    b5_col    = find_col(df, "前五大交易人買方數量", "前五大交易人買方")
+    s5_col    = find_col(df, "前五大交易人賣方數量", "前五大交易人賣方")
+    b10_col   = find_col(df, "前十大交易人買方數量", "前十大交易人買方")
+    s10_col   = find_col(df, "前十大交易人賣方數量", "前十大交易人賣方")
+    log(f"  b5={b5_col}, s5={s5_col}, b10={b10_col}, s10={s10_col}")
+    log(f"  month={month_col}, cat={cat_col}")
+
     if not (date_col and prod_col):
         raise ValueError(f"找不到必要欄位，現有: {list(df.columns)}")
+
     last_date = df[date_col].iloc[-1]
-    # 篩選臺股期貨 TX
     today = df[(df[date_col]==last_date) & (
         df[prod_col].astype(str).str.contains("臺股期貨|TX")
     )].copy()
-    log(f"  今日臺股期貨列數: {len(today)}")
-    if month_col:
-        log(f"  到期月份值: {today[month_col].tolist()}")
     result = {"date": roc_date_to_iso(last_date), "rows_found": len(today)}
     if today.empty or not (b5_col and s5_col and b10_col and s10_col):
         return result
 
+    # 記錄所有列的月份和類別，方便除錯
+    if month_col:
+        log(f"  到期月份值: {today[month_col].tolist()}")
+    if cat_col:
+        log(f"  交易人類別值: {today[cat_col].tolist()}")
+
     def extract(row):
-        b5  = to_float(row[b5_col])
-        s5  = to_float(row[s5_col])
-        b10 = to_float(row[b10_col])
-        s10 = to_float(row[s10_col])
+        b5  = to_float(row[b5_col]);  s5  = to_float(row[s5_col])
+        b10 = to_float(row[b10_col]); s10 = to_float(row[s10_col])
         return {
-            "top5_buy":  b5,  "top5_sell":  s5,  "top5_net":  round(b5-s5,0),
-            "top10_buy": b10, "top10_sell": s10, "top10_net": round(b10-s10,0),
+            "top5_buy":b5, "top5_sell":s5, "top5_net":round(b5-s5,0),
+            "top10_buy":b10,"top10_sell":s10,"top10_net":round(b10-s10,0),
         }
 
     if month_col:
-        month_vals = today[month_col].astype(str).tolist()
-        # 找「所有月份」列（通常含"所有"字樣或是數字最大的那列）
-        all_rows  = today[today[month_col].astype(str).str.contains("所有|合計|all", case=False)]
-        near_rows = today[~today[month_col].astype(str).str.contains("所有|合計|all", case=False)]
-        # 近月＝月份數字最小的那列
+        # 月份邏輯：
+        # 999912 = 所有月份合計（最大值）
+        # 666666 = 近三月或其他中間合計
+        # 202607 = 具體近月合約
+        today["_m"] = pd.to_numeric(today[month_col], errors="coerce").fillna(0)
+
+        # 一般交易人 = 交易人類別 不含「特定」的列
+        if cat_col:
+            general = today[~today[cat_col].astype(str).str.contains("特定")]
+            specific= today[today[cat_col].astype(str).str.contains("特定")]
+        else:
+            general = today
+            specific= pd.DataFrame()
+
+        log(f"  一般交易人列數={len(general)}, 特定法人列數={len(specific)}")
+        if not general.empty:
+            log(f"  一般月份值: {general['_m'].tolist()}")
+
+        # 近月 = 一般交易人中，月份 < 666666（具體合約月份）
+        near_rows = general[general["_m"] < 666666].sort_values("_m") if not general.empty else pd.DataFrame()
+        # 所有月份 = 月份 = 999912（最大）
+        all_rows  = general[general["_m"] == 999912] if not general.empty else pd.DataFrame()
+        # 若沒有 999912，取月份最大的列
+        if all_rows.empty and not general.empty:
+            max_m = general["_m"].max()
+            all_rows = general[general["_m"] == max_m]
+
         if not near_rows.empty:
-            try:
-                near_rows = near_rows.copy()
-                near_rows["_sort"] = near_rows[month_col].astype(str).str.extract(r"(\d+)")[0].astype(float)
-                near_rows = near_rows.sort_values("_sort")
-            except Exception:
-                pass
             result["near_month"] = extract(near_rows.iloc[0])
         if not all_rows.empty:
             result["all_months"] = extract(all_rows.iloc[0])
-        elif len(today) >= 2:
-            # 若沒有「所有月份」字樣，取月份數字最大的那列當作所有月份
-            try:
-                today2 = today.copy()
-                today2["_sort"] = today2[month_col].astype(str).str.extract(r"(\d+)")[0].astype(float)
-                result["all_months"] = extract(today2.sort_values("_sort").iloc[-1])
-            except Exception:
-                result["all_months"] = extract(today.iloc[-1])
+
+        # 特定法人
+        if not specific.empty:
+            specific_all = specific[specific["_m"] == 999912]
+            if specific_all.empty:
+                specific_all = specific[specific["_m"] == specific["_m"].max()]
+            if not specific_all.empty:
+                row = specific_all.iloc[0]
+                sp_b10 = to_float(row[b10_col]); sp_s10 = to_float(row[s10_col])
+                result["top10_specific_net"] = round(sp_b10 - sp_s10, 0)
     else:
         result["near_month"] = extract(today.iloc[0])
         if len(today) >= 2:
@@ -290,37 +340,16 @@ def get_pc_ratio():
     df = fetch_taifex_csv("PutCallRatio")
     log(f"PutCallRatio 欄位: {list(df.columns)}")
     date_col = find_col(df, "日期")
-    # 實際欄位：買賣權未平倉量比率%
-    pc_col   = find_col(df, "買賣權未平倉量比率", "賣買權未平倉比", "未平倉量比率", "比率")
-    vix_col  = find_col(df, "VIX")
-    log(f"  date={date_col}, pc={pc_col}, vix={vix_col}")
+    # 優先抓「未平倉量比率」，不要抓成「成交量比率」
+    pc_col   = find_col(df, "買賣權未平倉量比率", "賣買權未平倉比", "未平倉量比率%")
+    log(f"  date={date_col}, pc={pc_col}")
     if not (date_col and pc_col):
         raise ValueError(f"找不到必要欄位，現有: {list(df.columns)}")
     last = df.iloc[-1]
-    out = {
+    return {
         "date": roc_date_to_iso(last[date_col]),
         "pc_ratio": round(to_float(last[pc_col]), 2),
     }
-    if vix_col:
-        out["vix"] = round(to_float(last[vix_col]), 2)
-    return out
-
-# ---------------------------------------------------------------------------
-# VIX — 另外從 TAIFEX 官網抓（PutCallRatio CSV 沒有 VIX 欄）
-# ---------------------------------------------------------------------------
-def get_vix():
-    """嘗試從 VolatilityIndex 資料集抓 VIX；此資料集可能不在政府開放資料，失敗則回 None"""
-    try:
-        df = fetch_taifex_csv("VolatilityIndex", save_raw=True)
-        log(f"VolatilityIndex 欄位: {list(df.columns)}")
-        date_col = find_col(df, "日期")
-        vix_col  = find_col(df, "VIX", "波動率指數", "指數")
-        if date_col and vix_col:
-            return {"date": roc_date_to_iso(df.iloc[-1][date_col]),
-                    "vix": round(to_float(df.iloc[-1][vix_col]), 2)}
-    except Exception as e:
-        log(f"[WARN] VIX 資料抓取失敗: {e}")
-    return None
 
 # ---------------------------------------------------------------------------
 # 主流程
@@ -328,18 +357,13 @@ def get_vix():
 def main():
     os.makedirs(OUT_DIR, exist_ok=True)
 
-    weighted_index          = safe(get_weighted_index,           "加權指數 (TWSE FMTQIK)")
-    institutional_spot      = safe(get_institutional_spot,       "三大法人現貨 (TWSE BFIAUU)")
-    tx_futures              = safe(get_tx_futures,               "台指期 (TAIFEX DailyMarketReportFut)")
-    institutional_futures_tx= safe(get_institutional_futures_tx, "三大法人期貨-臺股期貨")
-    institutional_futures_mtx=safe(get_institutional_futures_mtx,"三大法人期貨-小型臺指期貨")
-    large_trader_futures    = safe(get_large_trader_futures,     "大額交易人期貨")
-    pc_ratio                = safe(get_pc_ratio,                 "P/C Ratio (TAIFEX)")
-    vix_data                = safe(get_vix,                      "VIX (TAIFEX VolatilityIndex)")
-
-    # 把 VIX 補進 pc_ratio
-    if vix_data and pc_ratio:
-        pc_ratio["vix"] = vix_data.get("vix")
+    weighted_index           = safe(get_weighted_index,            "加權指數 (TWSE FMTQIK)")
+    institutional_spot       = safe(get_institutional_spot,        "三大法人現貨 (TWSE)")
+    tx_futures               = safe(get_tx_futures,                "台指期 (TAIFEX)")
+    institutional_futures_tx = safe(get_institutional_futures_tx,  "三大法人期貨-臺股期貨")
+    institutional_futures_mtx= safe(get_institutional_futures_mtx, "三大法人期貨-小型臺指期貨")
+    large_trader_futures     = safe(get_large_trader_futures,      "大額交易人期貨")
+    pc_ratio                 = safe(get_pc_ratio,                  "P/C Ratio (TAIFEX)")
 
     record_date = None
     for d in [weighted_index, tx_futures, institutional_spot]:
@@ -349,8 +373,10 @@ def main():
         record_date = datetime.now(timezone.utc).strftime("%Y-%m-%d")
 
     basis = None
-    if weighted_index and tx_futures and tx_futures.get("price") and weighted_index.get("close"):
-        basis = round(tx_futures["price"] - weighted_index["close"], 2)
+    if weighted_index and tx_futures:
+        p = tx_futures.get("price"); c = weighted_index.get("close")
+        if p and c:
+            basis = round(p - c, 2)
 
     record = {
         "date": record_date,
