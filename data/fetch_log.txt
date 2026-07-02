@@ -1,34 +1,29 @@
 FMTQIK 欄位: ['Date', 'TradeVolume', 'TradeValue', 'Transaction', 'TAIEX', 'Change']
-  date_col=None, close_col=None, chg_col=None, turnover_col=None
-[ERROR] 加權指數 (TWSE FMTQIK): FMTQIK 找不到必要欄位，現有欄位: ['Date', 'TradeVolume', 'TradeValue', 'Transaction', 'TAIEX', 'Change']
+  date=Date, close=TAIEX, chg=Change, turnover=TradeValue
+  fund/TWT38U 失敗: Expecting value: line 1 column 1 (char 0)
+  exchangeReport/BFI82U 失敗: Expecting value: line 1 column 1 (char 0)
+嘗試 exchangeReport/BFIAUU，欄位: ['Code', 'Name', 'Classn', 'TradePrice', 'TradeVolume', 'TradeValue'], 列數: 42
+使用 endpoint: exchangeReport/BFIAUU, 欄位: ['Code', 'Name', 'Classn', 'TradePrice', 'TradeVolume', 'TradeValue']
+  date=None, name=Name, buy=None, sell=None, diff=None
+[ERROR] 三大法人現貨 (TWSE): 找不到必要欄位，現有: ['Code', 'Name', 'Classn', 'TradePrice', 'TradeVolume', 'TradeValue']
 Traceback (most recent call last):
-  File "/home/runner/work/Taiwan-number-one/Taiwan-number-one/scripts/fetch_data.py", line 27, in safe
+  File "/home/runner/work/Taiwan-number-one/Taiwan-number-one/scripts/fetch_data.py", line 22, in safe
     return fn()
            ^^^^
-  File "/home/runner/work/Taiwan-number-one/Taiwan-number-one/scripts/fetch_data.py", line 91, in get_weighted_index
-    raise ValueError(f"FMTQIK 找不到必要欄位，現有欄位: {list(df.columns)}")
-ValueError: FMTQIK 找不到必要欄位，現有欄位: ['Date', 'TradeVolume', 'TradeValue', 'Transaction', 'TAIEX', 'Change']
+  File "/home/runner/work/Taiwan-number-one/Taiwan-number-one/scripts/fetch_data.py", line 137, in get_institutional_spot
+    raise ValueError(f"找不到必要欄位，現有: {list(df.columns)}")
+ValueError: 找不到必要欄位，現有: ['Code', 'Name', 'Classn', 'TradePrice', 'TradeVolume', 'TradeValue']
 
-BFIAUU 欄位: ['Code', 'Name', 'Classn', 'TradePrice', 'TradeVolume', 'TradeValue']
-  date_col=None, name_col=None, buy_col=None, sell_col=None
-[ERROR] 三大法人現貨 (TWSE BFIAUU): BFIAUU 找不到必要欄位，現有欄位: ['Code', 'Name', 'Classn', 'TradePrice', 'TradeVolume', 'TradeValue']
-Traceback (most recent call last):
-  File "/home/runner/work/Taiwan-number-one/Taiwan-number-one/scripts/fetch_data.py", line 27, in safe
-    return fn()
-           ^^^^
-  File "/home/runner/work/Taiwan-number-one/Taiwan-number-one/scripts/fetch_data.py", line 116, in get_institutional_spot
-    raise ValueError(f"BFIAUU 找不到必要欄位，現有欄位: {list(df.columns)}")
-ValueError: BFIAUU 找不到必要欄位，現有欄位: ['Code', 'Name', 'Classn', 'TradePrice', 'TradeVolume', 'TradeValue']
-
-DailyMarketReportFut 欄位: ['日期', '契約代號', '到期月份(週別)', '開盤價', '最高價', '最低價', '最後成交價', '漲跌價', '漲跌%', '合計成交量', '結算價', '未沖銷契約數', '最後最佳買價', '最後最佳賣價', '歷史最高價', '歷史最低價', '是否因訊息面暫停交易', '交易時段', '價差對單式委託成交量']
 三大法人期貨 欄位: ['日期', '商品名稱', '身份別', '多方交易口數', '多方交易契約金額(千元)', '空方交易口數', '空方交易契約金額(千元)', '多空交易口數淨額', '多空交易契約金額淨額(千元)', '多方未平倉口數', '多方未平倉契約金額(千元)', '空方未平倉口數', '空方未平倉契約金額(千元)', '多空未平倉口數淨額', '多空未平倉契約金額淨額(千元)']
-  [臺股期貨] role=身份別, oi_net=多空未平倉口數淨額, oi_chg=None
+  [臺股期貨] role=身份別, oi_net=多空未平倉口數淨額
 三大法人期貨 欄位: ['日期', '商品名稱', '身份別', '多方交易口數', '多方交易契約金額(千元)', '空方交易口數', '空方交易契約金額(千元)', '多空交易口數淨額', '多空交易契約金額淨額(千元)', '多方未平倉口數', '多方未平倉契約金額(千元)', '空方未平倉口數', '空方未平倉契約金額(千元)', '多空未平倉口數淨額', '多空未平倉契約金額淨額(千元)']
-  [小型臺指期貨] role=身份別, oi_net=多空未平倉口數淨額, oi_chg=None
+  [小型臺指期貨] role=身份別, oi_net=多空未平倉口數淨額
 大額交易人期貨 欄位: ['日期', '契約', '商品名稱(契約名稱)', '到期月份(週別)', '交易人類別', '前五大交易人買方數量', '前五大交易人賣方數量', '前十大交易人買方數量', '前十大交易人賣方數量', '全市場未沖銷部位數']
-  b5=前五大交易人買方數量, s5=前五大交易人賣方數量, b10=前十大交易人買方數量, s10=前十大交易人賣方數量, month=到期月份(週別)
-  今日臺股期貨列數: 6
+  b5=前五大交易人買方數量, s5=前五大交易人賣方數量, b10=前十大交易人買方數量, s10=前十大交易人賣方數量
+  month=到期月份(週別), cat=交易人類別
   到期月份值: [202607, 666666, 666666, 202607, 999912, 999912]
+  交易人類別值: [0, 0, 1, 1, 0, 1]
+  一般交易人列數=6, 特定法人列數=0
+  一般月份值: [202607, 666666, 666666, 202607, 999912, 999912]
 PutCallRatio 欄位: ['日期', '賣權成交量', '買權成交量', '買賣權成交量比率%', '賣權未平倉量', '買權未平倉量', '買賣權未平倉量比率%']
-  date=日期, pc=買賣權成交量比率%, vix=None
-VolatilityIndex 欄位: ['no such data']
+  date=日期, pc=買賣權未平倉量比率%
