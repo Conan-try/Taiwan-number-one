@@ -1,0 +1,86 @@
+[ERROR] 加權指數 (TWSE FMTQIK): None
+Traceback (most recent call last):
+  File "/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/pandas/core/indexes/base.py", line 3641, in get_loc
+    return self._engine.get_loc(casted_key)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "pandas/_libs/index.pyx", line 168, in pandas._libs.index.IndexEngine.get_loc
+  File "pandas/_libs/index.pyx", line 197, in pandas._libs.index.IndexEngine.get_loc
+  File "pandas/_libs/hashtable_class_helper.pxi", line 7668, in pandas._libs.hashtable.PyObjectHashTable.get_item
+  File "pandas/_libs/hashtable_class_helper.pxi", line 7676, in pandas._libs.hashtable.PyObjectHashTable.get_item
+KeyError: nan
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/runner/work/Taiwan-number-one/Taiwan-number-one/scripts/fetch_data.py", line 40, in safe
+    return fn()
+           ^^^^
+  File "/home/runner/work/Taiwan-number-one/Taiwan-number-one/scripts/fetch_data.py", line 114, in get_weighted_index
+    close = to_float(last[close_col])
+                     ~~~~^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/pandas/core/series.py", line 959, in __getitem__
+    return self._get_value(key)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/pandas/core/series.py", line 1046, in _get_value
+    loc = self.index.get_loc(label)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/pandas/core/indexes/base.py", line 3648, in get_loc
+    raise KeyError(key) from err
+KeyError: None
+
+[ERROR] 三大法人現貨買賣超 (TWSE BFIAUU): None
+Traceback (most recent call last):
+  File "/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/pandas/core/indexes/base.py", line 3641, in get_loc
+    return self._engine.get_loc(casted_key)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "pandas/_libs/index.pyx", line 168, in pandas._libs.index.IndexEngine.get_loc
+  File "pandas/_libs/index.pyx", line 197, in pandas._libs.index.IndexEngine.get_loc
+  File "pandas/_libs/hashtable_class_helper.pxi", line 7668, in pandas._libs.hashtable.PyObjectHashTable.get_item
+  File "pandas/_libs/hashtable_class_helper.pxi", line 7676, in pandas._libs.hashtable.PyObjectHashTable.get_item
+KeyError: nan
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/runner/work/Taiwan-number-one/Taiwan-number-one/scripts/fetch_data.py", line 40, in safe
+    return fn()
+           ^^^^
+  File "/home/runner/work/Taiwan-number-one/Taiwan-number-one/scripts/fetch_data.py", line 135, in get_institutional_spot
+    last_date = df[date_col].iloc[-1]
+                ~~^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/pandas/core/frame.py", line 4378, in __getitem__
+    indexer = self.columns.get_loc(key)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/pandas/core/indexes/base.py", line 3648, in get_loc
+    raise KeyError(key) from err
+KeyError: None
+
+DailyMarketReportFut 欄位: ['日期', '契約代號', '到期月份(週別)', '開盤價', '最高價', '最低價', '最後成交價', '漲跌價', '漲跌%', '合計成交量', '結算價', '未沖銷契約數', '最後最佳買價', '最後最佳賣價', '歷史最高價', '歷史最低價', '是否因訊息面暫停交易', '交易時段', '價差對單式委託成交量']
+三大法人期貨 欄位: ['日期', '商品名稱', '身份別', '多方交易口數', '多方交易契約金額(千元)', '空方交易口數', '空方交易契約金額(千元)', '多空交易口數淨額', '多空交易契約金額淨額(千元)', '多方未平倉口數', '多方未平倉契約金額(千元)', '空方未平倉口數', '空方未平倉契約金額(千元)', '多空未平倉口數淨額', '多空未平倉契約金額淨額(千元)']
+[ERROR] 三大法人期貨-臺股期貨 (TAIFEX): 找不到必要欄位
+Traceback (most recent call last):
+  File "/home/runner/work/Taiwan-number-one/Taiwan-number-one/scripts/fetch_data.py", line 40, in safe
+    return fn()
+           ^^^^
+  File "/home/runner/work/Taiwan-number-one/Taiwan-number-one/scripts/fetch_data.py", line 268, in get_institutional_futures_tx
+    return get_institutional_futures_for(df, "臺股期貨")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/Taiwan-number-one/Taiwan-number-one/scripts/fetch_data.py", line 238, in get_institutional_futures_for
+    raise ValueError("找不到必要欄位")
+ValueError: 找不到必要欄位
+
+三大法人期貨 欄位: ['日期', '商品名稱', '身份別', '多方交易口數', '多方交易契約金額(千元)', '空方交易口數', '空方交易契約金額(千元)', '多空交易口數淨額', '多空交易契約金額淨額(千元)', '多方未平倉口數', '多方未平倉契約金額(千元)', '空方未平倉口數', '空方未平倉契約金額(千元)', '多空未平倉口數淨額', '多空未平倉契約金額淨額(千元)']
+[ERROR] 三大法人期貨-小型臺指期貨 (TAIFEX): 找不到必要欄位
+Traceback (most recent call last):
+  File "/home/runner/work/Taiwan-number-one/Taiwan-number-one/scripts/fetch_data.py", line 40, in safe
+    return fn()
+           ^^^^
+  File "/home/runner/work/Taiwan-number-one/Taiwan-number-one/scripts/fetch_data.py", line 273, in get_institutional_futures_mtx
+    return get_institutional_futures_for(df, "小型臺指期貨")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/Taiwan-number-one/Taiwan-number-one/scripts/fetch_data.py", line 238, in get_institutional_futures_for
+    raise ValueError("找不到必要欄位")
+ValueError: 找不到必要欄位
+
+大額交易人期貨 欄位: ['日期', '契約', '商品名稱(契約名稱)', '到期月份(週別)', '交易人類別', '前五大交易人買方數量', '前五大交易人賣方數量', '前十大交易人買方數量', '前十大交易人賣方數量', '全市場未沖銷部位數']
+PutCallRatio 欄位: ['日期', '賣權成交量', '買權成交量', '買賣權成交量比率%', '賣權未平倉量', '買權未平倉量', '買賣權未平倉量比率%']

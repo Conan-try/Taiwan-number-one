@@ -1,78 +1,47 @@
 {
-  "date": "2026-06-25",
-  "fetched_at": "2026-06-25T07:40:00+00:00",
-  "weighted_index": {
-    "date": "2026-06-25",
-    "close": 46255.26,
-    "change": 211.66,
-    "change_pct": 0.46,
-    "turnover_billion": 13556.87
-  },
+  "date": "20260702",
+  "fetched_at": "2026-07-02T18:59:19.074551+00:00",
+  "weighted_index": null,
   "tx_futures": {
-    "date": "2026-06-25",
-    "price": 46544.0,
-    "change": 137.0,
-    "change_pct": 0.30
+    "date": "20260702",
+    "price": 46599.0,
+    "change": -622.0,
+    "change_pct": -1.32
   },
-  "basis": 288.74,
-  "institutional_spot": {
-    "date": "2026-06-25",
-    "foreign": -405.10,
-    "trust": 161.41,
-    "dealer": -70.01,
-    "total": -313.70
-  },
-  "institutional_futures_tx": {
-    "date": "2026-06-25",
-    "dealer_oi_net": 3003,
-    "dealer_oi_chg": -274,
-    "trust_oi_net": 60921,
-    "trust_oi_chg": 164,
-    "foreign_oi_net": -81051,
-    "foreign_oi_chg": 2554
-  },
-  "institutional_futures_mtx": {
-    "date": "2026-06-25",
-    "foreign_oi_net": 1615,
-    "foreign_oi_chg": 733
-  },
+  "basis": null,
+  "institutional_spot": null,
+  "institutional_futures_tx": null,
+  "institutional_futures_mtx": null,
   "large_trader_futures": {
-    "date": "2026-06-25",
-    "rows_found": 2,
+    "date": "20260702",
+    "rows_found": 6,
     "near_month": {
-      "top5_buy": 61765,
-      "top5_sell": 60308,
-      "top5_net": 1457,
+      "top5_buy": 66205.0,
+      "top5_sell": 59607.0,
+      "top5_net": 6598.0,
       "top5_buy_chg": null,
       "top5_sell_chg": null,
-      "top10_buy": 71520,
-      "top10_sell": 81940,
-      "top10_net": -10420,
+      "top10_buy": 76074.0,
+      "top10_sell": 80046.0,
+      "top10_net": -3972.0,
       "top10_buy_chg": null,
-      "top10_sell_chg": null,
-      "top10_specific_buy": null,
-      "top10_specific_sell": null,
-      "top10_specific_net": -18878
+      "top10_sell_chg": null
     },
     "all_months": {
-      "top5_buy": 62496,
-      "top5_sell": 61182,
-      "top5_net": 1314,
+      "top5_buy": 11.0,
+      "top5_sell": 12.0,
+      "top5_net": -1.0,
       "top5_buy_chg": null,
       "top5_sell_chg": null,
-      "top10_buy": 72297,
-      "top10_sell": 83187,
-      "top10_net": -10890,
+      "top10_buy": 12.0,
+      "top10_sell": 12.0,
+      "top10_net": 0.0,
       "top10_buy_chg": null,
-      "top10_sell_chg": null,
-      "top10_specific_buy": null,
-      "top10_specific_sell": null,
-      "top10_specific_net": -18878
+      "top10_sell_chg": null
     }
   },
   "pc_ratio": {
-    "date": "2026-06-25",
-    "pc_ratio": 114.57,
-    "vix": 40.39
+    "date": "20260602.0",
+    "pc_ratio": 106.89
   }
 }

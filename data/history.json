@@ -53,6 +53,53 @@
         "pc_ratio": 114.57,
         "vix": 40.39
       }
+    },
+    {
+      "date": "20260702",
+      "fetched_at": "2026-07-02T18:59:19.074551+00:00",
+      "weighted_index": null,
+      "tx_futures": {
+        "date": "20260702",
+        "price": 46599.0,
+        "change": -622.0,
+        "change_pct": -1.32
+      },
+      "basis": null,
+      "institutional_spot": null,
+      "institutional_futures_tx": null,
+      "institutional_futures_mtx": null,
+      "large_trader_futures": {
+        "date": "20260702",
+        "rows_found": 6,
+        "near_month": {
+          "top5_buy": 66205.0,
+          "top5_sell": 59607.0,
+          "top5_net": 6598.0,
+          "top5_buy_chg": null,
+          "top5_sell_chg": null,
+          "top10_buy": 76074.0,
+          "top10_sell": 80046.0,
+          "top10_net": -3972.0,
+          "top10_buy_chg": null,
+          "top10_sell_chg": null
+        },
+        "all_months": {
+          "top5_buy": 11.0,
+          "top5_sell": 12.0,
+          "top5_net": -1.0,
+          "top5_buy_chg": null,
+          "top5_sell_chg": null,
+          "top10_buy": 12.0,
+          "top10_sell": 12.0,
+          "top10_net": 0.0,
+          "top10_buy_chg": null,
+          "top10_sell_chg": null
+        }
+      },
+      "pc_ratio": {
+        "date": "20260602.0",
+        "pc_ratio": 106.89
+      }
     }
   ]
 }
