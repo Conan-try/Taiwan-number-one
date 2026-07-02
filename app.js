@@ -14,7 +14,17 @@ async function loadJSON(path) {
 
 function renderHero(latest) {
   document.getElementById("dataDate").textContent = latest.date || "－";
-  document.getElementById("fetchedAt").textContent = latest.fetched_at ? latest.fetched_at.replace("T"," ").slice(0,16)+" UTC" : "－";
+  if (latest.fetched_at) {
+    const tw = new Date(latest.fetched_at);
+    const twStr = tw.toLocaleString("zh-TW", {
+      timeZone: "Asia/Taipei",
+      year: "numeric", month: "2-digit", day: "2-digit",
+      hour: "2-digit", minute: "2-digit", hour12: false
+    }).replace(/\//g, "-");
+    document.getElementById("fetchedAt").textContent = twStr + " (台灣時間)";
+  } else {
+    document.getElementById("fetchedAt").textContent = "－";
+  }
   const idx = latest.weighted_index;
   if (idx) {
     document.getElementById("idxClose").textContent = fmt(idx.close,2);
