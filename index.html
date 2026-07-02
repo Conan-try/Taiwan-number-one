@@ -63,17 +63,16 @@
     </div>
 
     <div class="card">
-      <h2>外資及大額交易人期貨 <span class="unit">口</span></h2>
-      <table class="data-table" id="largeTraderTable">
-        <tbody></tbody>
-      </table>
-    </div>
-
-    <div class="card">
       <h2>外資－小型臺指期貨 留倉 <span class="unit">口</span></h2>
       <div id="futMtxBars" class="bars"></div>
     </div>
 
+  </section>
+
+  <!-- 前五大/前十大交易人（獨立全寬區塊） -->
+  <section class="card lt-card">
+    <h2>台指期 大額交易人未沖銷部位 <span class="unit">口（括號內為增減）</span></h2>
+    <div id="largeTraderDetail"></div>
   </section>
 
   <section class="charts">
@@ -98,7 +97,7 @@
       <li>三大法人現貨買賣超 — 臺灣證券交易所 OpenAPI（exchangeReport/BFIAUU）</li>
       <li>台指期（近月）行情 — 臺灣期貨交易所 政府開放資料（DailyMarketReportFut）</li>
       <li>三大法人期貨留倉 — 臺灣期貨交易所 政府開放資料（三大法人區分各期貨契約）</li>
-      <li>大額交易人未沖銷部位 — 臺灣期貨交易所 政府開放資料（OpenInterestOfLargeTradersFutures）</li>
+      <li>前五大/前十大交易人未沖銷部位 — 臺灣期貨交易所 政府開放資料（OpenInterestOfLargeTradersFutures）</li>
       <li>賣買權未平倉比 / VIX — 臺灣期貨交易所 政府開放資料（PutCallRatio）</li>
     </ul>
     <p class="disclaimer">本網站資料僅供參考，不保證完整性與正確性，不作為投資建議，請自行審慎判斷並承擔交易風險。</p>
