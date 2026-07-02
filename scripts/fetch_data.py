@@ -274,6 +274,14 @@ def get_institutional_futures_mtx():
 
 
 def get_large_trader_futures():
+    """
+    抓取前五大/前十大交易人期貨未沖銷部位，包含：
+    - 近月份：買方、賣方、淨額、增減
+    - 所有月份：買方、賣方、淨額、增減
+    - 前十大特定法人：買方、賣方、淨額、增減
+    TAIFEX CSV 通常有兩列：一列是近月份、一列是所有月份。
+    用「月份別」或列順序來區分。
+    """
     df = fetch_taifex_csv("OpenInterestOfLargeTradersFutures")
     log(f"大額交易人期貨 欄位: {list(df.columns)}")
     date_col = find_col(df, "日期")
@@ -282,27 +290,76 @@ def get_large_trader_futures():
         raise ValueError("找不到必要欄位")
 
     last_date = df[date_col].iloc[-1]
-    today = df[(df[date_col] == last_date) & (df[prod_col].astype(str).str.contains("臺股期貨"))]
+    today = df[(df[date_col] == last_date) & (df[prod_col].astype(str).str.contains("臺股期貨"))].copy()
 
     result = {"date": roc_date_to_iso(last_date), "rows_found": len(today)}
+    if today.empty:
+        return result
 
-    buyer5_col = find_col(df, "前五大交易人買方", "前五大買方")
-    seller5_col = find_col(df, "前五大交易人賣方", "前五大賣方")
-    buyer10_col = find_col(df, "前十大交易人買方", "前十大買方")
-    seller10_col = find_col(df, "前十大交易人賣方", "前十大賣方")
-    specific_buy_col = find_col(df, "特定法人買方", "前十大特定法人買方")
-    specific_sell_col = find_col(df, "特定法人賣方", "前十大特定法人賣方")
+    # 欄位模糊比對（TAIFEX 欄位名常有空白或全半形差異）
+    def fc(*kws): return find_col(df, *kws)
 
-    if not today.empty:
-        row = today.iloc[0]
-        if buyer5_col and seller5_col:
-            result["top5_net"] = round(to_float(row[buyer5_col]) - to_float(row[seller5_col]), 0)
-        if buyer10_col and seller10_col:
-            result["top10_net"] = round(to_float(row[buyer10_col]) - to_float(row[seller10_col]), 0)
-        if specific_buy_col and specific_sell_col:
-            result["top10_specific_net"] = round(
-                to_float(row[specific_buy_col]) - to_float(row[specific_sell_col]), 0
-            )
+    b5n  = fc("前五大交易人買方", "前五大買方口數")
+    s5n  = fc("前五大交易人賣方", "前五大賣方口數")
+    b10n = fc("前十大交易人買方", "前十大買方口數")
+    s10n = fc("前十大交易人賣方", "前十大賣方口數")
+    sp_b = fc("特定法人買方", "前十大特定法人買方")
+    sp_s = fc("特定法人賣方", "前十大特定法人賣方")
+
+    # 嘗試找「增減」欄（可能叫「前五大交易人買方增減」等）
+    b5c  = fc("前五大交易人買方增減", "前五大買方增減")
+    s5c  = fc("前五大交易人賣方增減", "前五大賣方增減")
+    b10c = fc("前十大交易人買方增減", "前十大買方增減")
+    s10c = fc("前十大交易人賣方增減", "前十大賣方增減")
+    sp_bc= fc("特定法人買方增減", "前十大特定法人買方增減")
+    sp_sc= fc("特定法人賣方增減", "前十大特定法人賣方增減")
+
+    # 找「月份別」欄以區分近月/所有月份
+    month_type_col = fc("月份別", "近月", "所有月份")
+
+    def extract(row):
+        out = {}
+        def g(col): return to_float(row[col]) if col and col in row.index else None
+        if b5n and s5n:
+            out["top5_buy"]  = g(b5n)
+            out["top5_sell"] = g(s5n)
+            out["top5_net"]  = round(g(b5n) - g(s5n), 0) if g(b5n) is not None and g(s5n) is not None else None
+            out["top5_buy_chg"]  = g(b5c)
+            out["top5_sell_chg"] = g(s5c)
+        if b10n and s10n:
+            out["top10_buy"]  = g(b10n)
+            out["top10_sell"] = g(s10n)
+            out["top10_net"]  = round(g(b10n) - g(s10n), 0) if g(b10n) is not None and g(s10n) is not None else None
+            out["top10_buy_chg"]  = g(b10c)
+            out["top10_sell_chg"] = g(s10c)
+        if sp_b and sp_s:
+            out["top10_specific_buy"]  = g(sp_b)
+            out["top10_specific_sell"] = g(sp_s)
+            out["top10_specific_net"]  = round(g(sp_b) - g(sp_s), 0) if g(sp_b) is not None and g(sp_s) is not None else None
+            out["top10_specific_buy_chg"]  = g(sp_bc)
+            out["top10_specific_sell_chg"] = g(sp_sc)
+        return out
+
+    if month_type_col:
+        # 有月份別欄：分別取近月與所有月份
+        near_rows = today[today[month_type_col].astype(str).str.contains("近月")]
+        all_rows  = today[today[month_type_col].astype(str).str.contains("所有")]
+        if not near_rows.empty:
+            result["near_month"] = extract(near_rows.iloc[0])
+        if not all_rows.empty:
+            result["all_months"] = extract(all_rows.iloc[0])
+        # 若只有一列，同時放進兩個 key
+        if near_rows.empty and all_rows.empty and not today.empty:
+            result["near_month"] = extract(today.iloc[0])
+            result["all_months"] = extract(today.iloc[0])
+    else:
+        # 沒有月份別欄：第一列視為近月，第二列（若有）視為所有月份
+        result["near_month"] = extract(today.iloc[0])
+        if len(today) >= 2:
+            result["all_months"] = extract(today.iloc[1])
+        else:
+            result["all_months"] = extract(today.iloc[0])
+
     return result
 
 
