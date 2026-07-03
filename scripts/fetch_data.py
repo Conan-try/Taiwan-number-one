@@ -40,13 +40,16 @@ def find_col(df, *keywords):
 
 def roc_date_to_iso(s):
     s = str(s).strip()
-    # 純8位數字 YYYYMMDD（TAIFEX常見格式）
+    # 移除 pandas 讀成浮點數的小數點（如 20260702.0 → 20260702）
+    if "." in s:
+        s = s.split(".")[0]
+    # 純8位數字 YYYYMMDD
     if re.match(r"^\d{8}$", s):
         return f"{s[0:4]}-{s[4:6]}-{s[6:8]}"
     # 純7位數字 YYYMMDD（民國年）
     if re.match(r"^\d{7}$", s):
         return f"{int(s[0:3])+1911}-{s[3:5]}-{s[5:7]}"
-    # 有分隔符的民國年 YYY/MM/DD 或 YYY-MM-DD
+    # 有分隔符的民國年 YYY/MM/DD
     m = re.match(r"(\d{2,3})[/-](\d{1,2})[/-](\d{1,2})", s)
     if m:
         roc, mo, da = m.groups()
