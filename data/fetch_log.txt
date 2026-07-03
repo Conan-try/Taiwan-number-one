@@ -2,18 +2,10 @@ FMTQIK 欄位: ['Date', 'TradeVolume', 'TradeValue', 'Transaction', 'TAIEX', 'Ch
   date=Date, close=TAIEX, chg=Change, turnover=TradeValue
   fund/TWT38U 失敗: Expecting value: line 1 column 1 (char 0)
   exchangeReport/BFI82U 失敗: Expecting value: line 1 column 1 (char 0)
-嘗試 exchangeReport/BFIAUU，欄位: ['Code', 'Name', 'Classn', 'TradePrice', 'TradeVolume', 'TradeValue'], 列數: 42
+嘗試 exchangeReport/BFIAUU，欄位: ['Code', 'Name', 'Classn', 'TradePrice', 'TradeVolume', 'TradeValue'], 列數: 27
 使用 endpoint: exchangeReport/BFIAUU, 欄位: ['Code', 'Name', 'Classn', 'TradePrice', 'TradeVolume', 'TradeValue']
   date=None, name=Name, buy=None, sell=None, diff=None
-[ERROR] 三大法人現貨 (TWSE): 找不到必要欄位，現有: ['Code', 'Name', 'Classn', 'TradePrice', 'TradeVolume', 'TradeValue']
-Traceback (most recent call last):
-  File "/home/runner/work/Taiwan-number-one/Taiwan-number-one/scripts/fetch_data.py", line 22, in safe
-    return fn()
-           ^^^^
-  File "/home/runner/work/Taiwan-number-one/Taiwan-number-one/scripts/fetch_data.py", line 137, in get_institutional_spot
-    raise ValueError(f"找不到必要欄位，現有: {list(df.columns)}")
-ValueError: 找不到必要欄位，現有: ['Code', 'Name', 'Classn', 'TradePrice', 'TradeVolume', 'TradeValue']
-
+[WARN] 三大法人現貨：找不到買賣欄位，略過。現有: ['Code', 'Name', 'Classn', 'TradePrice', 'TradeVolume', 'TradeValue']
 三大法人期貨 欄位: ['日期', '商品名稱', '身份別', '多方交易口數', '多方交易契約金額(千元)', '空方交易口數', '空方交易契約金額(千元)', '多空交易口數淨額', '多空交易契約金額淨額(千元)', '多方未平倉口數', '多方未平倉契約金額(千元)', '空方未平倉口數', '空方未平倉契約金額(千元)', '多空未平倉口數淨額', '多空未平倉契約金額淨額(千元)']
   [臺股期貨] role=身份別, oi_net=多空未平倉口數淨額
 三大法人期貨 欄位: ['日期', '商品名稱', '身份別', '多方交易口數', '多方交易契約金額(千元)', '空方交易口數', '空方交易契約金額(千元)', '多空交易口數淨額', '多空交易契約金額淨額(千元)', '多方未平倉口數', '多方未平倉契約金額(千元)', '空方未平倉口數', '空方未平倉契約金額(千元)', '多空未平倉口數淨額', '多空未平倉契約金額淨額(千元)']
@@ -23,7 +15,7 @@ ValueError: 找不到必要欄位，現有: ['Code', 'Name', 'Classn', 'TradePri
   month=到期月份(週別), cat=交易人類別
   到期月份值: [202607, 666666, 666666, 202607, 999912, 999912]
   交易人類別值: [0, 0, 1, 1, 0, 1]
-  一般交易人列數=6, 特定法人列數=0
-  一般月份值: [202607, 666666, 666666, 202607, 999912, 999912]
+  一般交易人列數=3, 特定法人列數=3
+  一般月份值: [202607, 666666, 999912]
 PutCallRatio 欄位: ['日期', '賣權成交量', '買權成交量', '買賣權成交量比率%', '賣權未平倉量', '買權未平倉量', '買賣權未平倉量比率%']
   date=日期, pc=買賣權未平倉量比率%
