@@ -1,56 +1,62 @@
 {
-  "date": "2026-07-02",
-  "fetched_at": "2026-07-03T05:44:25.775253+00:00",
-  "weighted_index": null,
-  "tx_futures": {
+  "date": "2026-07-03",
+  "fetched_at": "2026-07-03T13:25:17.141876+00:00",
+  "weighted_index": {
     "date": "2026-07-02",
-    "price": 46599.0,
-    "change": -622.0,
-    "change_pct": -1.32
+    "close": 46744.16,
+    "change": -274.83,
+    "change_pct": -0.58,
+    "turnover_billion": 10835.83
   },
-  "basis": null,
+  "tx_futures": {
+    "date": "2026-07-03",
+    "price": 46966.0,
+    "change": 360.0,
+    "change_pct": 0.77
+  },
+  "basis": 221.84,
   "institutional_spot": null,
   "institutional_futures_tx": {
-    "date": "2026-07-02",
-    "dealer_oi_net": 3683.0,
+    "date": "2026-07-03",
+    "dealer_oi_net": 3071.0,
     "dealer_oi_chg": null,
-    "trust_oi_net": 66410.0,
+    "trust_oi_net": 67213.0,
     "trust_oi_chg": null,
-    "foreign_oi_net": -84487.0,
+    "foreign_oi_net": -81052.0,
     "foreign_oi_chg": null
   },
   "institutional_futures_mtx": {
-    "date": "2026-07-02",
-    "dealer_oi_net": -8028.0,
+    "date": "2026-07-03",
+    "dealer_oi_net": -7909.0,
     "dealer_oi_chg": null,
-    "trust_oi_net": 33.0,
+    "trust_oi_net": 34.0,
     "trust_oi_chg": null,
-    "foreign_oi_net": 418.0,
+    "foreign_oi_net": 2566.0,
     "foreign_oi_chg": null
   },
   "large_trader_futures": {
-    "date": "2026-07-02",
+    "date": "2026-07-03",
     "rows_found": 6,
     "near_month": {
-      "top5_buy": 66205.0,
-      "top5_sell": 59607.0,
-      "top5_net": 6598.0,
-      "top10_buy": 76074.0,
-      "top10_sell": 80046.0,
-      "top10_net": -3972.0
+      "top5_buy": 66117.0,
+      "top5_sell": 58550.0,
+      "top5_net": 7567.0,
+      "top10_buy": 75149.0,
+      "top10_sell": 78829.0,
+      "top10_net": -3680.0
     },
     "all_months": {
-      "top5_buy": 66794.0,
-      "top5_sell": 61288.0,
-      "top5_net": 5506.0,
-      "top10_buy": 77073.0,
-      "top10_sell": 82050.0,
-      "top10_net": -4977.0
+      "top5_buy": 67030.0,
+      "top5_sell": 60376.0,
+      "top5_net": 6654.0,
+      "top10_buy": 76062.0,
+      "top10_sell": 80987.0,
+      "top10_net": -4925.0
     },
-    "top10_specific_net": -12760.0
+    "top10_specific_net": -8673.0
   },
   "pc_ratio": {
-    "date": "2026-06-02",
-    "pc_ratio": 142.84
+    "date": "2026-06-03",
+    "pc_ratio": 217.69
   }
 }
