@@ -2,7 +2,7 @@ FMTQIK 欄位: ['Date', 'TradeVolume', 'TradeValue', 'Transaction', 'TAIEX', 'Ch
   date=Date, close=TAIEX, chg=Change, turnover=TradeValue
   fund/TWT38U 失敗: Expecting value: line 1 column 1 (char 0)
   exchangeReport/BFI82U 失敗: Expecting value: line 1 column 1 (char 0)
-嘗試 exchangeReport/BFIAUU，欄位: ['Code', 'Name', 'Classn', 'TradePrice', 'TradeVolume', 'TradeValue'], 列數: 27
+嘗試 exchangeReport/BFIAUU，欄位: ['Code', 'Name', 'Classn', 'TradePrice', 'TradeVolume', 'TradeValue'], 列數: 39
 使用 endpoint: exchangeReport/BFIAUU, 欄位: ['Code', 'Name', 'Classn', 'TradePrice', 'TradeVolume', 'TradeValue']
   date=None, name=Name, buy=None, sell=None, diff=None
 [WARN] 三大法人現貨：找不到買賣欄位，略過。現有: ['Code', 'Name', 'Classn', 'TradePrice', 'TradeVolume', 'TradeValue']
