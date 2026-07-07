@@ -1,46 +1,11 @@
-[ERROR] 加權指數 (TWSE FMTQIK): Expecting value: line 1 column 1 (char 0)
-Traceback (most recent call last):
-  File "/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/requests/models.py", line 1116, in json
-    return complexjson.loads(self.text, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/json/__init__.py", line 346, in loads
-    return _default_decoder.decode(s)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/json/decoder.py", line 337, in decode
-    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/json/decoder.py", line 355, in raw_decode
-    raise JSONDecodeError("Expecting value", s, err.value) from None
-json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/home/runner/work/Taiwan-number-one/Taiwan-number-one/scripts/fetch_data.py", line 22, in safe
-    return fn()
-           ^^^^
-  File "/home/runner/work/Taiwan-number-one/Taiwan-number-one/scripts/fetch_data.py", line 71, in get_weighted_index
-    data = fetch_twse_json("exchangeReport/FMTQIK")
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/runner/work/Taiwan-number-one/Taiwan-number-one/scripts/fetch_data.py", line 68, in fetch_twse_json
-    return r.json()
-           ^^^^^^^^
-  File "/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/requests/models.py", line 1120, in json
-    raise RequestsJSONDecodeError(e.msg, e.doc, e.pos)
-requests.exceptions.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
-
+FMTQIK 欄位: ['Date', 'TradeVolume', 'TradeValue', 'Transaction', 'TAIEX', 'Change']
+  date=Date, close=TAIEX, chg=Change, turnover=TradeValue
   fund/TWT38U 失敗: Expecting value: line 1 column 1 (char 0)
   exchangeReport/BFI82U 失敗: Expecting value: line 1 column 1 (char 0)
-  exchangeReport/BFIAUU 失敗: Expecting value: line 1 column 1 (char 0)
-[ERROR] 三大法人現貨 (TWSE): 所有 TWSE 三大法人 endpoint 均失敗
-Traceback (most recent call last):
-  File "/home/runner/work/Taiwan-number-one/Taiwan-number-one/scripts/fetch_data.py", line 22, in safe
-    return fn()
-           ^^^^
-  File "/home/runner/work/Taiwan-number-one/Taiwan-number-one/scripts/fetch_data.py", line 131, in get_institutional_spot
-    raise ValueError("所有 TWSE 三大法人 endpoint 均失敗")
-ValueError: 所有 TWSE 三大法人 endpoint 均失敗
-
+嘗試 exchangeReport/BFIAUU，欄位: ['Code', 'Name', 'Classn', 'TradePrice', 'TradeVolume', 'TradeValue'], 列數: 25
+使用 endpoint: exchangeReport/BFIAUU, 欄位: ['Code', 'Name', 'Classn', 'TradePrice', 'TradeVolume', 'TradeValue']
+  date=None, name=Name, buy=None, sell=None, diff=None
+[WARN] 三大法人現貨：找不到買賣欄位，略過。現有: ['Code', 'Name', 'Classn', 'TradePrice', 'TradeVolume', 'TradeValue']
 三大法人期貨 欄位: ['日期', '商品名稱', '身份別', '多方交易口數', '多方交易契約金額(千元)', '空方交易口數', '空方交易契約金額(千元)', '多空交易口數淨額', '多空交易契約金額淨額(千元)', '多方未平倉口數', '多方未平倉契約金額(千元)', '空方未平倉口數', '空方未平倉契約金額(千元)', '多空未平倉口數淨額', '多空未平倉契約金額淨額(千元)']
   [臺股期貨] role=身份別, oi_net=多空未平倉口數淨額
 三大法人期貨 欄位: ['日期', '商品名稱', '身份別', '多方交易口數', '多方交易契約金額(千元)', '空方交易口數', '空方交易契約金額(千元)', '多空交易口數淨額', '多空交易契約金額淨額(千元)', '多方未平倉口數', '多方未平倉契約金額(千元)', '空方未平倉口數', '空方未平倉契約金額(千元)', '多空未平倉口數淨額', '多空未平倉契約金額淨額(千元)']
@@ -55,4 +20,4 @@ ValueError: 所有 TWSE 三大法人 endpoint 均失敗
 PutCallRatio 欄位: ['日期', '賣權成交量', '買權成交量', '買賣權成交量比率%', '賣權未平倉量', '買權未平倉量', '買賣權未平倉量比率%']
   date=日期, pc=買賣權未平倉量比率%
 record_date（以TAIFEX為主）: 2026-07-06
-[WARN] P/C Ratio 日期 20260608.0 ≠ record_date 2026-07-06，略過以免顯示舊資料
+[WARN] P/C Ratio 日期 20260608.0 ≠ TAIFEX 2026-07-06（來源尚未更新，仍顯示最新可得值）

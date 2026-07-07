@@ -1,14 +1,20 @@
 {
   "date": "2026-07-06",
-  "fetched_at": "2026-07-07T03:13:20.792248+00:00",
-  "weighted_index": null,
+  "fetched_at": "2026-07-07T10:32:28.851615+00:00",
+  "weighted_index": {
+    "date": "2026-07-06",
+    "close": 46556.39,
+    "change": -224.23,
+    "change_pct": -0.48,
+    "turnover_billion": 10644.32
+  },
   "tx_futures": {
     "date": "2026-07-06",
     "price": 46886.0,
     "change": -114.0,
     "change_pct": -0.24
   },
-  "basis": null,
+  "basis": 329.61,
   "institutional_spot": null,
   "institutional_futures_tx": {
     "date": "2026-07-06",
@@ -49,5 +55,8 @@
     },
     "top10_specific_net": -8032.0
   },
-  "pc_ratio": null
+  "pc_ratio": {
+    "date": "20260608.0",
+    "pc_ratio": 126.75
+  }
 }
