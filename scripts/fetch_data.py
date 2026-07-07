@@ -40,16 +40,13 @@ def find_col(df, *keywords):
 
 def roc_date_to_iso(s):
     s = str(s).strip()
-    # 移除 pandas 讀成浮點數的小數點（如 20260702.0 → 20260702）
-    if "." in s:
-        s = s.split(".")[0]
-    # 純8位數字 YYYYMMDD
+    # 純8位數字 YYYYMMDD（TAIFEX常見格式）
     if re.match(r"^\d{8}$", s):
         return f"{s[0:4]}-{s[4:6]}-{s[6:8]}"
     # 純7位數字 YYYMMDD（民國年）
     if re.match(r"^\d{7}$", s):
         return f"{int(s[0:3])+1911}-{s[3:5]}-{s[5:7]}"
-    # 有分隔符的民國年 YYY/MM/DD
+    # 有分隔符的民國年 YYY/MM/DD 或 YYY-MM-DD
     m = re.match(r"(\d{2,3})[/-](\d{1,2})[/-](\d{1,2})", s)
     if m:
         roc, mo, da = m.groups()
@@ -383,13 +380,27 @@ def main():
     large_trader_futures     = safe(get_large_trader_futures,      "大額交易人期貨")
     pc_ratio                 = safe(get_pc_ratio,                  "P/C Ratio (TAIFEX)")
 
-    # 取所有資料來源中最新的日期（避免 TWSE 比 TAIFEX 晚更新）
-    all_dates = [
-        d.get("date") for d in [weighted_index, tx_futures, institutional_spot,
-                                  institutional_futures_tx, pc_ratio]
+    # 以 TAIFEX 的日期為主（TAIFEX 更新較快）
+    taifex_dates = [
+        d.get("date") for d in [tx_futures, institutional_futures_tx, large_trader_futures]
         if d and d.get("date")
     ]
-    record_date = max(all_dates) if all_dates else datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    record_date = max(taifex_dates) if taifex_dates else datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    log(f"record_date（以TAIFEX為主）: {record_date}")
+
+    # 若 TWSE / P/C Ratio 的日期與 TAIFEX 不符，代表資料尚未更新，清除避免顯示錯誤
+    def check_date(d, name):
+        if not d:
+            return d
+        d_date = d.get("date","")
+        if d_date != record_date:
+            log(f"[WARN] {name} 日期 {d_date} ≠ record_date {record_date}，略過以免顯示舊資料")
+            return None
+        return d
+
+    weighted_index   = check_date(weighted_index,   "加權指數")
+    institutional_spot = check_date(institutional_spot, "三大法人現貨")
+    pc_ratio         = check_date(pc_ratio,          "P/C Ratio")
 
     basis = None
     if weighted_index and tx_futures:
