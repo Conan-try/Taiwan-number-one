@@ -1,6 +1,6 @@
 {
   "date": "2026-07-07",
-  "fetched_at": "2026-07-07T13:20:58.653178+00:00",
+  "fetched_at": "2026-07-07T13:35:01.338127+00:00",
   "weighted_index": {
     "date": "2026-07-07",
     "close": 45479.11,
@@ -71,5 +71,19 @@
     "date": "2026-07-07",
     "pc_ratio": 98.68
   },
-  "txo_positions": null
+  "txo_positions": {
+    "date": "2026-07-07",
+    "dealer": {
+      "call_oi_net": 4734.0,
+      "call_amt_net": -90263.0,
+      "put_oi_net": 4836.0,
+      "put_amt_net": 3652.0
+    },
+    "foreign": {
+      "call_oi_net": 680.0,
+      "call_amt_net": -267453.0,
+      "put_oi_net": 10193.0,
+      "put_amt_net": 165920.0
+    }
+  }
 }
