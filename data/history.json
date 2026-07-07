@@ -297,13 +297,13 @@
     },
     {
       "date": "2026-07-07",
-      "fetched_at": "2026-07-07T12:34:57.268148+00:00",
+      "fetched_at": "2026-07-07T12:57:55.018027+00:00",
       "weighted_index": {
-        "date": "2026-07-06",
-        "close": 46556.39,
-        "change": -224.23,
-        "change_pct": -0.48,
-        "turnover_billion": 10644.32
+        "date": "2026-07-07",
+        "close": 45479.11,
+        "change": -1077.28,
+        "change_pct": -2.31,
+        "turnover_billion": 12281.19
       },
       "tx_futures": {
         "date": "2026-07-07",
@@ -311,7 +311,7 @@
         "change": -1099.0,
         "change_pct": -2.34
       },
-      "basis": null,
+      "basis": 295.89,
       "institutional_spot": {
         "date": "2026-07-07",
         "foreign": -547.31,
@@ -365,7 +365,7 @@
         "top10_specific_net": -7481.0
       },
       "pc_ratio": {
-        "date": "20260707.0",
+        "date": "2026-07-07",
         "pc_ratio": 98.68
       }
     },
