@@ -297,7 +297,7 @@
     },
     {
       "date": "2026-07-07",
-      "fetched_at": "2026-07-07T11:09:58.861027+00:00",
+      "fetched_at": "2026-07-07T11:17:53.072396+00:00",
       "weighted_index": {
         "date": "2026-07-06",
         "close": 46556.39,
@@ -311,7 +311,7 @@
         "change": -1099.0,
         "change_pct": -2.34
       },
-      "basis": -781.39,
+      "basis": null,
       "institutional_spot": null,
       "institutional_futures_tx": {
         "date": "2026-07-07",
@@ -340,7 +340,10 @@
           "top5_net": 8476.0,
           "top10_buy": 73248.0,
           "top10_sell": 74944.0,
-          "top10_net": -1696.0
+          "top10_net": -1696.0,
+          "top10_specific_buy": 70620.0,
+          "top10_specific_sell": 74944.0,
+          "top10_specific_net": -4324.0
         },
         "all_months": {
           "top5_buy": 67741.0,
@@ -348,13 +351,16 @@
           "top5_net": 8095.0,
           "top10_buy": 76545.0,
           "top10_sell": 80185.0,
-          "top10_net": -3640.0
+          "top10_net": -3640.0,
+          "top10_specific_buy": 72704.0,
+          "top10_specific_sell": 80185.0,
+          "top10_specific_net": -7481.0
         },
         "top10_specific_net": -7481.0
       },
       "pc_ratio": {
-        "date": "20260608.0",
-        "pc_ratio": 126.75
+        "date": "20260707.0",
+        "pc_ratio": 98.68
       }
     },
     {
