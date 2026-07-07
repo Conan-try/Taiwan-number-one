@@ -357,6 +357,55 @@ def get_large_trader_futures():
 
     return result
 
+def get_txo_positions():
+    """
+    三大法人-選擇權買賣權分計（臺指選擇權 TXO）
+    來源: MarketDataOfMajorInstitutionalTradersDetailsOfCallsAndPutsBytheDate
+    回傳自營商/外資的買權/賣權淨部位（口）與淨金額（千元）
+    """
+    df = fetch_taifex_csv("MarketDataOfMajorInstitutionalTradersDetailsOfCallsAndPutsBytheDate")
+    log(f"選擇權買賣權分計 欄位: {list(df.columns)}")
+    date_col = find_col(df, "日期")
+    prod_col = find_col(df, "商品名稱", "商品")
+    cp_col   = find_col(df, "買賣權", "權別")
+    role_col = find_col(df, "身份別", "身份", "身分")
+    oi_net_col  = find_col(df, "多空未平倉口數淨額", "未平倉口數淨額")
+    amt_net_col = find_col(df, "多空未平倉契約金額淨額", "未平倉契約金額淨額")
+    log(f"  cp={cp_col}, role={role_col}, oi_net={oi_net_col}, amt_net={amt_net_col}")
+    if not (date_col and prod_col and cp_col and role_col and oi_net_col):
+        raise ValueError(f"找不到必要欄位，現有: {list(df.columns)}")
+
+    # 取最大日期、篩臺指選擇權
+    df["_d"] = pd.to_numeric(df[date_col].astype(str).str.replace(r"\D","",regex=True), errors="coerce")
+    last_d = df["_d"].max()
+    today = df[(df["_d"]==last_d) & (df[prod_col].astype(str).str.contains("臺指選擇權"))]
+    log(f"  臺指選擇權列數: {len(today)}, 買賣權值: {today[cp_col].unique().tolist() if not today.empty else []}")
+
+    result = {"date": roc_date_to_iso(str(int(last_d)))}
+    if today.empty:
+        return result
+
+    def pick(role_kw, cp_kw):
+        rows = today[
+            today[role_col].astype(str).str.contains(role_kw) &
+            today[cp_col].astype(str).str.upper().str.contains(cp_kw)
+        ]
+        if rows.empty:
+            return None, None
+        r = rows.iloc[0]
+        oi  = to_float(r[oi_net_col])
+        amt = to_float(r[amt_net_col]) if amt_net_col else None
+        return oi, amt
+
+    for role_kw, key in [("自營", "dealer"), ("外資", "foreign")]:
+        call_oi, call_amt = pick(role_kw, "CALL|買權")
+        put_oi,  put_amt  = pick(role_kw, "PUT|賣權")
+        result[key] = {
+            "call_oi_net": call_oi, "call_amt_net": call_amt,
+            "put_oi_net":  put_oi,  "put_amt_net":  put_amt,
+        }
+    return result
+
 def get_pc_ratio():
     df = fetch_taifex_csv("PutCallRatio")
     log(f"PutCallRatio 欄位: {list(df.columns)}")
@@ -388,6 +437,7 @@ def main():
     institutional_futures_mtx= safe(get_institutional_futures_mtx, "三大法人期貨-小型臺指期貨")
     large_trader_futures     = safe(get_large_trader_futures,      "大額交易人期貨")
     pc_ratio                 = safe(get_pc_ratio,                  "P/C Ratio (TAIFEX)")
+    txo_positions            = safe(get_txo_positions,             "選擇權留倉 (TAIFEX)")
 
     # 以 TAIFEX 的日期為主（TAIFEX 更新較快）
     taifex_dates = [
@@ -434,6 +484,7 @@ def main():
         "institutional_futures_mtx": institutional_futures_mtx,
         "large_trader_futures": large_trader_futures,
         "pc_ratio": pc_ratio,
+        "txo_positions": txo_positions,
     }
 
     history = []
