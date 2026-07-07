@@ -102,7 +102,11 @@ def get_weighted_index():
                         target = row; break
                 if target: break
         if target is None:
-            log(f"  MI_INDEX {ymd} 找不到發行量加權股價指數列")
+            log(f"  MI_INDEX {ymd} 找不到發行量加權股價指數列，回傳keys: {list(js.keys())}")
+            # 印出各表的前幾列名稱協助除錯
+            for t in (js.get("tables") or [])[:5]:
+                sample = [str(r[0]) for r in (t.get("data") or [])[:3]]
+                log(f"    table title={t.get('title')}, 前幾列: {sample}")
             continue
 
         # 欄位順序: [指數, 收盤指數, 漲跌(+/-), 漲跌點數, 漲跌百分比(%), ...]
@@ -154,19 +158,24 @@ def get_institutional_spot():
         data = js.get("data") or []
         if not data:
             continue
-        log(f"  BFI82U {ymd} 單位列: {[str(r[0]) for r in data]}")
+        # 完整記錄每一列（名稱與買賣差額），方便核對
+        for row in data:
+            log(f"  BFI82U列: {row}")
 
         # 欄位: [單位名稱, 買進金額, 賣出金額, 買賣差額]
-        def net(keyword):
+        def net(include_kw, exclude_kw=None):
             total, found = 0.0, False
             for row in data:
-                if keyword in str(row[0]):
+                name = str(row[0])
+                if include_kw in name and (exclude_kw is None or exclude_kw not in name):
                     total += to_float(row[3]); found = True
             return round(total / 1e8, 2) if found else None
 
-        dealer  = net("自營商")   # 自行買賣 + 避險 兩列合計
+        # 自營商 = 自行買賣 + 避險（排除「外資自營商」以免重複計算）
+        dealer  = net("自營商", exclude_kw="外資")
         trust   = net("投信")
-        foreign = net("外資")     # 外資及陸資 + 外資自營商 合計
+        # 外資 = 外資及陸資 + 外資自營商
+        foreign = net("外資")
         iso_date = f"{ymd[0:4]}-{ymd[4:6]}-{ymd[6:8]}"
         total = sum(v for v in [foreign, trust, dealer] if v is not None)
         log(f"  三大法人現貨 {iso_date}: 外資{foreign} 投信{trust} 自營{dealer}")
