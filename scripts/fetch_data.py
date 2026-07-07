@@ -212,6 +212,12 @@ def get_tx_futures():
     if tx.empty:
         tx = df[df[prod_col].astype(str).str.contains("TX")].copy()
     tx = tx[~tx[month_col].astype(str).str.contains("/")]
+    # 只取一般時段（日盤），排除盤後時段
+    session_col = find_col(df, "交易時段")
+    if session_col:
+        tx_regular = tx[tx[session_col].astype(str).str.contains("一般")]
+        if not tx_regular.empty:
+            tx = tx_regular
     last_date = tx[date_col].iloc[-1]
     near = tx[tx[date_col]==last_date].sort_values(month_col).iloc[0]
     return {
