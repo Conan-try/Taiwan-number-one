@@ -369,8 +369,8 @@ def get_txo_positions():
     prod_col = find_col(df, "商品名稱", "商品")
     cp_col   = find_col(df, "買賣權", "權別")
     role_col = find_col(df, "身份別", "身份", "身分")
-    oi_net_col  = find_col(df, "多空未平倉口數淨額", "未平倉口數淨額")
-    amt_net_col = find_col(df, "多空未平倉契約金額淨額", "未平倉契約金額淨額")
+    oi_net_col  = find_col(df, "未平倉口數買賣淨額", "多空未平倉口數淨額")
+    amt_net_col = find_col(df, "未平倉契約金額買賣淨額", "多空未平倉契約金額淨額")
     log(f"  cp={cp_col}, role={role_col}, oi_net={oi_net_col}, amt_net={amt_net_col}")
     if not (date_col and prod_col and cp_col and role_col and oi_net_col):
         raise ValueError(f"找不到必要欄位，現有: {list(df.columns)}")
