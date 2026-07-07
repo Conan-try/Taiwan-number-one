@@ -40,6 +40,9 @@ def find_col(df, *keywords):
 
 def roc_date_to_iso(s):
     s = str(s).strip()
+    # 移除 pandas 讀成浮點數的小數點（如 20260707.0 → 20260707）
+    if "." in s:
+        s = s.split(".")[0]
     # 純8位數字 YYYYMMDD（TAIFEX常見格式）
     if re.match(r"^\d{8}$", s):
         return f"{s[0:4]}-{s[4:6]}-{s[6:8]}"
@@ -71,72 +74,43 @@ def _tw_now():
 
 def get_weighted_index():
     """
-    TWSE 盤後統計 MI_INDEX（大盤統計資訊）
+    TWSE 盤後統計 FMTQIK（每日市場成交資訊，收盤後更新）
+    欄位: [日期(民國), 成交股數, 成交金額, 成交筆數, 發行量加權股價指數, 漲跌點數]
     從今天往前最多找5天，取最近一個有資料的交易日
     """
     for offset in range(0, 5):
         d = _tw_now() - timedelta(days=offset)
         ymd = d.strftime("%Y%m%d")
-        url = f"https://www.twse.com.tw/rwd/zh/afterTrading/MI_INDEX?date={ymd}&type=IND&response=json"
+        iso_date = f"{ymd[0:4]}-{ymd[4:6]}-{ymd[6:8]}"
+        url = f"https://www.twse.com.tw/rwd/zh/afterTrading/FMTQIK?date={ymd}&response=json"
         try:
             js = _twse_rwd_json(url)
         except Exception as e:
-            log(f"  MI_INDEX {ymd} 請求失敗: {e}")
+            log(f"  FMTQIK {ymd} 請求失敗: {e}")
             continue
         if js.get("stat") != "OK":
-            log(f"  MI_INDEX {ymd} stat={js.get('stat')}（可能為假日或尚未更新）")
+            log(f"  FMTQIK {ymd} stat={js.get('stat')}")
             continue
-
-        # 在回傳的各表中尋找「發行量加權股價指數」那一列
         target = None
-        tables = js.get("tables") or []
-        for t in tables:
-            for row in (t.get("data") or []):
-                if row and "發行量加權股價指數" in str(row[0]):
-                    target = row; break
-            if target: break
+        for row in (js.get("data") or []):
+            if roc_date_to_iso(row[0]) == iso_date:
+                target = row; break
         if target is None:
-            for i in range(1, 8):
-                for row in (js.get(f"data{i}") or []):
-                    if row and "發行量加權股價指數" in str(row[0]):
-                        target = row; break
-                if target: break
-        if target is None:
-            log(f"  MI_INDEX {ymd} 找不到發行量加權股價指數列，回傳keys: {list(js.keys())}")
-            # 印出各表的前幾列名稱協助除錯
-            for t in (js.get("tables") or [])[:5]:
-                sample = [str(r[0]) for r in (t.get("data") or [])[:3]]
-                log(f"    table title={t.get('title')}, 前幾列: {sample}")
+            log(f"  FMTQIK {ymd} 該月資料中尚無 {iso_date} 這一天（未更新），往前一天")
             continue
-
-        # 欄位順序: [指數, 收盤指數, 漲跌(+/-), 漲跌點數, 漲跌百分比(%), ...]
-        close   = to_float(target[1])
-        sign    = -1 if "-" in str(target[2]) else 1
-        change  = sign * abs(to_float(target[3]))
-        chg_pct = sign * abs(to_float(target[4]))
-
-        # 成交金額從 FMTQIK 盤後統計取同一天
-        iso_date = f"{ymd[0:4]}-{ymd[4:6]}-{ymd[6:8]}"
-        turnover = None
-        try:
-            js2 = _twse_rwd_json(f"https://www.twse.com.tw/rwd/zh/afterTrading/FMTQIK?date={ymd}&response=json")
-            if js2.get("stat") == "OK":
-                for r2 in (js2.get("data") or []):
-                    if roc_date_to_iso(r2[0]) == iso_date:
-                        turnover = round(to_float(r2[2]) / 1e8, 2)
-                        break
-        except Exception as e:
-            log(f"  FMTQIK 成交金額抓取失敗: {e}")
-
-        log(f"  加權指數 {iso_date}: {close} ({change:+.2f}, {chg_pct:+.2f}%)")
+        close    = to_float(target[4])
+        change   = to_float(target[5])
+        prev     = close - change
+        turnover = round(to_float(target[2]) / 1e8, 2)
+        log(f"  加權指數 {iso_date}: {close} ({change:+.2f}), 成交 {turnover} 億")
         return {
             "date": iso_date,
             "close": round(close, 2),
             "change": round(change, 2),
-            "change_pct": round(chg_pct, 2),
+            "change_pct": round(change / prev * 100, 2) if prev else None,
             "turnover_billion": turnover,
         }
-    raise ValueError("往前5天皆無 MI_INDEX 資料")
+    raise ValueError("往前5天皆無 FMTQIK 資料")
 
 def get_institutional_spot():
     """
