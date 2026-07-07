@@ -2,12 +2,12 @@ name: 每日更新台股期貨籌碼資料
 
 on:
   schedule:
-    # GitHub Actions 排程時間為 UTC，台北時間 = UTC+8
-    # 07:40 UTC = 台北 15:40（三大法人/大額交易人資料約 15:30 後公布）
-    # 09:00 UTC = 台北 17:00（備援，避免第一次抓的時候資料還沒更新完）
-    - cron: "40 7 * * 1-5"
-    - cron: "0 9 * * 1-5"
-  workflow_dispatch: {}   # 允許手動點擊「Run workflow」立即執行一次
+    # GitHub Actions 排程為 UTC，台北時間 = UTC+8
+    - cron: "40 7 * * 1-5"   # 台北 15:40（三大法人/大額交易人約15:30公布）
+    - cron: "0 9 * * 1-5"    # 台北 17:00（備援一）
+    - cron: "0 12 * * 1-5"   # 台北 20:00（備援二，TAIFEX開放資料常在晚間更新）
+    - cron: "0 23 * * 1-5"   # 台北隔日 07:00（最終備援，確保開放資料已完成更新）
+  workflow_dispatch: {}       # 允許手動執行
 
 permissions:
   contents: write
