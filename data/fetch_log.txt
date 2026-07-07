@@ -1,11 +1,7 @@
-FMTQIK 欄位: ['Date', 'TradeVolume', 'TradeValue', 'Transaction', 'TAIEX', 'Change']
-  date=Date, close=TAIEX, chg=Change, turnover=TradeValue
-  fund/TWT38U 失敗: Expecting value: line 1 column 1 (char 0)
-  exchangeReport/BFI82U 失敗: Expecting value: line 1 column 1 (char 0)
-嘗試 exchangeReport/BFIAUU，欄位: ['Code', 'Name', 'Classn', 'TradePrice', 'TradeVolume', 'TradeValue'], 列數: 25
-使用 endpoint: exchangeReport/BFIAUU, 欄位: ['Code', 'Name', 'Classn', 'TradePrice', 'TradeVolume', 'TradeValue']
-  date=None, name=Name, buy=None, sell=None, diff=None
-[WARN] 三大法人現貨：找不到買賣欄位，略過。現有: ['Code', 'Name', 'Classn', 'TradePrice', 'TradeVolume', 'TradeValue']
+  MI_INDEX 20260707 找不到發行量加權股價指數列
+  加權指數 2026-07-06: 46556.39 (-224.23, -0.48%)
+  BFI82U 20260707 單位列: ['自營商(自行買賣)', '自營商(避險)', '投信', '外資及陸資(不含外資自營商)', '外資自營商', '合計']
+  三大法人現貨 2026-07-07: 外資-547.31 投信96.83 自營-1034.65
 三大法人期貨 欄位: ['日期', '商品名稱', '身份別', '多方交易口數', '多方交易契約金額(千元)', '空方交易口數', '空方交易契約金額(千元)', '多空交易口數淨額', '多空交易契約金額淨額(千元)', '多方未平倉口數', '多方未平倉契約金額(千元)', '空方未平倉口數', '空方未平倉契約金額(千元)', '多空未平倉口數淨額', '多空未平倉契約金額淨額(千元)']
   [臺股期貨] role=身份別, oi_net=多空未平倉口數淨額
 三大法人期貨 欄位: ['日期', '商品名稱', '身份別', '多方交易口數', '多方交易契約金額(千元)', '空方交易口數', '空方交易契約金額(千元)', '多空交易口數淨額', '多空交易契約金額淨額(千元)', '多方未平倉口數', '多方未平倉契約金額(千元)', '空方未平倉口數', '空方未平倉契約金額(千元)', '多空未平倉口數淨額', '多空未平倉契約金額淨額(千元)']
