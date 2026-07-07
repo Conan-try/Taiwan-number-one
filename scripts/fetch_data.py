@@ -2,7 +2,7 @@
 台股期貨籌碼儀表板 - 每日資料抓取腳本
 """
 import io, json, os, re, traceback
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 import pandas as pd
 import requests
 
@@ -388,19 +388,22 @@ def main():
     record_date = max(taifex_dates) if taifex_dates else datetime.now(timezone.utc).strftime("%Y-%m-%d")
     log(f"record_date（以TAIFEX為主）: {record_date}")
 
-    # 若 TWSE / P/C Ratio 的日期與 TAIFEX 不符，代表資料尚未更新，清除避免顯示錯誤
-    def check_date(d, name):
-        if not d:
-            return d
-        d_date = d.get("date","")
-        if d_date != record_date:
-            log(f"[WARN] {name} 日期 {d_date} ≠ record_date {record_date}，略過以免顯示舊資料")
-            return None
-        return d
-
-    weighted_index   = check_date(weighted_index,   "加權指數")
-    institutional_spot = check_date(institutional_spot, "三大法人現貨")
-    pc_ratio         = check_date(pc_ratio,          "P/C Ratio")
+    # 加權指數 / P/C Ratio 顯示邏輯：
+    # 台灣時間 9:00-13:30 為盤中，收盤價尚未產生 → 顯示 －
+    # 其他時間 → 顯示 TWSE/TAIFEX 提供的最新收盤值
+    now_tw = datetime.now(timezone.utc) + timedelta(hours=8)
+    hm = now_tw.strftime("%H:%M")
+    is_weekday = now_tw.weekday() < 5
+    in_session = is_weekday and ("09:00" <= hm < "13:30")
+    if in_session:
+        log(f"目前台灣時間 {hm} 為盤中時段，加權指數與 P/C Ratio 顯示為 －")
+        weighted_index = None
+        pc_ratio = None
+    else:
+        # 收盤後照常顯示，但若日期與 TAIFEX 不符仍記錄警告方便追蹤
+        for d, name in [(weighted_index, "加權指數"), (pc_ratio, "P/C Ratio")]:
+            if d and d.get("date") != record_date:
+                log(f"[WARN] {name} 日期 {d.get('date')} ≠ TAIFEX {record_date}（來源尚未更新，仍顯示最新可得值）")
 
     basis = None
     if weighted_index and tx_futures:
