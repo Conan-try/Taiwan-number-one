@@ -341,15 +341,29 @@ def get_large_trader_futures():
         if not all_rows.empty:
             result["all_months"] = extract(all_rows.iloc[0])
 
-        # 特定法人
+        # 特定法人：分別注入近月與所有月份（前端從 near_month/all_months 內讀取）
         if not specific.empty:
-            specific_all = specific[specific["_m"] == 999912]
-            if specific_all.empty:
-                specific_all = specific[specific["_m"] == specific["_m"].max()]
-            if not specific_all.empty:
-                row = specific_all.iloc[0]
-                sp_b10 = to_float(row[b10_col]); sp_s10 = to_float(row[s10_col])
-                result["top10_specific_net"] = round(sp_b10 - sp_s10, 0)
+            sp_near = specific[specific["_m"] < 666666].sort_values("_m")
+            sp_all  = specific[specific["_m"] == 999912]
+            if sp_all.empty:
+                sp_all = specific[specific["_m"] == specific["_m"].max()]
+
+            def inject_specific(target_key, rows):
+                if target_key in result and not rows.empty:
+                    row = rows.iloc[0]
+                    b = to_float(row[b10_col]); s = to_float(row[s10_col])
+                    result[target_key]["top10_specific_buy"]  = b
+                    result[target_key]["top10_specific_sell"] = s
+                    result[target_key]["top10_specific_net"]  = round(b - s, 0)
+
+            inject_specific("near_month", sp_near)
+            inject_specific("all_months", sp_all)
+
+            # 頂層也保留一份（相容）
+            if not sp_all.empty:
+                row = sp_all.iloc[0]
+                result["top10_specific_net"] = round(
+                    to_float(row[b10_col]) - to_float(row[s10_col]), 0)
     else:
         result["near_month"] = extract(today.iloc[0])
         if len(today) >= 2:
@@ -366,7 +380,10 @@ def get_pc_ratio():
     log(f"  date={date_col}, pc={pc_col}")
     if not (date_col and pc_col):
         raise ValueError(f"找不到必要欄位，現有: {list(df.columns)}")
-    last = df.iloc[-1]
+    # CSV 可能不是按日期排序，取日期最大的那列
+    df["_d"] = pd.to_numeric(df[date_col].astype(str).str.replace(r"\D","",regex=True), errors="coerce")
+    last = df.sort_values("_d").iloc[-1]
+    log(f"  P/C 取用日期: {last[date_col]}, 值: {last[pc_col]}")
     return {
         "date": roc_date_to_iso(last[date_col]),
         "pc_ratio": round(to_float(last[pc_col]), 2),
@@ -414,8 +431,11 @@ def main():
     basis = None
     if weighted_index and tx_futures:
         p = tx_futures.get("price"); c = weighted_index.get("close")
-        if p and c:
+        # 只在兩者日期一致時計算價差，避免用舊指數算出錯誤價差
+        if p and c and weighted_index.get("date") == tx_futures.get("date"):
             basis = round(p - c, 2)
+        elif p and c:
+            log(f"[WARN] 加權指數日期({weighted_index.get('date')})與台指期({tx_futures.get('date')})不符，價差不計算")
 
     record = {
         "date": record_date,
