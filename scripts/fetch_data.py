@@ -59,121 +59,124 @@ def roc_date_to_iso(s):
     return s
 
 # ---------------------------------------------------------------------------
-# TWSE
+# TWSE — 使用官方盤後統計端點（收盤後約13:40-15:00更新，遠比 openapi 即時）
 # ---------------------------------------------------------------------------
-def fetch_twse_json(endpoint):
-    url = f"https://openapi.twse.com.tw/v1/{endpoint}"
+def _twse_rwd_json(url):
     r = requests.get(url, timeout=30, headers={"User-Agent":"Mozilla/5.0"})
     r.raise_for_status()
     return r.json()
 
+def _tw_now():
+    return datetime.now(timezone.utc) + timedelta(hours=8)
+
 def get_weighted_index():
-    data = fetch_twse_json("exchangeReport/FMTQIK")
-    df = pd.DataFrame(data)
-    log(f"FMTQIK 欄位: {list(df.columns)}")
-    if df.empty:
-        raise ValueError("空資料")
-    # 欄位為英文：Date, TAIEX, Change, TradeValue
-    date_col     = find_col(df, "Date", "日期")
-    close_col    = find_col(df, "TAIEX", "發行量加權股價指數", "加權股價指數")
-    chg_col      = find_col(df, "Change", "漲跌點數", "漲跌")
-    turnover_col = find_col(df, "TradeValue", "成交金額")
-    log(f"  date={date_col}, close={close_col}, chg={chg_col}, turnover={turnover_col}")
-    if not (date_col and close_col):
-        raise ValueError(f"找不到必要欄位，現有: {list(df.columns)}")
-    last   = df.iloc[-1]
-    close  = to_float(last[close_col])
-    change = to_float(last[chg_col]) if chg_col else 0.0
-    prev   = close - change
-    # 日期可能是西元 8 碼或民國 7 碼
-    raw_date = str(last[date_col])
-    digits = re.sub(r"\D","", raw_date)
-    if len(digits) == 8:
-        iso_date = f"{digits[0:4]}-{digits[4:6]}-{digits[6:8]}"
-    elif len(digits) == 7:
-        iso_date = f"{int(digits[0:3])+1911}-{digits[3:5]}-{digits[5:7]}"
-    else:
-        iso_date = raw_date
-    turnover = to_float(last[turnover_col])/1e8 if turnover_col else None
-    return {
-        "date": iso_date,
-        "close": round(close, 2),
-        "change": round(change, 2),
-        "change_pct": round(change/prev*100, 2) if prev else None,
-        "turnover_billion": round(turnover, 2) if turnover else None,
-    }
+    """
+    TWSE 盤後統計 MI_INDEX（大盤統計資訊）
+    從今天往前最多找5天，取最近一個有資料的交易日
+    """
+    for offset in range(0, 5):
+        d = _tw_now() - timedelta(days=offset)
+        ymd = d.strftime("%Y%m%d")
+        url = f"https://www.twse.com.tw/rwd/zh/afterTrading/MI_INDEX?date={ymd}&type=IND&response=json"
+        try:
+            js = _twse_rwd_json(url)
+        except Exception as e:
+            log(f"  MI_INDEX {ymd} 請求失敗: {e}")
+            continue
+        if js.get("stat") != "OK":
+            log(f"  MI_INDEX {ymd} stat={js.get('stat')}（可能為假日或尚未更新）")
+            continue
+
+        # 在回傳的各表中尋找「發行量加權股價指數」那一列
+        target = None
+        tables = js.get("tables") or []
+        for t in tables:
+            for row in (t.get("data") or []):
+                if row and "發行量加權股價指數" in str(row[0]):
+                    target = row; break
+            if target: break
+        if target is None:
+            for i in range(1, 8):
+                for row in (js.get(f"data{i}") or []):
+                    if row and "發行量加權股價指數" in str(row[0]):
+                        target = row; break
+                if target: break
+        if target is None:
+            log(f"  MI_INDEX {ymd} 找不到發行量加權股價指數列")
+            continue
+
+        # 欄位順序: [指數, 收盤指數, 漲跌(+/-), 漲跌點數, 漲跌百分比(%), ...]
+        close   = to_float(target[1])
+        sign    = -1 if "-" in str(target[2]) else 1
+        change  = sign * abs(to_float(target[3]))
+        chg_pct = sign * abs(to_float(target[4]))
+
+        # 成交金額從 FMTQIK 盤後統計取同一天
+        iso_date = f"{ymd[0:4]}-{ymd[4:6]}-{ymd[6:8]}"
+        turnover = None
+        try:
+            js2 = _twse_rwd_json(f"https://www.twse.com.tw/rwd/zh/afterTrading/FMTQIK?date={ymd}&response=json")
+            if js2.get("stat") == "OK":
+                for r2 in (js2.get("data") or []):
+                    if roc_date_to_iso(r2[0]) == iso_date:
+                        turnover = round(to_float(r2[2]) / 1e8, 2)
+                        break
+        except Exception as e:
+            log(f"  FMTQIK 成交金額抓取失敗: {e}")
+
+        log(f"  加權指數 {iso_date}: {close} ({change:+.2f}, {chg_pct:+.2f}%)")
+        return {
+            "date": iso_date,
+            "close": round(close, 2),
+            "change": round(change, 2),
+            "change_pct": round(chg_pct, 2),
+            "turnover_billion": turnover,
+        }
+    raise ValueError("往前5天皆無 MI_INDEX 資料")
 
 def get_institutional_spot():
     """
-    TWSE 三大法人整體買賣超。
-    嘗試多個可能的 endpoint，逐一 fallback。
+    TWSE 盤後統計 BFI82U（三大法人買賣金額統計表，約15:00公布）
+    回傳外資/投信/自營商買賣超（億元）
     """
-    endpoints = [
-        "fund/TWT38U",          # 外資及陸資買賣超彙總
-        "exchangeReport/BFI82U",
-        "exchangeReport/BFIAUU",
-    ]
-    df = None
-    used_ep = None
-    for ep in endpoints:
+    for offset in range(0, 5):
+        d = _tw_now() - timedelta(days=offset)
+        ymd = d.strftime("%Y%m%d")
+        url = f"https://www.twse.com.tw/rwd/zh/fund/BFI82U?type=day&dayDate={ymd}&response=json"
         try:
-            data = fetch_twse_json(ep)
-            tmp = pd.DataFrame(data)
-            log(f"嘗試 {ep}，欄位: {list(tmp.columns)}, 列數: {len(tmp)}")
-            if not tmp.empty:
-                df = tmp
-                used_ep = ep
-                break
+            js = _twse_rwd_json(url)
         except Exception as e:
-            log(f"  {ep} 失敗: {e}")
+            log(f"  BFI82U {ymd} 請求失敗: {e}")
+            continue
+        if js.get("stat") != "OK":
+            log(f"  BFI82U {ymd} stat={js.get('stat')}（可能為假日或尚未更新）")
+            continue
+        data = js.get("data") or []
+        if not data:
+            continue
+        log(f"  BFI82U {ymd} 單位列: {[str(r[0]) for r in data]}")
 
-    if df is None:
-        raise ValueError("所有 TWSE 三大法人 endpoint 均失敗")
+        # 欄位: [單位名稱, 買進金額, 賣出金額, 買賣差額]
+        def net(keyword):
+            total, found = 0.0, False
+            for row in data:
+                if keyword in str(row[0]):
+                    total += to_float(row[3]); found = True
+            return round(total / 1e8, 2) if found else None
 
-    log(f"使用 endpoint: {used_ep}, 欄位: {list(df.columns)}")
-    df.columns = [str(c).strip() for c in df.columns]
-
-    # 找日期欄
-    date_col = find_col(df, "Date", "日期")
-    name_col = find_col(df, "Name", "單位名稱", "機構名稱", "名稱")
-    buy_col  = find_col(df, "BuyValue", "Buy", "買進金額", "買進")
-    sell_col = find_col(df, "SellValue", "Sell", "賣出金額", "賣出")
-    diff_col = find_col(df, "Diff", "買賣差額", "差額", "買賣超")
-    log(f"  date={date_col}, name={name_col}, buy={buy_col}, sell={sell_col}, diff={diff_col}")
-
-    if not (name_col and (buy_col or diff_col)):
-        log(f"[WARN] 三大法人現貨：找不到買賣欄位，略過。現有: {list(df.columns)}")
-        return None
-
-    # 取最新日期
-    if date_col:
-        last_date = df[date_col].iloc[-1]
-        today = df[df[date_col]==last_date]
-    else:
-        today = df
-
-    def net(keyword):
-        rows = today[today[name_col].astype(str).str.contains(keyword, case=False)]
-        if rows.empty:
-            return None
-        if diff_col:
-            return round(rows[diff_col].apply(to_float).sum()/1e8, 2)
-        if buy_col and sell_col:
-            b = rows[buy_col].apply(to_float).sum()
-            s = rows[sell_col].apply(to_float).sum()
-            return round((b-s)/1e8, 2)
-        return None
-
-    foreign = net("外資|Foreign")
-    trust   = net("投信|Trust|Invest")
-    dealer  = net("自營|Dealer|Prop")
-    iso_date = roc_date_to_iso(last_date) if date_col else datetime.now(timezone.utc).strftime("%Y-%m-%d")
-    total = sum(v for v in [foreign, trust, dealer] if v is not None)
-    return {
-        "date": iso_date,
-        "foreign": foreign, "trust": trust, "dealer": dealer,
-        "total": round(total, 2),
-    }
+        dealer  = net("自營商")   # 自行買賣 + 避險 兩列合計
+        trust   = net("投信")
+        foreign = net("外資")     # 外資及陸資 + 外資自營商 合計
+        iso_date = f"{ymd[0:4]}-{ymd[4:6]}-{ymd[6:8]}"
+        total = sum(v for v in [foreign, trust, dealer] if v is not None)
+        log(f"  三大法人現貨 {iso_date}: 外資{foreign} 投信{trust} 自營{dealer}")
+        return {
+            "date": iso_date,
+            "foreign": foreign, "trust": trust, "dealer": dealer,
+            "total": round(total, 2),
+        }
+    log("[WARN] 往前5天皆無 BFI82U 資料")
+    return None
 
 # ---------------------------------------------------------------------------
 # TAIFEX CSV
