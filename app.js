@@ -114,6 +114,28 @@ function renderLargeTrader(lt) {
   el.innerHTML = makeSection("近月份", near) + makeSection("所有月份", all);
 }
 
+function renderTxo(txo) {
+  const el = document.getElementById("txoDetail");
+  if (!el) return;
+  if (!txo || (!txo.dealer && !txo.foreign)) { el.innerHTML = '<p class="empty">暫無資料</p>'; return; }
+  const row = (label, d) => {
+    if (!d) return "";
+    return `<tr>
+      <td>${label}</td>
+      <td class="${signClass(d.call_oi_net)}">${fmt(d.call_oi_net)}</td>
+      <td class="${signClass(d.call_amt_net)}">${fmt(d.call_amt_net)}</td>
+      <td class="${signClass(d.put_oi_net)}">${fmt(d.put_oi_net)}</td>
+      <td class="${signClass(d.put_amt_net)}">${fmt(d.put_amt_net)}</td>
+    </tr>`;
+  };
+  el.innerHTML = `
+    <table class="data-table lt-table">
+      <thead><tr><th></th><th>買權淨部位(口)</th><th>買權淨金額(千元)</th><th>賣權淨部位(口)</th><th>賣權淨金額(千元)</th></tr></thead>
+      <tbody>${row("自營商", txo.dealer)}${row("外資", txo.foreign)}</tbody>
+    </table>
+    <p class="empty" style="margin:10px 0 0;font-size:0.72rem">賣權淨部位為正=看空避險部位增加；口數與金額為未平倉淨額</p>`;
+}
+
 function renderCharts(history) {
   if (typeof Chart === "undefined") { console.warn("Chart.js 未載入，跳過圖表"); return; }
   const labels = history.map(h => h.date);
@@ -141,6 +163,7 @@ async function main() {
       {label:"自營商",value:latest.institutional_futures_tx?.dealer_oi_net}]);
     renderBars("futMtxBars",[{label:"外資",value:latest.institutional_futures_mtx?.foreign_oi_net}]);
     renderLargeTrader(latest.large_trader_futures);
+    renderTxo(latest.txo_positions);
   } catch(err) {
     console.error("主資料載入失敗:", err);
     document.querySelector("main").innerHTML = `<p class="empty" style="padding:40px;text-align:center;">資料載入失敗：${err.message}</p>`;
