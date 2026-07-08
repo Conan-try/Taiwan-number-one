@@ -137,6 +137,42 @@ function renderTxo(txo) {
 }
 
 /* ═══════════════════════════════════════════════════════════
+   歷史資料自我修復：
+   1. 日期正規化（20260602.0 / 20260602 / 2026/07/07 → 2026-07-06 格式）
+   2. 按日期排序 + 去重（同日期保留後寫入的那筆）
+   3. 若 history 最後一天比 latest.json 舊，把 latest 補上
+   ═══════════════════════════════════════════════════════════ */
+
+function normalizeDate(d) {
+  if (d == null) return null;
+  let s = String(d).trim();
+  // "20260602.0" / "20260602" → "2026-06-02"
+  const m8 = s.match(/^(\d{4})(\d{2})(\d{2})(?:\.0+)?$/);
+  if (m8) return `${m8[1]}-${m8[2]}-${m8[3]}`;
+  // "2026/07/07" 或 "2026/7/7" → "2026-07-07"
+  const mSlash = s.match(/^(\d{4})[\/](\d{1,2})[\/](\d{1,2})$/);
+  if (mSlash) return `${mSlash[1]}-${mSlash[2].padStart(2,"0")}-${mSlash[3].padStart(2,"0")}`;
+  // 已是 "2026-07-07" 就原樣返回
+  if (/^\d{4}-\d{2}-\d{2}$/.test(s)) return s;
+  return s; // 認不得的格式原樣保留，至少不會整批掛掉
+}
+
+function normalizeHistory(rawHistory, latest) {
+  const byDate = new Map();
+  (rawHistory || []).forEach(h => {
+    const d = normalizeDate(h.date);
+    if (!d) return;
+    byDate.set(d, { ...h, date: d });   // 同日期後蓋前
+  });
+  // history 落後 latest 時，把 latest 當一筆補進去（欄位結構相同）
+  if (latest) {
+    const ld = normalizeDate(latest.date);
+    if (ld && !byDate.has(ld)) byDate.set(ld, { ...latest, date: ld });
+  }
+  return [...byDate.values()].sort((a, b) => a.date.localeCompare(b.date));
+}
+
+/* ═══════════════════════════════════════════════════════════
    走勢圖：統一期貨快報風格
    每張圖 = 指標柱狀（右軸，正紅／負綠）＋ 加權指數折線（左軸）
    標題旁顯示最新數值，最後一根柱子上也直接標數字
@@ -321,8 +357,9 @@ function renderCharts(history) {
 }
 
 async function main() {
+  let latest = null;
   try {
-    const latest = await loadJSON("data/latest.json");
+    latest = await loadJSON("data/latest.json");
     renderHero(latest);
     renderBars("spotBars",[
       {label:"外資",  value:latest.institutional_spot?.foreign, digits:2},
@@ -342,7 +379,7 @@ async function main() {
   }
   try {
     const history = await loadJSON("data/history.json");
-    renderCharts(history.history || []);
+    renderCharts(normalizeHistory(history.history || [], latest));
   } catch(err) {
     console.error("圖表載入失敗:", err);
     document.querySelectorAll(".chart-card canvas").forEach(c => {
