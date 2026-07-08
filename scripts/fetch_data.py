@@ -61,6 +61,16 @@ def roc_date_to_iso(s):
         return f"{int(y):04d}-{int(mo):02d}-{int(da):02d}"
     return s
 
+def latest_iso_date(series):
+    """把日期欄逐值正規化成 ISO(YYYY-MM-DD) 後取最大值。
+    直接比較原始字串或轉數值都會因補零/不補零混雜而出錯，
+    例如 '2026/7/2' 去掉分隔符是 6 位數、'20260602' 是 8 位數。"""
+    iso = series.astype(str).map(roc_date_to_iso)
+    valid = iso[iso.str.match(r"^\d{4}-\d{2}-\d{2}$")]
+    if valid.empty:
+        raise ValueError(f"日期欄無法解析: {series.head().tolist()}")
+    return iso, valid.max()
+
 # ---------------------------------------------------------------------------
 # TWSE — 使用官方盤後統計端點（收盤後約13:40-15:00更新，遠比 openapi 即時）
 # ---------------------------------------------------------------------------
@@ -204,10 +214,10 @@ def get_tx_futures():
         tx_regular = tx[tx[session_col].astype(str).str.contains("一般")]
         if not tx_regular.empty:
             tx = tx_regular
-    last_date = tx[date_col].iloc[-1]
-    near = tx[tx[date_col]==last_date].sort_values(month_col).iloc[0]
+    tx["_iso"], last_iso = latest_iso_date(tx[date_col])
+    near = tx[tx["_iso"]==last_iso].sort_values(month_col).iloc[0]
     return {
-        "date": roc_date_to_iso(last_date),
+        "date": last_iso,
         "price":      to_float(near[close_col]) if close_col else None,
         "change":     to_float(near[chg_col])   if chg_col   else None,
         "change_pct": to_float(near[chgpct_col])if chgpct_col else None,
@@ -227,8 +237,8 @@ def get_institutional_futures_for(df, product_keyword):
     log(f"  [{product_keyword}] role={role_col}, oi_net={oi_net_col}")
     if not (date_col and prod_col and role_col and oi_net_col):
         raise ValueError(f"找不到必要欄位，現有: {list(df.columns)}")
-    last_date = df[date_col].iloc[-1]
-    today = df[(df[date_col]==last_date) & (df[prod_col].astype(str).str.contains(product_keyword))]
+    df["_iso"], last_iso = latest_iso_date(df[date_col])
+    today = df[(df["_iso"]==last_iso) & (df[prod_col].astype(str).str.contains(product_keyword))]
     def pick(kw):
         rows = today[today[role_col].astype(str).str.contains(kw)]
         if rows.empty: return None, None
@@ -237,7 +247,7 @@ def get_institutional_futures_for(df, product_keyword):
     trust_net,  trust_chg  = pick("投信")
     foreign_net,foreign_chg= pick("外資")
     return {
-        "date": roc_date_to_iso(last_date),
+        "date": last_iso,
         "dealer_oi_net": dealer_net, "dealer_oi_chg": dealer_chg,
         "trust_oi_net":  trust_net,  "trust_oi_chg":  trust_chg,
         "foreign_oi_net":foreign_net,"foreign_oi_chg":foreign_chg,
@@ -266,11 +276,11 @@ def get_large_trader_futures():
     if not (date_col and prod_col):
         raise ValueError(f"找不到必要欄位，現有: {list(df.columns)}")
 
-    last_date = df[date_col].iloc[-1]
-    today = df[(df[date_col]==last_date) & (
+    df["_iso"], last_iso = latest_iso_date(df[date_col])
+    today = df[(df["_iso"]==last_iso) & (
         df[prod_col].astype(str).str.contains("臺股期貨|TX")
     )].copy()
-    result = {"date": roc_date_to_iso(last_date), "rows_found": len(today)}
+    result = {"date": last_iso, "rows_found": len(today)}
     if today.empty or not (b5_col and s5_col and b10_col and s10_col):
         return result
 
@@ -375,13 +385,12 @@ def get_txo_positions():
     if not (date_col and prod_col and cp_col and role_col and oi_net_col):
         raise ValueError(f"找不到必要欄位，現有: {list(df.columns)}")
 
-    # 取最大日期、篩臺指選擇權
-    df["_d"] = pd.to_numeric(df[date_col].astype(str).str.replace(r"\D","",regex=True), errors="coerce")
-    last_d = df["_d"].max()
-    today = df[(df["_d"]==last_d) & (df[prod_col].astype(str).str.contains("臺指選擇權"))]
+    # 取最大日期（以正規化後 ISO 日期比較）、篩臺指選擇權
+    df["_iso"], last_iso = latest_iso_date(df[date_col])
+    today = df[(df["_iso"]==last_iso) & (df[prod_col].astype(str).str.contains("臺指選擇權"))]
     log(f"  臺指選擇權列數: {len(today)}, 買賣權值: {today[cp_col].unique().tolist() if not today.empty else []}")
 
-    result = {"date": roc_date_to_iso(str(int(last_d)))}
+    result = {"date": last_iso}
     if today.empty:
         return result
 
@@ -415,12 +424,13 @@ def get_pc_ratio():
     log(f"  date={date_col}, pc={pc_col}")
     if not (date_col and pc_col):
         raise ValueError(f"找不到必要欄位，現有: {list(df.columns)}")
-    # CSV 可能不是按日期排序，取日期最大的那列
-    df["_d"] = pd.to_numeric(df[date_col].astype(str).str.replace(r"\D","",regex=True), errors="coerce")
-    last = df.sort_values("_d").iloc[-1]
-    log(f"  P/C 取用日期: {last[date_col]}, 值: {last[pc_col]}")
+    # CSV 可能不是按日期排序、且日期格式補零/不補零混雜
+    # → 一律先正規化成 ISO 再取最新一天
+    df["_iso"], last_iso = latest_iso_date(df[date_col])
+    last = df[df["_iso"]==last_iso].iloc[-1]
+    log(f"  P/C 取用日期: {last_iso}, 值: {last[pc_col]}")
     return {
-        "date": roc_date_to_iso(last[date_col]),
+        "date": last_iso,
         "pc_ratio": round(to_float(last[pc_col]), 2),
     }
 
@@ -439,69 +449,112 @@ def main():
     pc_ratio                 = safe(get_pc_ratio,                  "P/C Ratio (TAIFEX)")
     txo_positions            = safe(get_txo_positions,             "選擇權留倉 (TAIFEX)")
 
-    # 以 TAIFEX 的日期為主（TAIFEX 更新較快）
-    taifex_dates = [
-        d.get("date") for d in [tx_futures, institutional_futures_tx, large_trader_futures]
-        if d and d.get("date")
-    ]
-    record_date = max(taifex_dates) if taifex_dates else datetime.now(timezone.utc).strftime("%Y-%m-%d")
-    log(f"record_date（以TAIFEX為主）: {record_date}")
-
-    # 加權指數 / P/C Ratio 顯示邏輯：
-    # 台灣時間 9:00-13:30 為盤中，收盤價尚未產生 → 顯示 －
-    # 其他時間 → 顯示 TWSE/TAIFEX 提供的最新收盤值
-    now_tw = datetime.now(timezone.utc) + timedelta(hours=8)
-    hm = now_tw.strftime("%H:%M")
-    is_weekday = now_tw.weekday() < 5
-    in_session = is_weekday and ("09:00" <= hm < "13:30")
-    if in_session:
-        log(f"目前台灣時間 {hm} 為盤中時段，加權指數與 P/C Ratio 顯示為 －")
-        weighted_index = None
-        pc_ratio = None
-    else:
-        # 收盤後照常顯示，但若日期與 TAIFEX 不符仍記錄警告方便追蹤
-        for d, name in [(weighted_index, "加權指數"), (pc_ratio, "P/C Ratio")]:
-            if d and d.get("date") != record_date:
-                log(f"[WARN] {name} 日期 {d.get('date')} ≠ TAIFEX {record_date}（來源尚未更新，仍顯示最新可得值）")
-
-    basis = None
-    if weighted_index and tx_futures:
-        p = tx_futures.get("price"); c = weighted_index.get("close")
-        # 只在兩者日期一致時計算價差，避免用舊指數算出錯誤價差
-        if p and c and weighted_index.get("date") == tx_futures.get("date"):
-            basis = round(p - c, 2)
-        elif p and c:
-            log(f"[WARN] 加權指數日期({weighted_index.get('date')})與台指期({tx_futures.get('date')})不符，價差不計算")
-
-    record = {
-        "date": record_date,
-        "fetched_at": datetime.now(timezone.utc).isoformat(),
-        "weighted_index": weighted_index,
-        "tx_futures": tx_futures,
-        "basis": basis,
-        "institutional_spot": institutional_spot,
-        "institutional_futures_tx": institutional_futures_tx,
+    sections = {
+        "weighted_index":            weighted_index,
+        "tx_futures":                tx_futures,
+        "institutional_spot":        institutional_spot,
+        "institutional_futures_tx":  institutional_futures_tx,
         "institutional_futures_mtx": institutional_futures_mtx,
-        "large_trader_futures": large_trader_futures,
-        "pc_ratio": pc_ratio,
-        "txo_positions": txo_positions,
+        "large_trader_futures":      large_trader_futures,
+        "pc_ratio":                  pc_ratio,
+        "txo_positions":             txo_positions,
     }
 
+    # 盤中（台灣時間 9:00-13:30）不寫入加權指數與 P/C，收盤後的執行再補
+    now_tw = datetime.now(timezone.utc) + timedelta(hours=8)
+    hm = now_tw.strftime("%H:%M")
+    in_session = now_tw.weekday() < 5 and ("09:00" <= hm < "13:30")
+    if in_session:
+        log(f"目前台灣時間 {hm} 為盤中時段，本次不寫入加權指數與 P/C Ratio")
+        sections["weighted_index"] = None
+        sections["pc_ratio"] = None
+
+    # 顯示日期以 TAIFEX 為主（TAIFEX 收盤後更新較快）
+    taifex_dates = [
+        sections[k].get("date")
+        for k in ("tx_futures", "institutional_futures_tx", "large_trader_futures")
+        if sections[k] and sections[k].get("date")
+    ]
+    record_date = max(taifex_dates) if taifex_dates else (
+        datetime.now(timezone.utc) + timedelta(hours=8)).strftime("%Y-%m-%d")
+    log(f"record_date（以TAIFEX為主）: {record_date}")
+
+    # 讀舊 history
     history = []
     if os.path.exists(HISTORY_PATH):
         try:
             history = json.load(open(HISTORY_PATH, encoding="utf-8")).get("history", [])
         except Exception as e:
             log(f"[WARN] 讀取舊 history.json 失敗: {e}")
-    history = [h for h in history if h.get("date") != record_date]
-    history.append(record)
-    history.sort(key=lambda h: h.get("date",""))
+
+    fetched_at = datetime.now(timezone.utc).isoformat()
+    history = merge_into_history(history, sections, fetched_at, log)
     history = history[-180:]
 
+    # latest.json = history 中 record_date 那一天（合併後、同日一致的資料）
+    latest = next((h for h in history if h["date"] == record_date),
+                  history[-1] if history else None)
+    if latest is None:
+        log("[ERROR] 無任何可寫入的資料")
+        return
+
     json.dump({"history": history}, open(HISTORY_PATH,"w",encoding="utf-8"), ensure_ascii=False, indent=2)
-    json.dump(record, open(LATEST_PATH,"w",encoding="utf-8"), ensure_ascii=False, indent=2)
+    json.dump(latest, open(LATEST_PATH,"w",encoding="utf-8"), ensure_ascii=False, indent=2)
     open(LOG_PATH,"w",encoding="utf-8").write("\n".join(LOG_LINES))
-    log(f"完成。本次資料日期: {record_date}")
+    log(f"完成。本次資料日期: {record_date}（history 共 {len(history)} 天）")
+
+
+SECTION_KEYS = [
+    "weighted_index", "tx_futures", "institutional_spot",
+    "institutional_futures_tx", "institutional_futures_mtx",
+    "large_trader_futures", "pc_ratio", "txo_positions",
+]
+
+def merge_into_history(history, sections, fetched_at, log=print):
+    """把本次抓到的各資料區塊，依各區塊「自己的日期」寫入所屬的那一天。
+
+    解決的問題：TWSE 與 TAIFEX 更新時間不同步時，舊版會把
+    不同天的資料硬拼進同一筆紀錄（例如頂層標 7/7、裡面卻是 7/8 的加權指數）。
+    現在每個區塊都回到它真正的日期底下，價差也只用同一天的期、現價計算。
+    """
+    by_date = {}
+
+    # 1) 舊資料：日期正規化 + 同日去重（後蓋前）
+    for h in history:
+        d = roc_date_to_iso(h.get("date"))
+        if not re.match(r"^\d{4}-\d{2}-\d{2}$", str(d)):
+            log(f"[WARN] 略過無法解析日期的舊紀錄: {h.get('date')!r}")
+            continue
+        h = dict(h); h["date"] = d
+        by_date[d] = h
+
+    # 2) 本次各區塊 upsert 到各自的日期
+    for key, sec in sections.items():
+        if not sec:
+            continue
+        d = roc_date_to_iso(sec.get("date")) if sec.get("date") else None
+        if not re.match(r"^\d{4}-\d{2}-\d{2}$", str(d)):
+            log(f"[WARN] {key} 日期無法解析（{sec.get('date')!r}），本次不寫入")
+            continue
+        sec = dict(sec); sec["date"] = d
+        entry = by_date.setdefault(d, {"date": d})
+        entry[key] = sec
+        entry["fetched_at"] = fetched_at
+
+    # 3) 每一天補齊缺欄位、重算價差（僅用同一天的期價與現貨收盤）
+    result = []
+    for d in sorted(by_date):
+        e = by_date[d]
+        wi, tx = e.get("weighted_index"), e.get("tx_futures")
+        basis = None
+        if wi and tx and wi.get("close") is not None and tx.get("price") is not None:
+            basis = round(tx["price"] - wi["close"], 2)
+        ordered = {"date": d, "fetched_at": e.get("fetched_at"),
+                   "weighted_index": wi, "tx_futures": tx, "basis": basis}
+        for k in SECTION_KEYS[2:]:
+            ordered[k] = e.get(k)
+        result.append(ordered)
+    return result
 
 if __name__ == "__main__":
     main()
