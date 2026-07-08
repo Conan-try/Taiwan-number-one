@@ -1,12 +1,12 @@
 {
   "date": "2026-07-07",
-  "fetched_at": "2026-07-08T05:40:29.245575+00:00",
+  "fetched_at": "2026-07-08T07:57:13.441030+00:00",
   "weighted_index": {
-    "date": "2026-07-07",
-    "close": 45479.11,
-    "change": -1077.28,
-    "change_pct": -2.31,
-    "turnover_billion": 12281.19
+    "date": "2026-07-08",
+    "close": 45734.41,
+    "change": 255.3,
+    "change_pct": 0.56,
+    "turnover_billion": 9926.96
   },
   "tx_futures": {
     "date": "2026-07-07",
@@ -14,13 +14,13 @@
     "change": -1099.0,
     "change_pct": -2.34
   },
-  "basis": 295.89,
+  "basis": null,
   "institutional_spot": {
-    "date": "2026-07-07",
-    "foreign": -547.31,
-    "trust": 96.83,
-    "dealer": -487.33,
-    "total": -937.81
+    "date": "2026-07-08",
+    "foreign": -379.49,
+    "trust": 119.61,
+    "dealer": -169.43,
+    "total": -429.31
   },
   "institutional_futures_tx": {
     "date": "2026-07-07",
