@@ -339,13 +339,13 @@
     },
     {
       "date": "2026-07-08",
-      "fetched_at": "2026-07-08T13:17:18.339907+00:00",
+      "fetched_at": "2026-07-08T16:13:08.396345+00:00",
       "weighted_index": {
         "date": "2026-07-08",
         "close": 45734.41,
         "change": 255.3,
         "change_pct": 0.56,
-        "turnover_billion": 9926.96
+        "turnover_billion": 10045.6
       },
       "tx_futures": {
         "date": "2026-07-08",
