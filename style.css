@@ -221,6 +221,25 @@ main {
 }
 .chart-card canvas { width: 100% !important; }
 
+/* ── 統一期貨風格圖卡：標題列＋最新數值 ── */
+.chart-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+.chart-head h2 { margin: 0; }
+.chart-latest {
+  font-family: var(--font-mono);
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
 .sources h2 { font-family: var(--font-display); font-size: 0.95rem; margin: 0 0 10px; }
 .source-list {
   margin: 0 0 14px;
