@@ -81,18 +81,28 @@
     <div id="txoDetail"></div>
   </section>
 
+  <!-- 走勢圖：統一期貨快報風格（柱狀指標 × 加權指數雙軸） -->
   <section class="charts">
     <div class="card chart-card">
-      <h2>加權指數走勢</h2>
-      <canvas id="chartIndex" height="140"></canvas>
+      <div class="chart-head">
+        <h2>台指期現價差 <span class="unit">點</span></h2>
+        <span class="chart-latest" id="latestBasis">－</span>
+      </div>
+      <canvas id="chartBasis" height="190"></canvas>
     </div>
     <div class="card chart-card">
-      <h2>外資台股期貨留倉走勢</h2>
-      <canvas id="chartForeign" height="140"></canvas>
+      <div class="chart-head">
+        <h2>外資台股期貨留倉 <span class="unit">口</span></h2>
+        <span class="chart-latest" id="latestForeign">－</span>
+      </div>
+      <canvas id="chartForeign" height="190"></canvas>
     </div>
     <div class="card chart-card">
-      <h2>P/C Ratio 走勢</h2>
-      <canvas id="chartPC" height="140"></canvas>
+      <div class="chart-head">
+        <h2>P/C Ratio <span class="unit">%</span></h2>
+        <span class="chart-latest" id="latestPC">－</span>
+      </div>
+      <canvas id="chartPC" height="190"></canvas>
     </div>
   </section>
 
