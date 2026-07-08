@@ -136,17 +136,188 @@ function renderTxo(txo) {
     <p class="empty" style="margin:10px 0 0;font-size:0.72rem">賣權淨部位為正=看空避險部位增加；口數與金額為未平倉淨額</p>`;
 }
 
+/* ═══════════════════════════════════════════════════════════
+   走勢圖：統一期貨快報風格
+   每張圖 = 指標柱狀（右軸，正紅／負綠）＋ 加權指數折線（左軸）
+   標題旁顯示最新數值，最後一根柱子上也直接標數字
+   ═══════════════════════════════════════════════════════════ */
+
+const UNI = {
+  line:  "#d9a441",   // 加權指數折線（沿用網站金色主調）
+  up:    "#e5484d",   // 正值柱：紅（台股慣例，同快報正價差）
+  down:  "#2fa37a",   // 負值柱：綠（逆價差／淨空單）
+  grid:  "#1a1f28",
+  tick:  "#8b92a3",
+  fontMono: "'IBM Plex Mono', monospace",
+  fontBody: "'Noto Sans TC', sans-serif"
+};
+
+// 在最後一根柱子旁標出最新數值（仿快報在圖上直接標數字）
+const lastValueLabel = {
+  id: "lastValueLabel",
+  afterDatasetsDraw(chart, args, opts) {
+    const meta = chart.getDatasetMeta(0);            // dataset 0 = 柱狀
+    if (!meta || !meta.data.length) return;
+    // 找最後一個有值的點
+    let i = meta.data.length - 1;
+    const values = chart.data.datasets[0].data;
+    while (i >= 0 && (values[i] === null || values[i] === undefined)) i--;
+    if (i < 0) return;
+    const bar = meta.data[i];
+    const v = values[i];
+    const ctx = chart.ctx;
+    ctx.save();
+    ctx.font = `600 11px ${UNI.fontMono}`;
+    ctx.fillStyle = UNI.line;
+    ctx.textAlign = "right";
+    const above = v >= 0;
+    ctx.textBaseline = above ? "bottom" : "top";
+    ctx.fillText(fmt(v, opts.digits ?? 0), bar.x + 8, above ? bar.y - 3 : bar.y + 3);
+    ctx.restore();
+  }
+};
+
+// "2026-07-07" -> "7/7"（其他格式原樣顯示）
+function shortDate(d) {
+  if (typeof d === "string" && /^\d{4}-\d{2}-\d{2}$/.test(d)) {
+    const [, m, day] = d.split("-");
+    return `${Number(m)}/${Number(day)}`;
+  }
+  return d ?? "";
+}
+
+/**
+ * 建立一張統一期貨風格雙軸圖
+ * cfg = { canvasId, latestId, metricLabel, digits, unit, suggestedMin, values: number[] }
+ */
+function makeUniChart(history, cfg) {
+  const canvas = document.getElementById(cfg.canvasId);
+  if (!canvas) return;
+
+  const labels  = history.map(h => shortDate(h.date));
+  const taiex   = history.map(h => h.weighted_index?.close ?? null);
+  const bars    = cfg.values;
+
+  // 標題旁最新數值
+  const latestEl = document.getElementById(cfg.latestId);
+  const lastVal = [...bars].reverse().find(v => v !== null && v !== undefined);
+  if (latestEl) latestEl.textContent = lastVal == null ? "－" : fmt(lastVal, cfg.digits) + (cfg.unit ?? "");
+
+  const barColors = bars.map(v => (v != null && v < 0) ? UNI.down : UNI.up);
+
+  new Chart(canvas, {
+    data: {
+      labels,
+      datasets: [
+        {
+          type: "bar",
+          label: cfg.metricLabel,
+          data: bars,
+          backgroundColor: barColors,
+          borderWidth: 0,
+          yAxisID: "yBar",
+          order: 2,
+          categoryPercentage: 0.92,
+          barPercentage: 0.92
+        },
+        {
+          type: "line",
+          label: "加權指數-左軸",
+          data: taiex,
+          borderColor: UNI.line,
+          borderWidth: 2,
+          pointRadius: 0,
+          pointHitRadius: 6,
+          tension: 0.2,
+          spanGaps: true,
+          yAxisID: "yIndex",
+          order: 1
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      interaction: { mode: "index", intersect: false },
+      plugins: {
+        legend: {
+          position: "top",
+          align: "end",
+          labels: {
+            boxWidth: 12, boxHeight: 8,
+            color: UNI.tick,
+            font: { size: 10, family: UNI.fontBody }
+          }
+        },
+        tooltip: {
+          backgroundColor: "rgba(20,24,31,0.95)",
+          borderColor: UNI.grid,
+          borderWidth: 1,
+          titleFont: { family: UNI.fontMono, size: 12 },
+          bodyFont: { family: UNI.fontMono, size: 11 },
+          callbacks: {
+            label: (c) => ` ${c.dataset.label}：${fmt(c.parsed.y, c.datasetIndex === 0 ? cfg.digits : 2)}`
+          }
+        },
+        lastValueLabel: { digits: cfg.digits }
+      },
+      scales: {
+        x: {
+          grid: { display: false },
+          ticks: { color: UNI.tick, maxTicksLimit: 6, maxRotation: 0, font: { family: UNI.fontMono, size: 10 } }
+        },
+        yIndex: {   // 左軸：加權指數
+          position: "left",
+          grid: { color: UNI.grid, drawTicks: false },
+          ticks: { color: UNI.tick, font: { family: UNI.fontMono, size: 10 }, callback: v => fmt(v) }
+        },
+        yBar: {     // 右軸：指標本身
+          position: "right",
+          grid: { display: false },
+          suggestedMin: cfg.suggestedMin,
+          ticks: { color: UNI.tick, font: { family: UNI.fontMono, size: 10 }, callback: v => fmt(v) }
+        }
+      }
+    },
+    plugins: [lastValueLabel]
+  });
+}
+
 function renderCharts(history) {
   if (typeof Chart === "undefined") { console.warn("Chart.js 未載入，跳過圖表"); return; }
-  const labels = history.map(h => h.date);
-  const make = (id, data, color) => {
-    const ctx = document.getElementById(id);
-    if (!ctx) return;
-    new Chart(ctx, { type:"line", data:{ labels, datasets:[{ data, borderColor:color, backgroundColor:color+"22", fill:true, tension:0.25, pointRadius:0, borderWidth:2 }]}, options:{ responsive:true, plugins:{legend:{display:false}}, scales:{ x:{ticks:{color:"#8b92a3",maxTicksLimit:6},grid:{color:"#1a1f28"}}, y:{ticks:{color:"#8b92a3"},grid:{color:"#1a1f28"}} }}});
+
+  // 價差：優先用 h.basis，沒有就用 期價－現貨收盤 回推
+  const basisOf = (h) => {
+    if (h.basis != null) return h.basis;
+    if (h.tx_futures?.price != null && h.weighted_index?.close != null) {
+      return Math.round((h.tx_futures.price - h.weighted_index.close) * 100) / 100;
+    }
+    return null;
   };
-  make("chartIndex",   history.map(h=>h.weighted_index?.close??null),                    "#d9a441");
-  make("chartForeign", history.map(h=>h.institutional_futures_tx?.foreign_oi_net??null), "#e5484d");
-  make("chartPC",      history.map(h=>h.pc_ratio?.pc_ratio??null),                       "#2fa37a");
+
+  makeUniChart(history, {
+    canvasId: "chartBasis",
+    latestId: "latestBasis",
+    metricLabel: "價差(期-現)",
+    digits: 2,
+    values: history.map(basisOf)
+  });
+
+  makeUniChart(history, {
+    canvasId: "chartForeign",
+    latestId: "latestForeign",
+    metricLabel: "外資淨留倉(口)",
+    digits: 0,
+    values: history.map(h => h.institutional_futures_tx?.foreign_oi_net ?? null)
+  });
+
+  makeUniChart(history, {
+    canvasId: "chartPC",
+    latestId: "latestPC",
+    metricLabel: "P/C Ratio(%)",
+    digits: 2,
+    suggestedMin: 70,     // 比照快報，右軸從 70 起跳
+    values: history.map(h => h.pc_ratio?.pc_ratio ?? null)
+  });
 }
 
 async function main() {
