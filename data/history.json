@@ -339,7 +339,7 @@
     },
     {
       "date": "2026-07-08",
-      "fetched_at": "2026-07-08T17:13:00.940446+00:00",
+      "fetched_at": "2026-07-09T10:40:11.438834+00:00",
       "weighted_index": {
         "date": "2026-07-08",
         "close": 45734.41,
@@ -425,6 +425,31 @@
           "put_amt_net": 132434.0
         }
       }
+    },
+    {
+      "date": "2026-07-09",
+      "fetched_at": "2026-07-09T10:40:11.438834+00:00",
+      "weighted_index": {
+        "date": "2026-07-09",
+        "close": 45354.61,
+        "change": -379.8,
+        "change_pct": -0.83,
+        "turnover_billion": 9967.89
+      },
+      "tx_futures": null,
+      "basis": null,
+      "institutional_spot": {
+        "date": "2026-07-09",
+        "foreign": -471.33,
+        "trust": 154.1,
+        "dealer": -76.71,
+        "total": -393.94
+      },
+      "institutional_futures_tx": null,
+      "institutional_futures_mtx": null,
+      "large_trader_futures": null,
+      "pc_ratio": null,
+      "txo_positions": null
     }
   ]
 }
