@@ -1,6 +1,17 @@
   FMTQIK 20260711 該月資料中尚無 2026-07-11 這一天（未更新），往前一天
   FMTQIK 20260710 該月資料中尚無 2026-07-10 這一天（未更新），往前一天
-  加權指數 2026-07-09: 45354.61 (-379.80), 成交 9967.89 億
+  FMTQIK 20260709 請求失敗: Expecting value: line 1 column 1 (char 0)
+  FMTQIK 20260708 請求失敗: Expecting value: line 1 column 1 (char 0)
+  FMTQIK 20260707 請求失敗: Expecting value: line 1 column 1 (char 0)
+[ERROR] 加權指數 (TWSE FMTQIK): 往前5天皆無 FMTQIK 資料
+Traceback (most recent call last):
+  File "/home/runner/work/Taiwan-number-one/Taiwan-number-one/scripts/fetch_data.py", line 22, in safe
+    return fn()
+           ^^^^
+  File "/home/runner/work/Taiwan-number-one/Taiwan-number-one/scripts/fetch_data.py", line 123, in get_weighted_index
+    raise ValueError("往前5天皆無 FMTQIK 資料")
+ValueError: 往前5天皆無 FMTQIK 資料
+
   BFI82U 20260711 請求失敗: Expecting value: line 1 column 1 (char 0)
   BFI82U 20260710 stat=很抱歉，沒有符合條件的資料!（可能為假日或尚未更新）
   BFI82U列: ['自營商(自行買賣)', '9,494,954,521', '11,531,142,442', '-2,036,187,921']
