@@ -870,6 +870,95 @@
           "put_amt_net": 66597.0
         }
       }
+    },
+    {
+      "date": "2026-07-17",
+      "fetched_at": "2026-07-17T12:00:03.043779+00:00",
+      "weighted_index": {
+        "date": "2026-07-17",
+        "close": 42671.27,
+        "change": -2953.71,
+        "change_pct": -6.47,
+        "turnover_billion": 13331.57
+      },
+      "tx_futures": {
+        "date": "2026-07-17",
+        "price": 42725.0,
+        "change": -2966.0,
+        "change_pct": -6.49
+      },
+      "basis": 53.73,
+      "institutional_spot": {
+        "date": "2026-07-17",
+        "foreign": -1883.15,
+        "trust": 73.47,
+        "dealer": -821.79,
+        "total": -2631.47
+      },
+      "institutional_futures_tx": {
+        "date": "2026-07-17",
+        "dealer_oi_net": 4666.0,
+        "dealer_oi_chg": null,
+        "trust_oi_net": 75215.0,
+        "trust_oi_chg": null,
+        "foreign_oi_net": -86189.0,
+        "foreign_oi_chg": null
+      },
+      "institutional_futures_mtx": {
+        "date": "2026-07-17",
+        "dealer_oi_net": -9581.0,
+        "dealer_oi_chg": null,
+        "trust_oi_net": 38.0,
+        "trust_oi_chg": null,
+        "foreign_oi_net": -2233.0,
+        "foreign_oi_chg": null
+      },
+      "large_trader_futures": {
+        "date": "2026-07-17",
+        "rows_found": 6,
+        "near_month": {
+          "top5_buy": 72450.0,
+          "top5_sell": 60634.0,
+          "top5_net": 11816.0,
+          "top10_buy": 82882.0,
+          "top10_sell": 82333.0,
+          "top10_net": 549.0,
+          "top10_specific_buy": 79821.0,
+          "top10_specific_sell": 82333.0,
+          "top10_specific_net": -2512.0
+        },
+        "all_months": {
+          "top5_buy": 73129.0,
+          "top5_sell": 61613.0,
+          "top5_net": 11516.0,
+          "top10_buy": 83561.0,
+          "top10_sell": 83606.0,
+          "top10_net": -45.0,
+          "top10_specific_buy": 79821.0,
+          "top10_specific_sell": 83606.0,
+          "top10_specific_net": -3785.0
+        },
+        "top10_specific_net": -3785.0
+      },
+      "pc_ratio": {
+        "date": "2026-07-17",
+        "pc_ratio": 92.94
+      },
+      "txo_positions": {
+        "date": "2026-07-17",
+        "dealer": {
+          "call_oi_net": 94.0,
+          "call_amt_net": 1017.0,
+          "put_oi_net": 7416.0,
+          "put_amt_net": 353671.0
+        },
+        "foreign": {
+          "call_oi_net": -1111.0,
+          "call_amt_net": -90697.0,
+          "put_oi_net": 3341.0,
+          "put_amt_net": 166555.0
+        }
+      }
     }
   ]
 }
