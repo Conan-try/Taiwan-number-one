@@ -1,6 +1,6 @@
 {
   "date": "2026-07-31",
-  "fetched_at": "2026-07-31T11:33:13.415037+00:00",
+  "fetched_at": "2026-07-31T13:43:08.114244+00:00",
   "weighted_index": {
     "date": "2026-07-31",
     "close": 43119.75,
@@ -18,9 +18,9 @@
   "institutional_spot": {
     "date": "2026-07-31",
     "foreign": 675.54,
-    "trust": 333.82,
+    "trust": 360.2,
     "dealer": -162.6,
-    "total": 846.76
+    "total": 873.14
   },
   "institutional_futures_tx": {
     "date": "2026-07-31",
