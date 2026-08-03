@@ -171,6 +171,85 @@ def get_institutional_spot():
     log("[WARN] 往前5天皆無 BFI82U 資料")
     return None
 
+def get_margin_maintenance():
+    """
+    台股整體融資維持率（M平方公式）：
+    Sum(非ETF個股融資餘額張數x1000x收盤價) / 融資餘額總金額(元) x100
+    來源：TWSE MI_MARGN(信用交易統計) + MI_INDEX(全部個股收盤行情)
+    """
+    for offset in range(0, 5):
+        d = _tw_now() - timedelta(days=offset)
+        ymd = d.strftime("%Y%m%d")
+        iso_date = f"{ymd[0:4]}-{ymd[4:6]}-{ymd[6:8]}"
+        try:
+            js = _twse_rwd_json(f"https://www.twse.com.tw/rwd/zh/marginTrading/MI_MARGN?date={ymd}&selectType=ALL&response=json")
+        except Exception as e:
+            log(f"  MI_MARGN {ymd} 請求失敗: {e}"); continue
+        if js.get("stat") != "OK":
+            log(f"  MI_MARGN {ymd} stat={js.get('stat')}"); continue
+
+        tables = js.get("tables") or []
+        fin_balance = None
+        stock_rows, stock_fields = None, None
+        for t in tables:
+            fields = [str(f) for f in (t.get("fields") or [])]
+            data = t.get("data") or []
+            for row in data:
+                if row and "融資金額" in str(row[0]):
+                    idxs = [i for i, f in enumerate(fields) if "今日餘額" in f]
+                    if idxs:
+                        fin_balance = to_float(row[idxs[-1]]) * 1000  # 仟元->元
+            if any(("股票代號" in f or "證券代號" in f) for f in fields) and len(data) > 100:
+                stock_rows, stock_fields = data, fields
+        if fin_balance is None or stock_rows is None:
+            log(f"  MI_MARGN {ymd} 找不到總融資餘額或個股表，tables={[t.get('title') for t in tables]}"); continue
+
+        bal_idx = next((i for i, f in enumerate(stock_fields) if "今日餘額" in f), None)
+        if bal_idx is None:
+            log(f"  找不到個股今日餘額欄，fields={stock_fields}"); continue
+
+        try:
+            js2 = _twse_rwd_json(f"https://www.twse.com.tw/rwd/zh/afterTrading/MI_INDEX?date={ymd}&type=ALLBUT0999&response=json")
+        except Exception as e:
+            log(f"  MI_INDEX 全部行情 {ymd} 失敗: {e}"); continue
+        prices = {}
+        for t in (js2.get("tables") or []):
+            fields = [str(f) for f in (t.get("fields") or [])]
+            if any("收盤價" in f for f in fields) and any("證券代號" in f for f in fields):
+                ci = next(i for i, f in enumerate(fields) if "證券代號" in f)
+                pi = next(i for i, f in enumerate(fields) if "收盤價" in f)
+                for row in (t.get("data") or []):
+                    raw = str(row[pi]).strip()
+                    if raw in ("--", ""): continue
+                    p = to_float(raw, default=0)
+                    if p > 0:
+                        prices[str(row[ci]).strip()] = p
+        if not prices:
+            log(f"  {ymd} 收盤價表為空"); continue
+
+        total_value, matched = 0.0, 0
+        for row in stock_rows:
+            code = str(row[0]).strip()
+            if code.startswith("00"):  # 排除 ETF
+                continue
+            price = prices.get(code)
+            if not price:
+                continue
+            total_value += to_float(row[bal_idx]) * 1000 * price
+            matched += 1
+        if fin_balance <= 0 or total_value <= 0:
+            log(f"  {ymd} 數值異常 value={total_value}, balance={fin_balance}"); continue
+        ratio = round(total_value / fin_balance * 100, 2)
+        log(f"  融資維持率 {iso_date}: {ratio}%（{matched}檔，融資餘額 {round(fin_balance/1e8,1)} 億）")
+        return {
+            "date": iso_date,
+            "ratio": ratio,
+            "financing_balance_billion": round(fin_balance / 1e8, 1),
+            "stock_count": matched,
+        }
+    log("[WARN] 往前5天皆無融資維持率資料")
+    return None
+
 # ---------------------------------------------------------------------------
 # TAIFEX CSV
 # ---------------------------------------------------------------------------
@@ -448,6 +527,7 @@ def main():
     large_trader_futures     = safe(get_large_trader_futures,      "大額交易人期貨")
     pc_ratio                 = safe(get_pc_ratio,                  "P/C Ratio (TAIFEX)")
     txo_positions            = safe(get_txo_positions,             "選擇權留倉 (TAIFEX)")
+    margin_maintenance       = safe(get_margin_maintenance,        "融資維持率 (TWSE)")
 
     sections = {
         "weighted_index":            weighted_index,
@@ -458,6 +538,7 @@ def main():
         "large_trader_futures":      large_trader_futures,
         "pc_ratio":                  pc_ratio,
         "txo_positions":             txo_positions,
+        "margin_maintenance":        margin_maintenance,
     }
 
     # 盤中（台灣時間 9:00-13:30）不寫入加權指數與 P/C，收盤後的執行再補
