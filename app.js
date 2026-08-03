@@ -318,6 +318,16 @@ function makeUniChart(history, cfg) {
   });
 }
 
+function renderMargin(m) {
+  const el = document.getElementById("marginBox");
+  if (!el) return;
+  if (!m || m.ratio == null) { el.innerHTML = '<p class="empty">暫無資料</p>'; return; }
+  el.innerHTML = `
+    <div class="hero-number" style="font-size:1.8rem">${fmt(m.ratio,2)}<span style="font-size:1rem">%</span></div>
+    <div class="hero-foot" style="margin-top:6px">融資餘額 <span>${fmt(m.financing_balance_billion,1)}</span> 億元（${m.date}）</div>
+    <div class="hero-foot" style="margin-top:4px;font-size:0.7rem">數值愈低代表融資戶回檔壓力愈大；急跌至低檔常伴隨斷頭賣壓</div>`;
+}
+
 function renderCharts(history) {
   if (typeof Chart === "undefined") { console.warn("Chart.js 未載入，跳過圖表"); return; }
 
@@ -372,6 +382,7 @@ async function main() {
     renderBars("futMtxBars",[{label:"外資",value:latest.institutional_futures_mtx?.foreign_oi_net}]);
     renderLargeTrader(latest.large_trader_futures);
     renderTxo(latest.txo_positions);
+    renderMargin(latest.margin_maintenance);
   } catch(err) {
     console.error("主資料載入失敗:", err);
     document.querySelector("main").innerHTML = `<p class="empty" style="padding:40px;text-align:center;">資料載入失敗：${err.message}</p>`;
