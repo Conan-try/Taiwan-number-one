@@ -194,19 +194,23 @@ def get_margin_maintenance():
         for t in tables:
             fields = [str(f) for f in (t.get("fields") or [])]
             data = t.get("data") or []
+            log(f"  MI_MARGN 表[{t.get('title')}] 列數={len(data)}, fields={fields[:8]}")
             for row in data:
                 if row and "融資金額" in str(row[0]):
                     idxs = [i for i, f in enumerate(fields) if "今日餘額" in f]
-                    if idxs:
-                        fin_balance = to_float(row[idxs[-1]]) * 1000  # 仟元->元
-            if any(("股票代號" in f or "證券代號" in f) for f in fields) and len(data) > 100:
+                    # fields 可能為空，退而取最後一欄（今日餘額為最後一欄）
+                    val = row[idxs[-1]] if idxs else row[-1]
+                    fin_balance = to_float(val) * 1000  # 仟元->元
+                    log(f"  融資金額列: {row} -> 今日餘額 {val}")
+            # 個股表 = 列數最多的那張（不依賴欄位名）
+            if len(data) > 100 and stock_rows is None:
                 stock_rows, stock_fields = data, fields
         if fin_balance is None or stock_rows is None:
-            log(f"  MI_MARGN {ymd} 找不到總融資餘額或個股表，tables={[t.get('title') for t in tables]}"); continue
+            log(f"  MI_MARGN {ymd} 解析失敗 fin_balance={fin_balance}, stock_rows={'有' if stock_rows else '無'}"); continue
 
-        bal_idx = next((i for i, f in enumerate(stock_fields) if "今日餘額" in f), None)
-        if bal_idx is None:
-            log(f"  找不到個股今日餘額欄，fields={stock_fields}"); continue
+        # 個股融資今日餘額：欄位比對不到就用固定位置6（代號,名稱,買進,賣出,現償,前日餘額,今日餘額）
+        bal_idx = next((i for i, f in enumerate(stock_fields) if "今日餘額" in f), 6)
+        log(f"  個股表首列範例: {stock_rows[0][:8]}, bal_idx={bal_idx}")
 
         try:
             js2 = _twse_rwd_json(f"https://www.twse.com.tw/rwd/zh/afterTrading/MI_INDEX?date={ymd}&type=ALLBUT0999&response=json")
