@@ -254,6 +254,36 @@ def get_margin_maintenance():
     log("[WARN] 往前5天皆無融資維持率資料")
     return None
 
+def get_wantgoo_margin():
+    """玩股網「扣除ETF資券進出行情」融資維持率（第三方口徑，僅供對照；抓不到時回None）"""
+    url = "https://www.wantgoo.com/stock/margin-trading/exclude-etf/taiex"
+    try:
+        r = requests.get(url, timeout=30, headers={
+            "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0 Safari/537.36",
+            "Accept-Language": "zh-TW,zh;q=0.9",
+        })
+        r.raise_for_status()
+        html = r.text
+    except Exception as e:
+        log(f"[WARN] 玩股網請求失敗: {e}")
+        return None
+    # 在「維持率」關鍵字附近找 100~300 之間的百分比數字
+    candidates = []
+    for m in re.finditer(r"維持率[^0-9]{0,80}?(\d{3}\.\d{1,2})", html):
+        candidates.append(m.group(1))
+    if not candidates:
+        for m in re.finditer(r"(\d{3}\.\d{1,2})\s*%", html):
+            v = float(m.group(1))
+            if 100 <= v <= 300:
+                candidates.append(m.group(1))
+    log(f"  玩股網候選值: {candidates[:5]}")
+    for cand in candidates:
+        v = float(cand)
+        if 100 <= v <= 300:
+            return {"ratio": v, "source": "wantgoo"}
+    log(f"[WARN] 玩股網頁面找不到維持率數字（頁面長度 {len(html)}）")
+    return None
+
 # ---------------------------------------------------------------------------
 # TAIFEX CSV
 # ---------------------------------------------------------------------------
@@ -532,6 +562,7 @@ def main():
     pc_ratio                 = safe(get_pc_ratio,                  "P/C Ratio (TAIFEX)")
     txo_positions            = safe(get_txo_positions,             "選擇權留倉 (TAIFEX)")
     margin_maintenance       = safe(get_margin_maintenance,        "融資維持率 (TWSE)")
+    wantgoo_margin           = safe(get_wantgoo_margin,            "融資維持率 (玩股網)")
 
     sections = {
         "weighted_index":            weighted_index,
@@ -543,6 +574,7 @@ def main():
         "pc_ratio":                  pc_ratio,
         "txo_positions":             txo_positions,
         "margin_maintenance":        margin_maintenance,
+        "wantgoo_margin":            wantgoo_margin,
     }
 
     # 盤中（台灣時間 9:00-13:30）不寫入加權指數與 P/C，收盤後的執行再補
