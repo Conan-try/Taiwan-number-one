@@ -325,7 +325,17 @@ function renderMargin(m) {
   el.innerHTML = `
     <div class="hero-number" style="font-size:1.8rem">${fmt(m.ratio,2)}<span style="font-size:1rem">%</span></div>
     <div class="hero-foot" style="margin-top:6px">融資餘額 <span>${fmt(m.financing_balance_billion,1)}</span> 億元（${m.date}）</div>
-    <div class="hero-foot" style="margin-top:4px;font-size:0.7rem">數值愈低代表融資戶回檔壓力愈大；急跌至低檔常伴隨斷頭賣壓</div>`;
+    <div class="hero-foot" style="margin-top:4px;font-size:0.7rem">公式：Σ(非ETF個股融資張數×1000×收盤價) ÷ 全市場融資餘額 ×100</div>
+    <div class="hero-foot" style="margin-top:2px;font-size:0.7rem">數值愈低代表融資戶回檔壓力愈大；口徑與各平台不同，請看趨勢</div>`;
+}
+
+function renderWantgoo(w) {
+  const el = document.getElementById("wantgooBox");
+  if (!el) return;
+  if (!w || w.ratio == null) { el.innerHTML = '<p class="empty">暫無資料</p>'; return; }
+  el.innerHTML = `
+    <div class="hero-number" style="font-size:1.8rem">${fmt(w.ratio,2)}<span style="font-size:1rem">%</span></div>
+    <div class="hero-foot" style="margin-top:6px;font-size:0.7rem">來源：玩股網（第三方口徑，僅供與上方自算值對照）</div>`;
 }
 
 function renderCharts(history) {
@@ -383,6 +393,7 @@ async function main() {
     renderLargeTrader(latest.large_trader_futures);
     renderTxo(latest.txo_positions);
     renderMargin(latest.margin_maintenance);
+    renderWantgoo(latest.wantgoo_margin);
   } catch(err) {
     console.error("主資料載入失敗:", err);
     document.querySelector("main").innerHTML = `<p class="empty" style="padding:40px;text-align:center;">資料載入失敗：${err.message}</p>`;
