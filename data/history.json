@@ -53,7 +53,9 @@
         "pc_ratio": 114.57,
         "vix": 40.39
       },
-      "txo_positions": null
+      "txo_positions": null,
+      "margin_maintenance": null,
+      "wantgoo_margin": null
     },
     {
       "date": "2026-07-01",
@@ -72,7 +74,9 @@
       "institutional_futures_mtx": null,
       "large_trader_futures": null,
       "pc_ratio": null,
-      "txo_positions": null
+      "txo_positions": null,
+      "margin_maintenance": null,
+      "wantgoo_margin": null
     },
     {
       "date": "2026-07-02",
@@ -132,7 +136,9 @@
         "top10_specific_net": -12760.0
       },
       "pc_ratio": null,
-      "txo_positions": null
+      "txo_positions": null,
+      "margin_maintenance": null,
+      "wantgoo_margin": null
     },
     {
       "date": "2026-07-03",
@@ -192,7 +198,9 @@
         "top10_specific_net": -8673.0
       },
       "pc_ratio": null,
-      "txo_positions": null
+      "txo_positions": null,
+      "margin_maintenance": null,
+      "wantgoo_margin": null
     },
     {
       "date": "2026-07-06",
@@ -252,7 +260,9 @@
         "top10_specific_net": -8032.0
       },
       "pc_ratio": null,
-      "txo_positions": null
+      "txo_positions": null,
+      "margin_maintenance": null,
+      "wantgoo_margin": null
     },
     {
       "date": "2026-07-07",
@@ -335,7 +345,9 @@
           "put_oi_net": 10193.0,
           "put_amt_net": 165920.0
         }
-      }
+      },
+      "margin_maintenance": null,
+      "wantgoo_margin": null
     },
     {
       "date": "2026-07-08",
@@ -424,7 +436,9 @@
           "put_oi_net": 6836.0,
           "put_amt_net": 132434.0
         }
-      }
+      },
+      "margin_maintenance": null,
+      "wantgoo_margin": null
     },
     {
       "date": "2026-07-09",
@@ -513,7 +527,9 @@
           "put_oi_net": 9728.0,
           "put_amt_net": 134438.0
         }
-      }
+      },
+      "margin_maintenance": null,
+      "wantgoo_margin": null
     },
     {
       "date": "2026-07-13",
@@ -602,7 +618,9 @@
           "put_oi_net": 9703.0,
           "put_amt_net": 107022.0
         }
-      }
+      },
+      "margin_maintenance": null,
+      "wantgoo_margin": null
     },
     {
       "date": "2026-07-14",
@@ -691,7 +709,9 @@
           "put_oi_net": 13201.0,
           "put_amt_net": 129029.0
         }
-      }
+      },
+      "margin_maintenance": null,
+      "wantgoo_margin": null
     },
     {
       "date": "2026-07-15",
@@ -780,7 +800,9 @@
           "put_oi_net": 3139.0,
           "put_amt_net": 70673.0
         }
-      }
+      },
+      "margin_maintenance": null,
+      "wantgoo_margin": null
     },
     {
       "date": "2026-07-16",
@@ -869,7 +891,9 @@
           "put_oi_net": 5086.0,
           "put_amt_net": 66597.0
         }
-      }
+      },
+      "margin_maintenance": null,
+      "wantgoo_margin": null
     },
     {
       "date": "2026-07-17",
@@ -958,7 +982,9 @@
           "put_oi_net": 3341.0,
           "put_amt_net": 166555.0
         }
-      }
+      },
+      "margin_maintenance": null,
+      "wantgoo_margin": null
     },
     {
       "date": "2026-07-20",
@@ -1047,7 +1073,9 @@
           "put_oi_net": 3308.0,
           "put_amt_net": 167267.0
         }
-      }
+      },
+      "margin_maintenance": null,
+      "wantgoo_margin": null
     },
     {
       "date": "2026-07-21",
@@ -1136,7 +1164,9 @@
           "put_oi_net": 6770.0,
           "put_amt_net": 107148.0
         }
-      }
+      },
+      "margin_maintenance": null,
+      "wantgoo_margin": null
     },
     {
       "date": "2026-07-22",
@@ -1225,7 +1255,9 @@
           "put_oi_net": 2735.0,
           "put_amt_net": 89409.0
         }
-      }
+      },
+      "margin_maintenance": null,
+      "wantgoo_margin": null
     },
     {
       "date": "2026-07-23",
@@ -1314,7 +1346,9 @@
           "put_oi_net": 4059.0,
           "put_amt_net": 91650.0
         }
-      }
+      },
+      "margin_maintenance": null,
+      "wantgoo_margin": null
     },
     {
       "date": "2026-07-24",
@@ -1403,7 +1437,9 @@
           "put_oi_net": 2976.0,
           "put_amt_net": 84047.0
         }
-      }
+      },
+      "margin_maintenance": null,
+      "wantgoo_margin": null
     },
     {
       "date": "2026-07-27",
@@ -1492,7 +1528,9 @@
           "put_oi_net": 4681.0,
           "put_amt_net": 55402.0
         }
-      }
+      },
+      "margin_maintenance": null,
+      "wantgoo_margin": null
     },
     {
       "date": "2026-07-28",
@@ -1581,7 +1619,9 @@
           "put_oi_net": 6025.0,
           "put_amt_net": 136020.0
         }
-      }
+      },
+      "margin_maintenance": null,
+      "wantgoo_margin": null
     },
     {
       "date": "2026-07-29",
@@ -1670,7 +1710,9 @@
           "put_oi_net": 3658.0,
           "put_amt_net": 81808.0
         }
-      }
+      },
+      "margin_maintenance": null,
+      "wantgoo_margin": null
     },
     {
       "date": "2026-07-30",
@@ -1759,7 +1801,9 @@
           "put_oi_net": 3231.0,
           "put_amt_net": 81548.0
         }
-      }
+      },
+      "margin_maintenance": null,
+      "wantgoo_margin": null
     },
     {
       "date": "2026-07-31",
@@ -1848,7 +1892,9 @@
           "put_oi_net": 3423.0,
           "put_amt_net": 27813.0
         }
-      }
+      },
+      "margin_maintenance": null,
+      "wantgoo_margin": null
     },
     {
       "date": "2026-08-03",
@@ -1937,7 +1983,9 @@
           "put_oi_net": 5675.0,
           "put_amt_net": 28549.0
         }
-      }
+      },
+      "margin_maintenance": null,
+      "wantgoo_margin": null
     },
     {
       "date": "2026-08-04",
@@ -2026,7 +2074,9 @@
           "put_oi_net": 8990.0,
           "put_amt_net": 13563.0
         }
-      }
+      },
+      "margin_maintenance": null,
+      "wantgoo_margin": null
     },
     {
       "date": "2026-08-05",
@@ -2115,11 +2165,13 @@
           "put_oi_net": 1421.0,
           "put_amt_net": -6728.0
         }
-      }
+      },
+      "margin_maintenance": null,
+      "wantgoo_margin": null
     },
     {
       "date": "2026-08-06",
-      "fetched_at": "2026-08-07T01:42:13.809917+00:00",
+      "fetched_at": "2026-08-07T07:43:09.105282+00:00",
       "weighted_index": {
         "date": "2026-08-06",
         "close": 44396.7,
@@ -2204,7 +2256,41 @@
           "put_oi_net": 3772.0,
           "put_amt_net": -7591.0
         }
-      }
+      },
+      "margin_maintenance": {
+        "date": "2026-08-06",
+        "ratio": 179.07,
+        "financing_balance_billion": 5328.0,
+        "stock_count": 1057
+      },
+      "wantgoo_margin": null
+    },
+    {
+      "date": "2026-08-07",
+      "fetched_at": "2026-08-07T07:43:09.105282+00:00",
+      "weighted_index": {
+        "date": "2026-08-07",
+        "close": 44225.91,
+        "change": -170.79,
+        "change_pct": -0.38,
+        "turnover_billion": 8444.4
+      },
+      "tx_futures": null,
+      "basis": null,
+      "institutional_spot": {
+        "date": "2026-08-07",
+        "foreign": -407.16,
+        "trust": -25.6,
+        "dealer": -9.68,
+        "total": -442.44
+      },
+      "institutional_futures_tx": null,
+      "institutional_futures_mtx": null,
+      "large_trader_futures": null,
+      "pc_ratio": null,
+      "txo_positions": null,
+      "margin_maintenance": null,
+      "wantgoo_margin": null
     }
   ]
 }
