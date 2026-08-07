@@ -259,8 +259,14 @@ def get_wantgoo_margin():
     url = "https://www.wantgoo.com/stock/margin-trading/exclude-etf/taiex"
     try:
         r = requests.get(url, timeout=30, headers={
-            "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0 Safari/537.36",
-            "Accept-Language": "zh-TW,zh;q=0.9",
+            "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36",
+            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
+            "Accept-Language": "zh-TW,zh;q=0.9,en;q=0.8",
+            "Referer": "https://www.wantgoo.com/",
+            "Sec-Fetch-Dest": "document",
+            "Sec-Fetch-Mode": "navigate",
+            "Sec-Fetch-Site": "same-origin",
+            "Upgrade-Insecure-Requests": "1",
         })
         r.raise_for_status()
         html = r.text
@@ -564,6 +570,13 @@ def main():
     margin_maintenance       = safe(get_margin_maintenance,        "融資維持率 (TWSE)")
     wantgoo_margin           = safe(get_wantgoo_margin,            "融資維持率 (玩股網)")
 
+    # 玩股網回傳沒有日期欄位，補上（優先對齊 TWSE 維持率的日期，否則用台灣今天）
+    if wantgoo_margin and not wantgoo_margin.get("date"):
+        wantgoo_margin["date"] = (
+            (margin_maintenance or {}).get("date")
+            or (datetime.now(timezone.utc) + timedelta(hours=8)).strftime("%Y-%m-%d")
+        )
+
     sections = {
         "weighted_index":            weighted_index,
         "tx_futures":                tx_futures,
@@ -625,6 +638,7 @@ SECTION_KEYS = [
     "weighted_index", "tx_futures", "institutional_spot",
     "institutional_futures_tx", "institutional_futures_mtx",
     "large_trader_futures", "pc_ratio", "txo_positions",
+    "margin_maintenance", "wantgoo_margin",
 ]
 
 def merge_into_history(history, sections, fetched_at, log=print):
