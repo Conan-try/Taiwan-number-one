@@ -2459,7 +2459,7 @@
     },
     {
       "date": "2026-08-11",
-      "fetched_at": "2026-08-11T11:44:50.394811+00:00",
+      "fetched_at": "2026-08-11T12:42:53.729913+00:00",
       "weighted_index": {
         "date": "2026-08-11",
         "close": 45120.72,
@@ -2477,9 +2477,9 @@
       "institutional_spot": {
         "date": "2026-08-11",
         "foreign": 223.29,
-        "trust": 33.9,
+        "trust": 32.24,
         "dealer": 24.6,
-        "total": 281.79
+        "total": 280.13
       },
       "institutional_futures_tx": {
         "date": "2026-08-11",
@@ -2545,7 +2545,12 @@
           "put_amt_net": 2741.0
         }
       },
-      "margin_maintenance": null,
+      "margin_maintenance": {
+        "date": "2026-08-11",
+        "ratio": 181.62,
+        "financing_balance_billion": 5441.5,
+        "stock_count": 1059
+      },
       "wantgoo_margin": null
     }
   ]
