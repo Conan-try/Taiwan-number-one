@@ -2843,7 +2843,7 @@
     },
     {
       "date": "2026-08-17",
-      "fetched_at": "2026-08-18T11:28:54.443299+00:00",
+      "fetched_at": "2026-08-18T12:26:22.396967+00:00",
       "weighted_index": {
         "date": "2026-08-17",
         "close": 45857.27,
@@ -2939,7 +2939,7 @@
     },
     {
       "date": "2026-08-18",
-      "fetched_at": "2026-08-18T11:28:54.443299+00:00",
+      "fetched_at": "2026-08-18T12:26:22.396967+00:00",
       "weighted_index": {
         "date": "2026-08-18",
         "close": 45308.68,
@@ -2952,9 +2952,9 @@
       "institutional_spot": {
         "date": "2026-08-18",
         "foreign": -119.86,
-        "trust": 56.63,
+        "trust": 38.27,
         "dealer": -176.07,
-        "total": -239.3
+        "total": -257.66
       },
       "institutional_futures_tx": null,
       "institutional_futures_mtx": null,
