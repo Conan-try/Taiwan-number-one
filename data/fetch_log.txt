@@ -1,4 +1,8 @@
-  加權指數 2026-08-18: 45308.68 (-548.59), 成交 10078.82 億
+  FMTQIK 20260818 請求失敗: HTTPSConnectionPool(host='www.twse.com.tw', port=443): Read timed out. (read timeout=30)
+  FMTQIK 20260817 請求失敗: HTTPSConnectionPool(host='www.twse.com.tw', port=443): Read timed out. (read timeout=30)
+  FMTQIK 20260816 請求失敗: HTTPSConnectionPool(host='www.twse.com.tw', port=443): Read timed out. (read timeout=30)
+  FMTQIK 20260815 請求失敗: HTTPSConnectionPool(host='www.twse.com.tw', port=443): Read timed out. (read timeout=30)
+  加權指數 2026-08-14: 45811.01 (-210.47), 成交 11097.47 億
   BFI82U列: ['自營商(自行買賣)', '8,093,888,080', '10,266,982,257', '-2,173,094,177']
   BFI82U列: ['自營商(避險)', '25,794,226,744', '41,228,275,068', '-15,434,048,324']
   BFI82U列: ['投信', '40,844,402,975', '35,181,664,548', '5,662,738,427']
