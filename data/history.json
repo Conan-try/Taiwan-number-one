@@ -2971,7 +2971,7 @@
     },
     {
       "date": "2026-08-19",
-      "fetched_at": "2026-08-20T12:28:51.437369+00:00",
+      "fetched_at": "2026-08-20T14:17:28.679592+00:00",
       "weighted_index": {
         "date": "2026-08-19",
         "close": 44719.35,
@@ -3067,7 +3067,7 @@
     },
     {
       "date": "2026-08-20",
-      "fetched_at": "2026-08-20T12:28:51.437369+00:00",
+      "fetched_at": "2026-08-20T14:17:28.679592+00:00",
       "weighted_index": {
         "date": "2026-08-20",
         "close": 44933.74,
@@ -3089,7 +3089,12 @@
       "large_trader_futures": null,
       "pc_ratio": null,
       "txo_positions": null,
-      "margin_maintenance": null,
+      "margin_maintenance": {
+        "date": "2026-08-20",
+        "ratio": 180.58,
+        "financing_balance_billion": 5484.1,
+        "stock_count": 1057
+      },
       "wantgoo_margin": null
     }
   ]
