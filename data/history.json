@@ -3099,7 +3099,7 @@
     },
     {
       "date": "2026-08-21",
-      "fetched_at": "2026-08-24T09:56:09.230432+00:00",
+      "fetched_at": "2026-08-24T11:30:18.204035+00:00",
       "weighted_index": {
         "date": "2026-08-21",
         "close": 45224.29,
@@ -3161,7 +3161,7 @@
     },
     {
       "date": "2026-08-24",
-      "fetched_at": "2026-08-24T09:56:09.230432+00:00",
+      "fetched_at": "2026-08-24T11:30:18.204035+00:00",
       "weighted_index": {
         "date": "2026-08-24",
         "close": 44762.32,
@@ -3183,8 +3183,24 @@
         "dealer": -43.33,
         "total": -163.79
       },
-      "institutional_futures_tx": null,
-      "institutional_futures_mtx": null,
+      "institutional_futures_tx": {
+        "date": "2026-08-24",
+        "dealer_oi_net": 2315.0,
+        "dealer_oi_chg": null,
+        "trust_oi_net": 75808.0,
+        "trust_oi_chg": null,
+        "foreign_oi_net": -82529.0,
+        "foreign_oi_chg": null
+      },
+      "institutional_futures_mtx": {
+        "date": "2026-08-24",
+        "dealer_oi_net": -7142.0,
+        "dealer_oi_chg": null,
+        "trust_oi_net": -46.0,
+        "trust_oi_chg": null,
+        "foreign_oi_net": -2727.0,
+        "foreign_oi_chg": null
+      },
       "large_trader_futures": {
         "date": "2026-08-24",
         "rows_found": 6,
@@ -3216,7 +3232,21 @@
         "date": "2026-08-24",
         "pc_ratio": 95.81
       },
-      "txo_positions": null,
+      "txo_positions": {
+        "date": "2026-08-24",
+        "dealer": {
+          "call_oi_net": 4129.0,
+          "call_amt_net": 235501.0,
+          "put_oi_net": 1492.0,
+          "put_amt_net": 63144.0
+        },
+        "foreign": {
+          "call_oi_net": -3199.0,
+          "call_amt_net": -187777.0,
+          "put_oi_net": 605.0,
+          "put_amt_net": 33440.0
+        }
+      },
       "margin_maintenance": null,
       "wantgoo_margin": null
     }
