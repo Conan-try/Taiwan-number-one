@@ -3161,7 +3161,7 @@
     },
     {
       "date": "2026-08-24",
-      "fetched_at": "2026-08-24T23:24:21.133963+00:00",
+      "fetched_at": "2026-08-25T08:21:25.719308+00:00",
       "weighted_index": {
         "date": "2026-08-24",
         "close": 44762.32,
@@ -3253,6 +3253,33 @@
         "financing_balance_billion": 5452.6,
         "stock_count": 1059
       },
+      "wantgoo_margin": null
+    },
+    {
+      "date": "2026-08-25",
+      "fetched_at": "2026-08-25T08:21:25.719308+00:00",
+      "weighted_index": {
+        "date": "2026-08-25",
+        "close": 45169.46,
+        "change": 407.14,
+        "change_pct": 0.91,
+        "turnover_billion": 7185.7
+      },
+      "tx_futures": null,
+      "basis": null,
+      "institutional_spot": {
+        "date": "2026-08-25",
+        "foreign": -7.87,
+        "trust": -46.1,
+        "dealer": 0.6,
+        "total": -53.37
+      },
+      "institutional_futures_tx": null,
+      "institutional_futures_mtx": null,
+      "large_trader_futures": null,
+      "pc_ratio": null,
+      "txo_positions": null,
+      "margin_maintenance": null,
       "wantgoo_margin": null
     }
   ]
