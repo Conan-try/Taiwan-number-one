@@ -3257,7 +3257,7 @@
     },
     {
       "date": "2026-08-25",
-      "fetched_at": "2026-08-26T08:21:20.966818+00:00",
+      "fetched_at": "2026-08-26T09:51:00.166103+00:00",
       "weighted_index": {
         "date": "2026-08-25",
         "close": 45169.46,
@@ -3353,13 +3353,13 @@
     },
     {
       "date": "2026-08-26",
-      "fetched_at": "2026-08-26T08:21:20.966818+00:00",
+      "fetched_at": "2026-08-26T09:51:00.166103+00:00",
       "weighted_index": {
         "date": "2026-08-26",
         "close": 45832.62,
         "change": 663.16,
         "change_pct": 1.47,
-        "turnover_billion": 8362.44
+        "turnover_billion": 8430.92
       },
       "tx_futures": null,
       "basis": null,
