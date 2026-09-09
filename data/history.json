@@ -4313,7 +4313,7 @@
     },
     {
       "date": "2026-09-09",
-      "fetched_at": "2026-09-09T12:28:09.972373+00:00",
+      "fetched_at": "2026-09-09T13:39:00.755228+00:00",
       "weighted_index": {
         "date": "2026-09-09",
         "close": 47183.36,
@@ -4399,7 +4399,12 @@
           "put_amt_net": 75747.0
         }
       },
-      "margin_maintenance": null,
+      "margin_maintenance": {
+        "date": "2026-09-09",
+        "ratio": 182.34,
+        "financing_balance_billion": 5871.7,
+        "stock_count": 1061
+      },
       "wantgoo_margin": null
     }
   ]
