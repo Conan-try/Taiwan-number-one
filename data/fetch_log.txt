@@ -32,4 +32,5 @@ PutCallRatio 欄位: ['日期', '賣權成交量', '買權成交量', '買賣權
   個股表首列範例: ['00400A', '主動國泰動能高息', '349', '1,545', '153', '9,531', '8,182', '475,535'], bal_idx=6
   融資維持率 2026-09-22: 184.35%（1057檔，融資餘額 6048.6 億）
 [WARN] 玩股網請求失敗: 403 Client Error: Forbidden for url: https://www.wantgoo.com/stock/margin-trading/exclude-etf/taiex
+目前台灣時間 09:19 為盤中時段，本次不寫入加權指數與 P/C Ratio
 record_date（以TAIFEX為主）: 2026-09-22
