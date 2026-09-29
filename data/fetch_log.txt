@@ -42,4 +42,5 @@ PutCallRatio 欄位: ['日期', '賣權成交量', '買權成交量', '買賣權
   MI_MARGN 20260925 stat=很抱歉，沒有符合條件的資料
 [WARN] 往前5天皆無融資維持率資料
 [WARN] 玩股網請求失敗: 403 Client Error: Forbidden for url: https://www.wantgoo.com/stock/margin-trading/exclude-etf/taiex
+目前台灣時間 10:30 為盤中時段，本次不寫入加權指數與 P/C Ratio
 record_date（以TAIFEX為主）: 2026-09-24
