@@ -1,96 +1,96 @@
 {
-  "date": "2026-09-29",
-  "fetched_at": "2026-09-30T01:53:05.054946+00:00",
+  "date": "2026-09-30",
+  "fetched_at": "2026-09-30T14:13:05.226961+00:00",
   "weighted_index": {
-    "date": "2026-09-29",
-    "close": 47631.96,
-    "change": -392.64,
-    "change_pct": -0.82,
-    "turnover_billion": 8361.45
+    "date": "2026-09-30",
+    "close": 47940.13,
+    "change": 308.17,
+    "change_pct": 0.65,
+    "turnover_billion": 9214.93
   },
   "tx_futures": {
-    "date": "2026-09-29",
-    "price": 47767.0,
-    "change": -358.0,
-    "change_pct": -0.74
+    "date": "2026-09-30",
+    "price": 48330.0,
+    "change": 549.0,
+    "change_pct": 1.15
   },
-  "basis": 135.04,
+  "basis": 389.87,
   "institutional_spot": {
-    "date": "2026-09-29",
-    "foreign": -625.83,
-    "trust": 5.79,
-    "dealer": -164.03,
-    "total": -784.07
+    "date": "2026-09-30",
+    "foreign": 308.57,
+    "trust": 82.91,
+    "dealer": 12.4,
+    "total": 403.88
   },
   "institutional_futures_tx": {
-    "date": "2026-09-29",
-    "dealer_oi_net": -488.0,
+    "date": "2026-09-30",
+    "dealer_oi_net": -1070.0,
     "dealer_oi_chg": null,
-    "trust_oi_net": 72812.0,
+    "trust_oi_net": 73839.0,
     "trust_oi_chg": null,
-    "foreign_oi_net": -79029.0,
+    "foreign_oi_net": -78151.0,
     "foreign_oi_chg": null
   },
   "institutional_futures_mtx": {
-    "date": "2026-09-29",
-    "dealer_oi_net": -6689.0,
+    "date": "2026-09-30",
+    "dealer_oi_net": -7218.0,
     "dealer_oi_chg": null,
-    "trust_oi_net": -18.0,
+    "trust_oi_net": -16.0,
     "trust_oi_chg": null,
-    "foreign_oi_net": 1157.0,
+    "foreign_oi_net": 2602.0,
     "foreign_oi_chg": null
   },
   "large_trader_futures": {
-    "date": "2026-09-29",
+    "date": "2026-09-30",
     "rows_found": 6,
     "near_month": {
-      "top5_buy": 71086.0,
-      "top5_sell": 51971.0,
-      "top5_net": 19115.0,
-      "top10_buy": 77082.0,
-      "top10_sell": 72340.0,
-      "top10_net": 4742.0,
-      "top10_specific_buy": 77082.0,
-      "top10_specific_sell": 72340.0,
-      "top10_specific_net": 4742.0
+      "top5_buy": 73597.0,
+      "top5_sell": 54603.0,
+      "top5_net": 18994.0,
+      "top10_buy": 80962.0,
+      "top10_sell": 74433.0,
+      "top10_net": 6529.0,
+      "top10_specific_buy": 80962.0,
+      "top10_specific_sell": 74433.0,
+      "top10_specific_net": 6529.0
     },
     "all_months": {
-      "top5_buy": 71087.0,
-      "top5_sell": 53145.0,
-      "top5_net": 17942.0,
-      "top10_buy": 77083.0,
-      "top10_sell": 74324.0,
-      "top10_net": 2759.0,
-      "top10_specific_buy": 77083.0,
-      "top10_specific_sell": 74324.0,
-      "top10_specific_net": 2759.0
+      "top5_buy": 73598.0,
+      "top5_sell": 55670.0,
+      "top5_net": 17928.0,
+      "top10_buy": 80963.0,
+      "top10_sell": 76428.0,
+      "top10_net": 4535.0,
+      "top10_specific_buy": 80963.0,
+      "top10_specific_sell": 76428.0,
+      "top10_specific_net": 4535.0
     },
-    "top10_specific_net": 2759.0
+    "top10_specific_net": 4535.0
   },
   "pc_ratio": {
-    "date": "2026-09-29",
-    "pc_ratio": 75.3
+    "date": "2026-09-30",
+    "pc_ratio": 80.57
   },
   "txo_positions": {
-    "date": "2026-09-29",
+    "date": "2026-09-30",
     "dealer": {
-      "call_oi_net": 7621.0,
-      "call_amt_net": 75700.0,
-      "put_oi_net": 1274.0,
-      "put_amt_net": 101914.0
+      "call_oi_net": 4151.0,
+      "call_amt_net": 123005.0,
+      "put_oi_net": 4474.0,
+      "put_amt_net": 90948.0
     },
     "foreign": {
-      "call_oi_net": -1501.0,
-      "call_amt_net": -158477.0,
-      "put_oi_net": 576.0,
-      "put_amt_net": 28896.0
+      "call_oi_net": -1241.0,
+      "call_amt_net": -182279.0,
+      "put_oi_net": 670.0,
+      "put_amt_net": 22646.0
     }
   },
   "margin_maintenance": {
-    "date": "2026-09-29",
-    "ratio": 183.63,
-    "financing_balance_billion": 6186.5,
-    "stock_count": 1058
+    "date": "2026-09-30",
+    "ratio": 185.6,
+    "financing_balance_billion": 6222.5,
+    "stock_count": 1060
   },
   "wantgoo_margin": null
 }
