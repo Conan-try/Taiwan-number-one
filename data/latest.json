@@ -1,96 +1,96 @@
 {
-  "date": "2026-10-01",
-  "fetched_at": "2026-10-02T02:03:24.230416+00:00",
+  "date": "2026-10-02",
+  "fetched_at": "2026-10-02T14:06:27.388409+00:00",
   "weighted_index": {
-    "date": "2026-10-01",
-    "close": 48353.49,
-    "change": 413.36,
-    "change_pct": 0.86,
-    "turnover_billion": 8740.46
+    "date": "2026-10-02",
+    "close": 48475.74,
+    "change": 122.25,
+    "change_pct": 0.25,
+    "turnover_billion": 9382.22
   },
   "tx_futures": {
-    "date": "2026-10-01",
-    "price": 48685.0,
-    "change": 355.0,
-    "change_pct": 0.73
+    "date": "2026-10-02",
+    "price": 48671.0,
+    "change": -27.0,
+    "change_pct": -0.06
   },
-  "basis": 331.51,
+  "basis": 195.26,
   "institutional_spot": {
-    "date": "2026-10-01",
-    "foreign": 219.37,
-    "trust": 58.65,
-    "dealer": 16.59,
-    "total": 294.61
+    "date": "2026-10-02",
+    "foreign": 26.22,
+    "trust": 57.69,
+    "dealer": 20.26,
+    "total": 104.17
   },
   "institutional_futures_tx": {
-    "date": "2026-10-01",
-    "dealer_oi_net": -1440.0,
+    "date": "2026-10-02",
+    "dealer_oi_net": -1006.0,
     "dealer_oi_chg": null,
-    "trust_oi_net": 74615.0,
+    "trust_oi_net": 74669.0,
     "trust_oi_chg": null,
-    "foreign_oi_net": -79554.0,
+    "foreign_oi_net": -80304.0,
     "foreign_oi_chg": null
   },
   "institutional_futures_mtx": {
-    "date": "2026-10-01",
-    "dealer_oi_net": -7264.0,
+    "date": "2026-10-02",
+    "dealer_oi_net": -7205.0,
     "dealer_oi_chg": null,
     "trust_oi_net": -15.0,
     "trust_oi_chg": null,
-    "foreign_oi_net": 1988.0,
+    "foreign_oi_net": 1033.0,
     "foreign_oi_chg": null
   },
   "large_trader_futures": {
-    "date": "2026-10-01",
+    "date": "2026-10-02",
     "rows_found": 6,
     "near_month": {
-      "top5_buy": 73818.0,
-      "top5_sell": 55630.0,
-      "top5_net": 18188.0,
-      "top10_buy": 80995.0,
-      "top10_sell": 76012.0,
-      "top10_net": 4983.0,
-      "top10_specific_buy": 80995.0,
-      "top10_specific_sell": 76012.0,
-      "top10_specific_net": 4983.0
+      "top5_buy": 73290.0,
+      "top5_sell": 55954.0,
+      "top5_net": 17336.0,
+      "top10_buy": 80719.0,
+      "top10_sell": 76942.0,
+      "top10_net": 3777.0,
+      "top10_specific_buy": 80719.0,
+      "top10_specific_sell": 76942.0,
+      "top10_specific_net": 3777.0
     },
     "all_months": {
-      "top5_buy": 73819.0,
-      "top5_sell": 56700.0,
-      "top5_net": 17119.0,
-      "top10_buy": 81195.0,
-      "top10_sell": 77850.0,
-      "top10_net": 3345.0,
-      "top10_specific_buy": 80270.0,
-      "top10_specific_sell": 77850.0,
-      "top10_specific_net": 2420.0
+      "top5_buy": 73291.0,
+      "top5_sell": 57034.0,
+      "top5_net": 16257.0,
+      "top10_buy": 80841.0,
+      "top10_sell": 78636.0,
+      "top10_net": 2205.0,
+      "top10_specific_buy": 79928.0,
+      "top10_specific_sell": 78636.0,
+      "top10_specific_net": 1292.0
     },
-    "top10_specific_net": 2420.0
+    "top10_specific_net": 1292.0
   },
   "pc_ratio": {
-    "date": "2026-10-01",
-    "pc_ratio": 82.54
+    "date": "2026-10-02",
+    "pc_ratio": 80.84
   },
   "txo_positions": {
-    "date": "2026-10-01",
+    "date": "2026-10-02",
     "dealer": {
-      "call_oi_net": 3227.0,
-      "call_amt_net": 279916.0,
-      "put_oi_net": 5697.0,
-      "put_amt_net": 97113.0
+      "call_oi_net": 4666.0,
+      "call_amt_net": 182879.0,
+      "put_oi_net": 4603.0,
+      "put_amt_net": 88250.0
     },
     "foreign": {
-      "call_oi_net": -1020.0,
-      "call_amt_net": -196280.0,
-      "put_oi_net": 994.0,
-      "put_amt_net": 19835.0
+      "call_oi_net": -1113.0,
+      "call_amt_net": -187682.0,
+      "put_oi_net": 581.0,
+      "put_amt_net": 29725.0
     }
   },
   "margin_maintenance": {
-    "date": "2026-10-01",
-    "ratio": 187.03,
-    "financing_balance_billion": 6298.7,
-    "stock_count": 1057
+    "date": "2026-10-02",
+    "ratio": 188.99,
+    "financing_balance_billion": 6351.0,
+    "stock_count": 1059
   },
   "wantgoo_margin": null
 }
