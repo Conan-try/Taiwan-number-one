@@ -1,95 +1,95 @@
 {
-  "date": "2026-10-07",
-  "fetched_at": "2026-10-08T02:35:34.804000+00:00",
+  "date": "2026-10-08",
+  "fetched_at": "2026-10-08T14:53:46.937210+00:00",
   "weighted_index": {
-    "date": "2026-10-07",
-    "close": 49806.37,
-    "change": -16.18,
-    "change_pct": -0.03,
-    "turnover_billion": 9862.8
+    "date": "2026-10-08",
+    "close": 49313.44,
+    "change": -492.93,
+    "change_pct": -0.99,
+    "turnover_billion": 9245.09
   },
   "tx_futures": {
-    "date": "2026-10-07",
-    "price": 49979.0,
-    "change": -103.0,
-    "change_pct": -0.21
+    "date": "2026-10-08",
+    "price": 49349.0,
+    "change": -619.0,
+    "change_pct": -1.24
   },
-  "basis": 172.63,
+  "basis": 35.56,
   "institutional_spot": {
-    "date": "2026-10-07",
-    "foreign": -130.44,
-    "trust": -33.23,
-    "dealer": -77.96,
-    "total": -241.63
+    "date": "2026-10-08",
+    "foreign": -758.52,
+    "trust": 30.09,
+    "dealer": -187.31,
+    "total": -915.74
   },
   "institutional_futures_tx": {
-    "date": "2026-10-07",
-    "dealer_oi_net": -2253.0,
+    "date": "2026-10-08",
+    "dealer_oi_net": -534.0,
     "dealer_oi_chg": null,
-    "trust_oi_net": 76268.0,
+    "trust_oi_net": 76339.0,
     "trust_oi_chg": null,
-    "foreign_oi_net": -79101.0,
+    "foreign_oi_net": -83194.0,
     "foreign_oi_chg": null
   },
   "institutional_futures_mtx": {
-    "date": "2026-10-07",
-    "dealer_oi_net": -7773.0,
+    "date": "2026-10-08",
+    "dealer_oi_net": -8299.0,
     "dealer_oi_chg": null,
-    "trust_oi_net": -9.0,
+    "trust_oi_net": -11.0,
     "trust_oi_chg": null,
-    "foreign_oi_net": 3950.0,
+    "foreign_oi_net": -602.0,
     "foreign_oi_chg": null
   },
   "large_trader_futures": {
-    "date": "2026-10-07",
+    "date": "2026-10-08",
     "rows_found": 6,
     "near_month": {
-      "top5_buy": 75940.0,
-      "top5_sell": 56334.0,
-      "top5_net": 19606.0,
-      "top10_buy": 84587.0,
-      "top10_sell": 77045.0,
-      "top10_net": 7542.0,
-      "top10_specific_buy": 83756.0,
-      "top10_specific_sell": 77045.0,
-      "top10_specific_net": 6711.0
+      "top5_buy": 74453.0,
+      "top5_sell": 56618.0,
+      "top5_net": 17835.0,
+      "top10_buy": 82609.0,
+      "top10_sell": 77985.0,
+      "top10_net": 4624.0,
+      "top10_specific_buy": 81509.0,
+      "top10_specific_sell": 77985.0,
+      "top10_specific_net": 3524.0
     },
     "all_months": {
-      "top5_buy": 75950.0,
-      "top5_sell": 57430.0,
-      "top5_net": 18520.0,
-      "top10_buy": 85029.0,
-      "top10_sell": 79249.0,
-      "top10_net": 5780.0,
-      "top10_specific_buy": 83766.0,
-      "top10_specific_sell": 79249.0,
-      "top10_specific_net": 4517.0
+      "top5_buy": 74470.0,
+      "top5_sell": 57775.0,
+      "top5_net": 16695.0,
+      "top10_buy": 82679.0,
+      "top10_sell": 80334.0,
+      "top10_net": 2345.0,
+      "top10_specific_buy": 81526.0,
+      "top10_specific_sell": 80334.0,
+      "top10_specific_net": 1192.0
     },
-    "top10_specific_net": 4517.0
+    "top10_specific_net": 1192.0
   },
   "pc_ratio": {
-    "date": "2026-10-07",
-    "pc_ratio": 82.25
+    "date": "2026-10-08",
+    "pc_ratio": 80.18
   },
   "txo_positions": {
-    "date": "2026-10-07",
+    "date": "2026-10-08",
     "dealer": {
-      "call_oi_net": 10240.0,
-      "call_amt_net": 345688.0,
-      "put_oi_net": 806.0,
-      "put_amt_net": 55439.0
+      "call_oi_net": 8284.0,
+      "call_amt_net": 230724.0,
+      "put_oi_net": 1072.0,
+      "put_amt_net": 85285.0
     },
     "foreign": {
-      "call_oi_net": -148.0,
-      "call_amt_net": -259568.0,
-      "put_oi_net": 1865.0,
-      "put_amt_net": 37406.0
+      "call_oi_net": 47.0,
+      "call_amt_net": -208753.0,
+      "put_oi_net": 2765.0,
+      "put_amt_net": 62974.0
     }
   },
   "margin_maintenance": {
-    "date": "2026-10-07",
-    "ratio": 190.91,
-    "financing_balance_billion": 6400.0,
+    "date": "2026-10-08",
+    "ratio": 189.27,
+    "financing_balance_billion": 6464.1,
     "stock_count": 1057
   },
   "wantgoo_margin": null
