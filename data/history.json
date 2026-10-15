@@ -6521,7 +6521,7 @@
     },
     {
       "date": "2026-10-15",
-      "fetched_at": "2026-10-15T12:50:41.296393+00:00",
+      "fetched_at": "2026-10-15T14:05:31.899032+00:00",
       "weighted_index": {
         "date": "2026-10-15",
         "close": 46969.87,
@@ -6588,7 +6588,10 @@
         },
         "top10_specific_net": -7918.0
       },
-      "pc_ratio": null,
+      "pc_ratio": {
+        "date": "2026-10-15",
+        "pc_ratio": 60.84
+      },
       "txo_positions": {
         "date": "2026-10-15",
         "dealer": {
