@@ -10,16 +10,7 @@
   三大法人現貨 2026-10-19: 外資-767.43 投信241.42 自營-362.63
 三大法人期貨 欄位: ['日期', '商品名稱', '身份別', '多方交易口數', '多方交易契約金額(千元)', '空方交易口數', '空方交易契約金額(千元)', '多空交易口數淨額', '多空交易契約金額淨額(千元)', '多方未平倉口數', '多方未平倉契約金額(千元)', '空方未平倉口數', '空方未平倉契約金額(千元)', '多空未平倉口數淨額', '多空未平倉契約金額淨額(千元)']
   [臺股期貨] role=身份別, oi_net=多空未平倉口數淨額
-三大法人期貨 欄位: ['日期', '商品名稱', '身份別', '多方交易口數', '多方交易契約金額(千元)', '空方交易口數', '空方交易契約金額(千元)', '多空交易口數淨額', '多空交易契約金額淨額(千元)', '多方未平倉口數', '多方未平倉契約金額(千元)', '空方未平倉口數', '空方未平倉契約金額(千元)', '多空未平倉口數淨額', '多空未平倉契約金額淨額(千元)']
-  [小型臺指期貨] role=身份別, oi_net=多空未平倉口數淨額
-大額交易人期貨 欄位: ['日期', '契約', '商品名稱(契約名稱)', '到期月份(週別)', '交易人類別', '前五大交易人買方數量', '前五大交易人賣方數量', '前十大交易人買方數量', '前十大交易人賣方數量', '全市場未沖銷部位數']
-  b5=前五大交易人買方數量, s5=前五大交易人賣方數量, b10=前十大交易人買方數量, s10=前十大交易人賣方數量
-  month=到期月份(週別), cat=交易人類別
-  到期月份值: [202610, 666666, 666666, 202610, 999912, 999912]
-  交易人類別值: [0, 0, 1, 1, 0, 1]
-  一般交易人列數=3, 特定法人列數=3
-  一般月份值: [202610, 666666, 999912]
-[ERROR] P/C Ratio (TAIFEX): HTTPSConnectionPool(host='www.taifex.com.tw', port=443): Read timed out. (read timeout=30)
+[ERROR] 三大法人期貨-小型臺指期貨: HTTPSConnectionPool(host='www.taifex.com.tw', port=443): Read timed out. (read timeout=30)
 Traceback (most recent call last):
   File "/opt/hostedtoolcache/Python/3.11.17/x64/lib/python3.11/site-packages/urllib3/connectionpool.py", line 540, in _make_request
     response = conn.getresponse()
@@ -75,9 +66,12 @@ Traceback (most recent call last):
   File "/home/runner/work/Taiwan-number-one/Taiwan-number-one/scripts/fetch_data.py", line 22, in safe
     return fn()
            ^^^^
-  File "/home/runner/work/Taiwan-number-one/Taiwan-number-one/scripts/fetch_data.py", line 538, in get_pc_ratio
-    df = fetch_taifex_csv("PutCallRatio")
-         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/Taiwan-number-one/Taiwan-number-one/scripts/fetch_data.py", line 379, in get_institutional_futures_mtx
+    return get_institutional_futures_for(_load_inst_fut_df(), "小型臺指期貨")
+                                         ^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/Taiwan-number-one/Taiwan-number-one/scripts/fetch_data.py", line 346, in _load_inst_fut_df
+    df = fetch_taifex_csv("MarketDataOfMajorInstitutionalTradersDetailsOfFuturesContractsBytheDate")
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   File "/home/runner/work/Taiwan-number-one/Taiwan-number-one/scripts/fetch_data.py", line 298, in fetch_taifex_csv
     r = requests.get(url, timeout=30, headers={"User-Agent":"Mozilla/5.0"})
         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -97,6 +91,16 @@ Traceback (most recent call last):
     raise ReadTimeout(e, request=request)
 requests.exceptions.ReadTimeout: HTTPSConnectionPool(host='www.taifex.com.tw', port=443): Read timed out. (read timeout=30)
 
+大額交易人期貨 欄位: ['日期', '契約', '商品名稱(契約名稱)', '到期月份(週別)', '交易人類別', '前五大交易人買方數量', '前五大交易人賣方數量', '前十大交易人買方數量', '前十大交易人賣方數量', '全市場未沖銷部位數']
+  b5=前五大交易人買方數量, s5=前五大交易人賣方數量, b10=前十大交易人買方數量, s10=前十大交易人賣方數量
+  month=到期月份(週別), cat=交易人類別
+  到期月份值: [202610, 666666, 666666, 202610, 999912, 999912]
+  交易人類別值: [0, 0, 1, 1, 0, 1]
+  一般交易人列數=3, 特定法人列數=3
+  一般月份值: [202610, 666666, 999912]
+PutCallRatio 欄位: ['日期', '賣權成交量', '買權成交量', '買賣權成交量比率%', '賣權未平倉量', '買權未平倉量', '買賣權未平倉量比率%']
+  date=日期, pc=買賣權未平倉量比率%
+  P/C 取用日期: 2026-10-19, 值: 61.6
 選擇權買賣權分計 欄位: ['日期', '商品名稱', '買賣權別', '身份別', '買方交易口數', '買方交易契約金額(千元)', '賣方交易口數', '賣方交易契約金額(千元)', '交易口數買賣淨額', '交易契約金額買賣淨額(千元)', '買方未平倉口數', '買方未平倉契約金額(千元)', '賣方未平倉口數', '賣方未平倉契約金額(千元)', '未平倉口數買賣淨額', '未平倉契約金額買賣淨額(千元)']
   cp=買賣權別, role=身份別, oi_net=未平倉口數買賣淨額, amt_net=未平倉契約金額買賣淨額(千元)
   臺指選擇權列數: 6, 買賣權值: ['CALL', 'PUT']
