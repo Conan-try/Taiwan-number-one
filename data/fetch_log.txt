@@ -1,13 +1,11 @@
-  FMTQIK 20261020 該月資料中尚無 2026-10-20 這一天（未更新），往前一天
-  加權指數 2026-10-19: 46822.08 (-289.18), 成交 8667.12 億
-  BFI82U 20261020 stat=很抱歉，沒有符合條件的資料!（可能為假日或尚未更新）
-  BFI82U列: ['自營商(自行買賣)', '9,393,790,718', '15,416,680,321', '-6,022,889,603']
-  BFI82U列: ['自營商(避險)', '32,258,177,704', '62,498,371,857', '-30,240,194,153']
-  BFI82U列: ['投信', '50,699,118,560', '26,557,490,609', '24,141,627,951']
-  BFI82U列: ['外資及陸資(不含外資自營商)', '276,460,340,925', '353,203,076,694', '-76,742,735,769']
+  加權指數 2026-10-20: 46292.93 (-529.15), 成交 8029.47 億
+  BFI82U列: ['自營商(自行買賣)', '6,542,914,327', '13,397,949,503', '-6,855,035,176']
+  BFI82U列: ['自營商(避險)', '27,529,320,011', '56,253,589,067', '-28,724,269,056']
+  BFI82U列: ['投信', '34,044,387,977', '15,285,879,547', '18,758,508,430']
+  BFI82U列: ['外資及陸資(不含外資自營商)', '248,675,549,542', '328,215,241,938', '-79,539,692,396']
   BFI82U列: ['外資自營商', '0', '0', '0']
-  BFI82U列: ['合計', '368,811,427,907', '457,675,619,481', '-88,864,191,574']
-  三大法人現貨 2026-10-19: 外資-767.43 投信241.42 自營-362.63
+  BFI82U列: ['合計', '316,792,171,857', '413,152,660,055', '-96,360,488,198']
+  三大法人現貨 2026-10-20: 外資-795.4 投信187.59 自營-355.79
 三大法人期貨 欄位: ['日期', '商品名稱', '身份別', '多方交易口數', '多方交易契約金額(千元)', '空方交易口數', '空方交易契約金額(千元)', '多空交易口數淨額', '多空交易契約金額淨額(千元)', '多方未平倉口數', '多方未平倉契約金額(千元)', '空方未平倉口數', '空方未平倉契約金額(千元)', '多空未平倉口數淨額', '多空未平倉契約金額淨額(千元)']
   [臺股期貨] role=身份別, oi_net=多空未平倉口數淨額
 三大法人期貨 欄位: ['日期', '商品名稱', '身份別', '多方交易口數', '多方交易契約金額(千元)', '空方交易口數', '空方交易契約金額(千元)', '多空交易口數淨額', '多空交易契約金額淨額(千元)', '多方未平倉口數', '多方未平倉契約金額(千元)', '空方未平倉口數', '空方未平倉契約金額(千元)', '多空未平倉口數淨額', '多空未平倉契約金額淨額(千元)']
@@ -19,93 +17,16 @@
   交易人類別值: [0, 0, 1, 1, 0, 1]
   一般交易人列數=3, 特定法人列數=3
   一般月份值: [202610, 666666, 999912]
-[ERROR] P/C Ratio (TAIFEX): HTTPSConnectionPool(host='www.taifex.com.tw', port=443): Read timed out. (read timeout=30)
-Traceback (most recent call last):
-  File "/opt/hostedtoolcache/Python/3.11.17/x64/lib/python3.11/site-packages/urllib3/connectionpool.py", line 540, in _make_request
-    response = conn.getresponse()
-               ^^^^^^^^^^^^^^^^^^
-  File "/opt/hostedtoolcache/Python/3.11.17/x64/lib/python3.11/site-packages/urllib3/connection.py", line 638, in getresponse
-    httplib_response = super().getresponse()
-                       ^^^^^^^^^^^^^^^^^^^^^
-  File "/opt/hostedtoolcache/Python/3.11.17/x64/lib/python3.11/http/client.py", line 1443, in getresponse
-    response.begin()
-  File "/opt/hostedtoolcache/Python/3.11.17/x64/lib/python3.11/http/client.py", line 337, in begin
-    version, status, reason = self._read_status()
-                              ^^^^^^^^^^^^^^^^^^^
-  File "/opt/hostedtoolcache/Python/3.11.17/x64/lib/python3.11/http/client.py", line 298, in _read_status
-    line = str(self.fp.readline(_MAXLINE + 1), "iso-8859-1")
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/opt/hostedtoolcache/Python/3.11.17/x64/lib/python3.11/socket.py", line 718, in readinto
-    return self._sock.recv_into(b)
-           ^^^^^^^^^^^^^^^^^^^^^^^
-  File "/opt/hostedtoolcache/Python/3.11.17/x64/lib/python3.11/ssl.py", line 1327, in recv_into
-    return self.read(nbytes, buffer)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/opt/hostedtoolcache/Python/3.11.17/x64/lib/python3.11/ssl.py", line 1179, in read
-    return self._sslobj.read(len, buffer)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-TimeoutError: The read operation timed out
-
-The above exception was the direct cause of the following exception:
-
-Traceback (most recent call last):
-  File "/opt/hostedtoolcache/Python/3.11.17/x64/lib/python3.11/site-packages/requests/adapters.py", line 696, in send
-    resp = conn.urlopen(
-           ^^^^^^^^^^^^^
-  File "/opt/hostedtoolcache/Python/3.11.17/x64/lib/python3.11/site-packages/urllib3/connectionpool.py", line 847, in urlopen
-    retries = retries.increment(
-              ^^^^^^^^^^^^^^^^^^
-  File "/opt/hostedtoolcache/Python/3.11.17/x64/lib/python3.11/site-packages/urllib3/util/retry.py", line 510, in increment
-    raise reraise(type(error), error, _stacktrace)
-          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/opt/hostedtoolcache/Python/3.11.17/x64/lib/python3.11/site-packages/urllib3/util/util.py", line 39, in reraise
-    raise value
-  File "/opt/hostedtoolcache/Python/3.11.17/x64/lib/python3.11/site-packages/urllib3/connectionpool.py", line 793, in urlopen
-    response = self._make_request(
-               ^^^^^^^^^^^^^^^^^^^
-  File "/opt/hostedtoolcache/Python/3.11.17/x64/lib/python3.11/site-packages/urllib3/connectionpool.py", line 542, in _make_request
-    self._raise_timeout(err=e, url=url, timeout_value=read_timeout)
-  File "/opt/hostedtoolcache/Python/3.11.17/x64/lib/python3.11/site-packages/urllib3/connectionpool.py", line 373, in _raise_timeout
-    raise ReadTimeoutError(
-urllib3.exceptions.ReadTimeoutError: HTTPSConnectionPool(host='www.taifex.com.tw', port=443): Read timed out. (read timeout=30)
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/home/runner/work/Taiwan-number-one/Taiwan-number-one/scripts/fetch_data.py", line 22, in safe
-    return fn()
-           ^^^^
-  File "/home/runner/work/Taiwan-number-one/Taiwan-number-one/scripts/fetch_data.py", line 538, in get_pc_ratio
-    df = fetch_taifex_csv("PutCallRatio")
-         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/runner/work/Taiwan-number-one/Taiwan-number-one/scripts/fetch_data.py", line 298, in fetch_taifex_csv
-    r = requests.get(url, timeout=30, headers={"User-Agent":"Mozilla/5.0"})
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/opt/hostedtoolcache/Python/3.11.17/x64/lib/python3.11/site-packages/requests/api.py", line 87, in get
-    return request("get", url, params=params, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/opt/hostedtoolcache/Python/3.11.17/x64/lib/python3.11/site-packages/requests/api.py", line 71, in request
-    return session.request(method=method, url=url, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/opt/hostedtoolcache/Python/3.11.17/x64/lib/python3.11/site-packages/requests/sessions.py", line 651, in request
-    resp = self.send(prep, **send_kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/opt/hostedtoolcache/Python/3.11.17/x64/lib/python3.11/site-packages/requests/sessions.py", line 784, in send
-    r = adapter.send(request, **kwargs)
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/opt/hostedtoolcache/Python/3.11.17/x64/lib/python3.11/site-packages/requests/adapters.py", line 742, in send
-    raise ReadTimeout(e, request=request)
-requests.exceptions.ReadTimeout: HTTPSConnectionPool(host='www.taifex.com.tw', port=443): Read timed out. (read timeout=30)
-
+PutCallRatio 欄位: ['日期', '賣權成交量', '買權成交量', '買賣權成交量比率%', '賣權未平倉量', '買權未平倉量', '買賣權未平倉量比率%']
+  date=日期, pc=買賣權未平倉量比率%
+  P/C 取用日期: 2026-10-20, 值: 66.17
 選擇權買賣權分計 欄位: ['日期', '商品名稱', '買賣權別', '身份別', '買方交易口數', '買方交易契約金額(千元)', '賣方交易口數', '賣方交易契約金額(千元)', '交易口數買賣淨額', '交易契約金額買賣淨額(千元)', '買方未平倉口數', '買方未平倉契約金額(千元)', '賣方未平倉口數', '賣方未平倉契約金額(千元)', '未平倉口數買賣淨額', '未平倉契約金額買賣淨額(千元)']
   cp=買賣權別, role=身份別, oi_net=未平倉口數買賣淨額, amt_net=未平倉契約金額買賣淨額(千元)
   臺指選擇權列數: 6, 買賣權值: ['CALL', 'PUT']
-  MI_MARGN 20261020 stat=很抱歉，沒有符合條件的資料
-  MI_MARGN 表[115年10月19日 信用交易統計] 列數=3, fields=['項目', '買進', '賣出', '現金(券)償還', '前日餘額', '今日餘額']
-  融資金額列: ['融資金額(仟元)', '22,841,656', '27,109,766', '707,506', '645,594,048', '640,618,432'] -> 今日餘額 640,618,432
-  MI_MARGN 表[115年10月19日 融資融券彙總 (全部)] 列數=1302, fields=['代號', '名稱', '買進', '賣出', '現金償還', '前日餘額', '今日餘額', '次一營業日限額']
-  個股表首列範例: ['00400A', '主動國泰動能高息', '316', '161', '18', '11,052', '11,189', '512,285'], bal_idx=6
-  融資維持率 2026-10-19: 172.96%（1057檔，融資餘額 6406.2 億）
+  MI_MARGN 表[115年10月20日 信用交易統計] 列數=3, fields=['項目', '買進', '賣出', '現金(券)償還', '前日餘額', '今日餘額']
+  融資金額列: ['融資金額(仟元)', '20,058,977', '22,077,421', '499,372', '640,617,928', '638,100,111'] -> 今日餘額 638,100,111
+  MI_MARGN 表[115年10月20日 融資融券彙總 (全部)] 列數=1302, fields=['代號', '名稱', '買進', '賣出', '現金償還', '前日餘額', '今日餘額', '次一營業日限額']
+  個股表首列範例: ['00400A', '主動國泰動能高息', '424', '220', '6', '11,189', '11,387', '512,535'], bal_idx=6
+  融資維持率 2026-10-20: 170.6%（1059檔，融資餘額 6381.0 億）
 [WARN] 玩股網請求失敗: 403 Client Error: Forbidden for url: https://www.wantgoo.com/stock/margin-trading/exclude-etf/taiex
-目前台灣時間 09:38 為盤中時段，本次不寫入加權指數與 P/C Ratio
-record_date（以TAIFEX為主）: 2026-10-19
+record_date（以TAIFEX為主）: 2026-10-20
