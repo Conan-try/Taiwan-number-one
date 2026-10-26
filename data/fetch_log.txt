@@ -12,7 +12,7 @@ Traceback (most recent call last):
     raise ValueError("往前5天皆無 FMTQIK 資料")
 ValueError: 往前5天皆無 FMTQIK 資料
 
-  BFI82U 20261027 stat=查詢日期大於可查詢最大日期，請重新查詢!（可能為假日或尚未更新）
+  BFI82U 20261027 stat=很抱歉，沒有符合條件的資料!（可能為假日或尚未更新）
   BFI82U 20261026 stat=很抱歉，沒有符合條件的資料!（可能為假日或尚未更新）
   BFI82U 20261025 stat=很抱歉，沒有符合條件的資料!（可能為假日或尚未更新）
   BFI82U 20261024 stat=很抱歉，沒有符合條件的資料!（可能為假日或尚未更新）
