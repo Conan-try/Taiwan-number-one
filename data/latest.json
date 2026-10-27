@@ -1,6 +1,6 @@
 {
   "date": "2026-10-27",
-  "fetched_at": "2026-10-27T13:33:07.834993+00:00",
+  "fetched_at": "2026-10-27T15:16:51.192613+00:00",
   "weighted_index": {
     "date": "2026-10-27",
     "close": 46096.23,
@@ -8,8 +8,13 @@
     "change_pct": 0.12,
     "turnover_billion": 10316.84
   },
-  "tx_futures": null,
-  "basis": null,
+  "tx_futures": {
+    "date": "2026-10-27",
+    "price": 46081.0,
+    "change": -153.0,
+    "change_pct": -0.33
+  },
+  "basis": -15.23,
   "institutional_spot": {
     "date": "2026-10-27",
     "foreign": -80.39,
@@ -17,7 +22,15 @@
     "dealer": -123.99,
     "total": 31.67
   },
-  "institutional_futures_tx": null,
+  "institutional_futures_tx": {
+    "date": "2026-10-27",
+    "dealer_oi_net": 1454.0,
+    "dealer_oi_chg": null,
+    "trust_oi_net": 85052.0,
+    "trust_oi_chg": null,
+    "foreign_oi_net": -86043.0,
+    "foreign_oi_chg": null
+  },
   "institutional_futures_mtx": {
     "date": "2026-10-27",
     "dealer_oi_net": -9961.0,
