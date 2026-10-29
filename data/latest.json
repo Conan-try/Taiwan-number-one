@@ -1,6 +1,6 @@
 {
   "date": "2026-10-29",
-  "fetched_at": "2026-10-29T16:00:35.514144+00:00",
+  "fetched_at": "2026-10-29T17:19:46.558789+00:00",
   "weighted_index": {
     "date": "2026-10-29",
     "close": 46368.33,
@@ -8,8 +8,13 @@
     "change_pct": -1.42,
     "turnover_billion": 8238.13
   },
-  "tx_futures": null,
-  "basis": null,
+  "tx_futures": {
+    "date": "2026-10-29",
+    "price": 46577.0,
+    "change": -672.0,
+    "change_pct": -1.42
+  },
+  "basis": 208.67,
   "institutional_spot": {
     "date": "2026-10-29",
     "foreign": -688.15,
