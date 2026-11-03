@@ -1,96 +1,96 @@
 {
-  "date": "2026-11-02",
-  "fetched_at": "2026-11-03T03:52:34.003270+00:00",
+  "date": "2026-11-03",
+  "fetched_at": "2026-11-03T15:27:28.520706+00:00",
   "weighted_index": {
-    "date": "2026-11-02",
-    "close": 44920.14,
-    "change": -291.69,
-    "change_pct": -0.65,
-    "turnover_billion": 7996.88
+    "date": "2026-11-03",
+    "close": 43307.54,
+    "change": -1612.6,
+    "change_pct": -3.59,
+    "turnover_billion": 10020.36
   },
   "tx_futures": {
-    "date": "2026-11-02",
-    "price": 45256.0,
-    "change": -44.0,
-    "change_pct": -0.1
+    "date": "2026-11-03",
+    "price": 43376.0,
+    "change": -1851.0,
+    "change_pct": -4.09
   },
-  "basis": 335.86,
+  "basis": 68.46,
   "institutional_spot": {
-    "date": "2026-11-02",
-    "foreign": -735.21,
-    "trust": 338.16,
-    "dealer": -152.88,
-    "total": -549.93
+    "date": "2026-11-03",
+    "foreign": -1073.07,
+    "trust": 184.6,
+    "dealer": -590.54,
+    "total": -1479.01
   },
   "institutional_futures_tx": {
-    "date": "2026-11-02",
-    "dealer_oi_net": 1307.0,
+    "date": "2026-11-03",
+    "dealer_oi_net": 3976.0,
     "dealer_oi_chg": null,
-    "trust_oi_net": 89139.0,
+    "trust_oi_net": 86998.0,
     "trust_oi_chg": null,
-    "foreign_oi_net": -89379.0,
+    "foreign_oi_net": -91812.0,
     "foreign_oi_chg": null
   },
   "institutional_futures_mtx": {
-    "date": "2026-11-02",
-    "dealer_oi_net": -8803.0,
+    "date": "2026-11-03",
+    "dealer_oi_net": -8373.0,
     "dealer_oi_chg": null,
-    "trust_oi_net": -31.0,
+    "trust_oi_net": -40.0,
     "trust_oi_chg": null,
-    "foreign_oi_net": 1935.0,
+    "foreign_oi_net": -1056.0,
     "foreign_oi_chg": null
   },
   "large_trader_futures": {
-    "date": "2026-11-02",
+    "date": "2026-11-03",
     "rows_found": 6,
     "near_month": {
-      "top5_buy": 84986.0,
-      "top5_sell": 52534.0,
-      "top5_net": 32452.0,
-      "top10_buy": 94291.0,
-      "top10_sell": 80052.0,
-      "top10_net": 14239.0,
-      "top10_specific_buy": 94291.0,
-      "top10_specific_sell": 75712.0,
-      "top10_specific_net": 18579.0
+      "top5_buy": 83938.0,
+      "top5_sell": 53521.0,
+      "top5_net": 30417.0,
+      "top10_buy": 94444.0,
+      "top10_sell": 82876.0,
+      "top10_net": 11568.0,
+      "top10_specific_buy": 93075.0,
+      "top10_specific_sell": 78536.0,
+      "top10_specific_net": 14539.0
     },
     "all_months": {
-      "top5_buy": 84986.0,
-      "top5_sell": 53553.0,
-      "top5_net": 31433.0,
-      "top10_buy": 94926.0,
-      "top10_sell": 82609.0,
-      "top10_net": 12317.0,
-      "top10_specific_buy": 93284.0,
-      "top10_specific_sell": 78269.0,
-      "top10_specific_net": 15015.0
+      "top5_buy": 83967.0,
+      "top5_sell": 55811.0,
+      "top5_net": 28156.0,
+      "top10_buy": 95287.0,
+      "top10_sell": 86187.0,
+      "top10_net": 9100.0,
+      "top10_specific_buy": 93119.0,
+      "top10_specific_sell": 81847.0,
+      "top10_specific_net": 11272.0
     },
-    "top10_specific_net": 15015.0
+    "top10_specific_net": 11272.0
   },
   "pc_ratio": {
-    "date": "2026-11-02",
-    "pc_ratio": 61.58
+    "date": "2026-11-03",
+    "pc_ratio": 47.77
   },
   "txo_positions": {
-    "date": "2026-11-02",
+    "date": "2026-11-03",
     "dealer": {
-      "call_oi_net": 12495.0,
-      "call_amt_net": 583825.0,
-      "put_oi_net": -1976.0,
-      "put_amt_net": 345264.0
+      "call_oi_net": 4790.0,
+      "call_amt_net": 145121.0,
+      "put_oi_net": 1767.0,
+      "put_amt_net": 420689.0
     },
     "foreign": {
-      "call_oi_net": 2164.0,
-      "call_amt_net": 10591.0,
-      "put_oi_net": 2193.0,
-      "put_amt_net": 110266.0
+      "call_oi_net": 3553.0,
+      "call_amt_net": 4065.0,
+      "put_oi_net": 3241.0,
+      "put_amt_net": 270217.0
     }
   },
   "margin_maintenance": {
-    "date": "2026-11-02",
-    "ratio": 163.03,
-    "financing_balance_billion": 6227.0,
-    "stock_count": 1061
+    "date": "2026-11-03",
+    "ratio": 153.89,
+    "financing_balance_billion": 5997.7,
+    "stock_count": 1059
   },
   "wantgoo_margin": null
 }
