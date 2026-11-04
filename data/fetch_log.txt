@@ -8,96 +8,23 @@
   BFI82U列: ['外資自營商', '0', '0', '0']
   BFI82U列: ['合計', '570,420,739,961', '730,581,085,695', '-160,160,345,734']
   三大法人現貨 2026-11-04: 外資-1499.0 投信272.58 自營-375.19
-[ERROR] 台指期 (TAIFEX): 403 Client Error: Forbidden for url: https://www.taifex.com.tw/data_gov/taifex_open_data.asp?data_name=DailyMarketReportFut
-Traceback (most recent call last):
-  File "/home/runner/work/Taiwan-number-one/Taiwan-number-one/scripts/fetch_data.py", line 22, in safe
-    return fn()
-           ^^^^
-  File "/home/runner/work/Taiwan-number-one/Taiwan-number-one/scripts/fetch_data.py", line 317, in get_tx_futures
-    df = fetch_taifex_csv("DailyMarketReportFut")
-         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/runner/work/Taiwan-number-one/Taiwan-number-one/scripts/fetch_data.py", line 299, in fetch_taifex_csv
-    r.raise_for_status()
-  File "/opt/hostedtoolcache/Python/3.11.18/x64/lib/python3.11/site-packages/requests/models.py", line 1167, in raise_for_status
-    raise HTTPError(http_error_msg, response=self)
-requests.exceptions.HTTPError: 403 Client Error: Forbidden for url: https://www.taifex.com.tw/data_gov/taifex_open_data.asp?data_name=DailyMarketReportFut
-
-[ERROR] 三大法人期貨-臺股期貨: 403 Client Error: Forbidden for url: https://www.taifex.com.tw/data_gov/taifex_open_data.asp?data_name=MarketDataOfMajorInstitutionalTradersDetailsOfFuturesContractsBytheDate
-Traceback (most recent call last):
-  File "/home/runner/work/Taiwan-number-one/Taiwan-number-one/scripts/fetch_data.py", line 22, in safe
-    return fn()
-           ^^^^
-  File "/home/runner/work/Taiwan-number-one/Taiwan-number-one/scripts/fetch_data.py", line 376, in get_institutional_futures_tx
-    return get_institutional_futures_for(_load_inst_fut_df(), "臺股期貨")
-                                         ^^^^^^^^^^^^^^^^^^^
-  File "/home/runner/work/Taiwan-number-one/Taiwan-number-one/scripts/fetch_data.py", line 346, in _load_inst_fut_df
-    df = fetch_taifex_csv("MarketDataOfMajorInstitutionalTradersDetailsOfFuturesContractsBytheDate")
-         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/runner/work/Taiwan-number-one/Taiwan-number-one/scripts/fetch_data.py", line 299, in fetch_taifex_csv
-    r.raise_for_status()
-  File "/opt/hostedtoolcache/Python/3.11.18/x64/lib/python3.11/site-packages/requests/models.py", line 1167, in raise_for_status
-    raise HTTPError(http_error_msg, response=self)
-requests.exceptions.HTTPError: 403 Client Error: Forbidden for url: https://www.taifex.com.tw/data_gov/taifex_open_data.asp?data_name=MarketDataOfMajorInstitutionalTradersDetailsOfFuturesContractsBytheDate
-
-[ERROR] 三大法人期貨-小型臺指期貨: 403 Client Error: Forbidden for url: https://www.taifex.com.tw/data_gov/taifex_open_data.asp?data_name=MarketDataOfMajorInstitutionalTradersDetailsOfFuturesContractsBytheDate
-Traceback (most recent call last):
-  File "/home/runner/work/Taiwan-number-one/Taiwan-number-one/scripts/fetch_data.py", line 22, in safe
-    return fn()
-           ^^^^
-  File "/home/runner/work/Taiwan-number-one/Taiwan-number-one/scripts/fetch_data.py", line 379, in get_institutional_futures_mtx
-    return get_institutional_futures_for(_load_inst_fut_df(), "小型臺指期貨")
-                                         ^^^^^^^^^^^^^^^^^^^
-  File "/home/runner/work/Taiwan-number-one/Taiwan-number-one/scripts/fetch_data.py", line 346, in _load_inst_fut_df
-    df = fetch_taifex_csv("MarketDataOfMajorInstitutionalTradersDetailsOfFuturesContractsBytheDate")
-         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/runner/work/Taiwan-number-one/Taiwan-number-one/scripts/fetch_data.py", line 299, in fetch_taifex_csv
-    r.raise_for_status()
-  File "/opt/hostedtoolcache/Python/3.11.18/x64/lib/python3.11/site-packages/requests/models.py", line 1167, in raise_for_status
-    raise HTTPError(http_error_msg, response=self)
-requests.exceptions.HTTPError: 403 Client Error: Forbidden for url: https://www.taifex.com.tw/data_gov/taifex_open_data.asp?data_name=MarketDataOfMajorInstitutionalTradersDetailsOfFuturesContractsBytheDate
-
-[ERROR] 大額交易人期貨: 403 Client Error: Forbidden for url: https://www.taifex.com.tw/data_gov/taifex_open_data.asp?data_name=OpenInterestOfLargeTradersFutures
-Traceback (most recent call last):
-  File "/home/runner/work/Taiwan-number-one/Taiwan-number-one/scripts/fetch_data.py", line 22, in safe
-    return fn()
-           ^^^^
-  File "/home/runner/work/Taiwan-number-one/Taiwan-number-one/scripts/fetch_data.py", line 382, in get_large_trader_futures
-    df = fetch_taifex_csv("OpenInterestOfLargeTradersFutures")
-         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/runner/work/Taiwan-number-one/Taiwan-number-one/scripts/fetch_data.py", line 299, in fetch_taifex_csv
-    r.raise_for_status()
-  File "/opt/hostedtoolcache/Python/3.11.18/x64/lib/python3.11/site-packages/requests/models.py", line 1167, in raise_for_status
-    raise HTTPError(http_error_msg, response=self)
-requests.exceptions.HTTPError: 403 Client Error: Forbidden for url: https://www.taifex.com.tw/data_gov/taifex_open_data.asp?data_name=OpenInterestOfLargeTradersFutures
-
-[ERROR] P/C Ratio (TAIFEX): 403 Client Error: Forbidden for url: https://www.taifex.com.tw/data_gov/taifex_open_data.asp?data_name=PutCallRatio
-Traceback (most recent call last):
-  File "/home/runner/work/Taiwan-number-one/Taiwan-number-one/scripts/fetch_data.py", line 22, in safe
-    return fn()
-           ^^^^
-  File "/home/runner/work/Taiwan-number-one/Taiwan-number-one/scripts/fetch_data.py", line 538, in get_pc_ratio
-    df = fetch_taifex_csv("PutCallRatio")
-         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/runner/work/Taiwan-number-one/Taiwan-number-one/scripts/fetch_data.py", line 299, in fetch_taifex_csv
-    r.raise_for_status()
-  File "/opt/hostedtoolcache/Python/3.11.18/x64/lib/python3.11/site-packages/requests/models.py", line 1167, in raise_for_status
-    raise HTTPError(http_error_msg, response=self)
-requests.exceptions.HTTPError: 403 Client Error: Forbidden for url: https://www.taifex.com.tw/data_gov/taifex_open_data.asp?data_name=PutCallRatio
-
-[ERROR] 選擇權留倉 (TAIFEX): 403 Client Error: Forbidden for url: https://www.taifex.com.tw/data_gov/taifex_open_data.asp?data_name=MarketDataOfMajorInstitutionalTradersDetailsOfCallsAndPutsBytheDate
-Traceback (most recent call last):
-  File "/home/runner/work/Taiwan-number-one/Taiwan-number-one/scripts/fetch_data.py", line 22, in safe
-    return fn()
-           ^^^^
-  File "/home/runner/work/Taiwan-number-one/Taiwan-number-one/scripts/fetch_data.py", line 495, in get_txo_positions
-    df = fetch_taifex_csv("MarketDataOfMajorInstitutionalTradersDetailsOfCallsAndPutsBytheDate")
-         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/runner/work/Taiwan-number-one/Taiwan-number-one/scripts/fetch_data.py", line 299, in fetch_taifex_csv
-    r.raise_for_status()
-  File "/opt/hostedtoolcache/Python/3.11.18/x64/lib/python3.11/site-packages/requests/models.py", line 1167, in raise_for_status
-    raise HTTPError(http_error_msg, response=self)
-requests.exceptions.HTTPError: 403 Client Error: Forbidden for url: https://www.taifex.com.tw/data_gov/taifex_open_data.asp?data_name=MarketDataOfMajorInstitutionalTradersDetailsOfCallsAndPutsBytheDate
-
+三大法人期貨 欄位: ['日期', '商品名稱', '身份別', '多方交易口數', '多方交易契約金額(千元)', '空方交易口數', '空方交易契約金額(千元)', '多空交易口數淨額', '多空交易契約金額淨額(千元)', '多方未平倉口數', '多方未平倉契約金額(千元)', '空方未平倉口數', '空方未平倉契約金額(千元)', '多空未平倉口數淨額', '多空未平倉契約金額淨額(千元)']
+  [臺股期貨] role=身份別, oi_net=多空未平倉口數淨額
+三大法人期貨 欄位: ['日期', '商品名稱', '身份別', '多方交易口數', '多方交易契約金額(千元)', '空方交易口數', '空方交易契約金額(千元)', '多空交易口數淨額', '多空交易契約金額淨額(千元)', '多方未平倉口數', '多方未平倉契約金額(千元)', '空方未平倉口數', '空方未平倉契約金額(千元)', '多空未平倉口數淨額', '多空未平倉契約金額淨額(千元)']
+  [小型臺指期貨] role=身份別, oi_net=多空未平倉口數淨額
+大額交易人期貨 欄位: ['日期', '契約', '商品名稱(契約名稱)', '到期月份(週別)', '交易人類別', '前五大交易人買方數量', '前五大交易人賣方數量', '前十大交易人買方數量', '前十大交易人賣方數量', '全市場未沖銷部位數']
+  b5=前五大交易人買方數量, s5=前五大交易人賣方數量, b10=前十大交易人買方數量, s10=前十大交易人賣方數量
+  month=到期月份(週別), cat=交易人類別
+  到期月份值: [202611, 666666, 666666, 202611, 999912, 999912]
+  交易人類別值: [0, 0, 1, 1, 0, 1]
+  一般交易人列數=3, 特定法人列數=3
+  一般月份值: [202611, 666666, 999912]
+PutCallRatio 欄位: ['日期', '賣權成交量', '買權成交量', '買賣權成交量比率%', '賣權未平倉量', '買權未平倉量', '買賣權未平倉量比率%']
+  date=日期, pc=買賣權未平倉量比率%
+  P/C 取用日期: 2026-11-04, 值: 49.37
+選擇權買賣權分計 欄位: ['日期', '商品名稱', '買賣權別', '身份別', '買方交易口數', '買方交易契約金額(千元)', '賣方交易口數', '賣方交易契約金額(千元)', '交易口數買賣淨額', '交易契約金額買賣淨額(千元)', '買方未平倉口數', '買方未平倉契約金額(千元)', '賣方未平倉口數', '賣方未平倉契約金額(千元)', '未平倉口數買賣淨額', '未平倉契約金額買賣淨額(千元)']
+  cp=買賣權別, role=身份別, oi_net=未平倉口數買賣淨額, amt_net=未平倉契約金額買賣淨額(千元)
+  臺指選擇權列數: 6, 買賣權值: ['CALL', 'PUT']
   MI_MARGN 20261105 stat=很抱歉，沒有符合條件的資料
   MI_MARGN 表[115年11月04日 信用交易統計] 列數=3, fields=['項目', '買進', '賣出', '現金(券)償還', '前日餘額', '今日餘額']
   融資金額列: ['融資金額(仟元)', '30,947,037', '31,862,354', '1,913,279', '599,774,466', '596,945,870'] -> 今日餘額 596,945,870
@@ -105,4 +32,4 @@ requests.exceptions.HTTPError: 403 Client Error: Forbidden for url: https://www.
   個股表首列範例: ['00400A', '主動國泰動能高息', '1,962', '465', '61', '14,771', '16,207', '567,785'], bal_idx=6
   融資維持率 2026-11-04: 155.45%（1065檔，融資餘額 5969.5 億）
 [WARN] 玩股網請求失敗: 403 Client Error: Forbidden for url: https://www.wantgoo.com/stock/margin-trading/exclude-etf/taiex
-record_date（以TAIFEX為主）: 2026-11-05
+record_date（以TAIFEX為主）: 2026-11-04
