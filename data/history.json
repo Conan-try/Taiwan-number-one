@@ -8246,6 +8246,102 @@
         "stock_count": 1062
       },
       "wantgoo_margin": null
+    },
+    {
+      "date": "2026-11-12",
+      "fetched_at": "2026-11-12T16:11:20.282008+00:00",
+      "weighted_index": {
+        "date": "2026-11-12",
+        "close": 43091.87,
+        "change": -1165.28,
+        "change_pct": -2.63,
+        "turnover_billion": 10568.42
+      },
+      "tx_futures": {
+        "date": "2026-11-12",
+        "price": 43178.0,
+        "change": -958.0,
+        "change_pct": -2.17
+      },
+      "basis": 86.13,
+      "institutional_spot": {
+        "date": "2026-11-12",
+        "foreign": -6.85,
+        "trust": 125.68,
+        "dealer": -65.41,
+        "total": 53.42
+      },
+      "institutional_futures_tx": {
+        "date": "2026-11-12",
+        "dealer_oi_net": -187.0,
+        "dealer_oi_chg": null,
+        "trust_oi_net": 98901.0,
+        "trust_oi_chg": null,
+        "foreign_oi_net": -99573.0,
+        "foreign_oi_chg": null
+      },
+      "institutional_futures_mtx": {
+        "date": "2026-11-12",
+        "dealer_oi_net": -6172.0,
+        "dealer_oi_chg": null,
+        "trust_oi_net": -37.0,
+        "trust_oi_chg": null,
+        "foreign_oi_net": 2054.0,
+        "foreign_oi_chg": null
+      },
+      "large_trader_futures": {
+        "date": "2026-11-12",
+        "rows_found": 6,
+        "near_month": {
+          "top5_buy": 90182.0,
+          "top5_sell": 53277.0,
+          "top5_net": 36905.0,
+          "top10_buy": 97792.0,
+          "top10_sell": 78453.0,
+          "top10_net": 19339.0,
+          "top10_specific_buy": 96144.0,
+          "top10_specific_sell": 75245.0,
+          "top10_specific_net": 20899.0
+        },
+        "all_months": {
+          "top5_buy": 94282.0,
+          "top5_sell": 60998.0,
+          "top5_net": 33284.0,
+          "top10_buy": 102435.0,
+          "top10_sell": 88673.0,
+          "top10_net": 13762.0,
+          "top10_specific_buy": 99775.0,
+          "top10_specific_sell": 88673.0,
+          "top10_specific_net": 11102.0
+        },
+        "top10_specific_net": 11102.0
+      },
+      "pc_ratio": {
+        "date": "2026-11-12",
+        "pc_ratio": 66.69
+      },
+      "txo_positions": {
+        "date": "2026-11-12",
+        "dealer": {
+          "call_oi_net": 9944.0,
+          "call_amt_net": 1274474.0,
+          "put_oi_net": -6010.0,
+          "put_amt_net": 190412.0
+        },
+        "foreign": {
+          "call_oi_net": 4031.0,
+          "call_amt_net": 27153.0,
+          "put_oi_net": 3742.0,
+          "put_amt_net": 148546.0
+        }
+      },
+      "margin_maintenance": {
+        "date": "2026-11-12",
+        "ratio": 157.39,
+        "financing_balance_billion": 5334.7,
+        "stock_count": 1062
+      },
+      "wantgoo_margin": null
     }
   ]
 }
