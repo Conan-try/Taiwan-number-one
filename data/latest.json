@@ -1,95 +1,95 @@
 {
-  "date": "2026-11-18",
-  "fetched_at": "2026-11-19T04:00:10.306925+00:00",
+  "date": "2026-11-19",
+  "fetched_at": "2026-11-19T16:45:39.612500+00:00",
   "weighted_index": {
-    "date": "2026-11-18",
-    "close": 40194.91,
-    "change": 102.8,
-    "change_pct": 0.26,
-    "turnover_billion": 10751.74
+    "date": "2026-11-19",
+    "close": 38426.89,
+    "change": -1768.02,
+    "change_pct": -4.4,
+    "turnover_billion": 9429.89
   },
   "tx_futures": {
-    "date": "2026-11-18",
-    "price": 40025.0,
-    "change": 14.0,
-    "change_pct": 0.03
+    "date": "2026-11-19",
+    "price": 38649.0,
+    "change": -1683.0,
+    "change_pct": -4.17
   },
-  "basis": -169.91,
+  "basis": 222.11,
   "institutional_spot": {
-    "date": "2026-11-18",
-    "foreign": -765.64,
-    "trust": 166.12,
-    "dealer": -42.01,
-    "total": -641.53
+    "date": "2026-11-19",
+    "foreign": -243.12,
+    "trust": 43.9,
+    "dealer": -233.03,
+    "total": -432.25
   },
   "institutional_futures_tx": {
-    "date": "2026-11-18",
-    "dealer_oi_net": -1457.0,
+    "date": "2026-11-19",
+    "dealer_oi_net": -1455.0,
     "dealer_oi_chg": null,
-    "trust_oi_net": 93573.0,
+    "trust_oi_net": 91791.0,
     "trust_oi_chg": null,
-    "foreign_oi_net": -99438.0,
+    "foreign_oi_net": -99219.0,
     "foreign_oi_chg": null
   },
   "institutional_futures_mtx": {
-    "date": "2026-11-18",
-    "dealer_oi_net": -5430.0,
+    "date": "2026-11-19",
+    "dealer_oi_net": -4061.0,
     "dealer_oi_chg": null,
-    "trust_oi_net": -54.0,
+    "trust_oi_net": -48.0,
     "trust_oi_chg": null,
-    "foreign_oi_net": -98.0,
+    "foreign_oi_net": 2135.0,
     "foreign_oi_chg": null
   },
   "large_trader_futures": {
-    "date": "2026-11-18",
+    "date": "2026-11-19",
     "rows_found": 6,
     "near_month": {
-      "top5_buy": 91587.0,
-      "top5_sell": 64460.0,
-      "top5_net": 27127.0,
-      "top10_buy": 100057.0,
-      "top10_sell": 93315.0,
-      "top10_net": 6742.0,
-      "top10_specific_buy": 99157.0,
-      "top10_specific_sell": 93315.0,
-      "top10_specific_net": 5842.0
+      "top5_buy": 91606.0,
+      "top5_sell": 66674.0,
+      "top5_net": 24932.0,
+      "top10_buy": 100642.0,
+      "top10_sell": 95571.0,
+      "top10_net": 5071.0,
+      "top10_specific_buy": 99523.0,
+      "top10_specific_sell": 95571.0,
+      "top10_specific_net": 3952.0
     },
     "all_months": {
-      "top5_buy": 91587.0,
-      "top5_sell": 64531.0,
-      "top5_net": 27056.0,
-      "top10_buy": 100057.0,
-      "top10_sell": 93490.0,
-      "top10_net": 6567.0,
-      "top10_specific_buy": 99157.0,
-      "top10_specific_sell": 93490.0,
-      "top10_specific_net": 5667.0
+      "top5_buy": 91606.0,
+      "top5_sell": 66796.0,
+      "top5_net": 24810.0,
+      "top10_buy": 100645.0,
+      "top10_sell": 95790.0,
+      "top10_net": 4855.0,
+      "top10_specific_buy": 99526.0,
+      "top10_specific_sell": 95790.0,
+      "top10_specific_net": 3736.0
     },
-    "top10_specific_net": 5667.0
+    "top10_specific_net": 3736.0
   },
   "pc_ratio": {
-    "date": "2026-11-18",
-    "pc_ratio": 39.8
+    "date": "2026-11-19",
+    "pc_ratio": 41.0
   },
   "txo_positions": {
-    "date": "2026-11-18",
+    "date": "2026-11-19",
     "dealer": {
-      "call_oi_net": 18233.0,
-      "call_amt_net": 1062092.0,
-      "put_oi_net": -1770.0,
-      "put_amt_net": 125570.0
+      "call_oi_net": 12912.0,
+      "call_amt_net": 252194.0,
+      "put_oi_net": 1120.0,
+      "put_amt_net": 127998.0
     },
     "foreign": {
-      "call_oi_net": 7956.0,
-      "call_amt_net": 655420.0,
-      "put_oi_net": 1633.0,
-      "put_amt_net": 174840.0
+      "call_oi_net": 7094.0,
+      "call_amt_net": 262011.0,
+      "put_oi_net": 209.0,
+      "put_amt_net": 197996.0
     }
   },
   "margin_maintenance": {
-    "date": "2026-11-18",
-    "ratio": 145.53,
-    "financing_balance_billion": 5080.3,
+    "date": "2026-11-19",
+    "ratio": 136.4,
+    "financing_balance_billion": 4843.7,
     "stock_count": 1065
   },
   "wantgoo_margin": null
