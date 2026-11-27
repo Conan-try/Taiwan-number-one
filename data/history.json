@@ -9305,7 +9305,7 @@
     },
     {
       "date": "2026-11-27",
-      "fetched_at": "2026-11-27T17:38:50.529571+00:00",
+      "fetched_at": "2026-11-27T18:48:49.582342+00:00",
       "weighted_index": {
         "date": "2026-11-27",
         "close": 39308.08,
@@ -9313,8 +9313,13 @@
         "change_pct": 0.4,
         "turnover_billion": 6946.61
       },
-      "tx_futures": null,
-      "basis": null,
+      "tx_futures": {
+        "date": "2026-11-27",
+        "price": 39363.0,
+        "change": -129.0,
+        "change_pct": -0.33
+      },
+      "basis": 54.92,
       "institutional_spot": {
         "date": "2026-11-27",
         "foreign": -296.28,
